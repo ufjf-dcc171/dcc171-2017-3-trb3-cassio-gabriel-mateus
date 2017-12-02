@@ -1,4 +1,4 @@
-package janelaProjeto;
+package janelaControleProjeto;
 
 import java.util.ArrayList;
 import java.util.List;
