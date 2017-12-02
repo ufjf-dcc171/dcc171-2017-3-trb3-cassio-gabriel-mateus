@@ -7,14 +7,8 @@ public class DashboardMain extends javax.swing.JFrame {
     
     
     public DashboardMain() {
-      super("Mesas");
-      lstMesas.setModel(new MesaListModel(mesas));
-      
-      
-      
+      super("DashBoard");
       initComponents();
-      this.mesas = sampleData;
-      janelaRel = new JanelaRelatorio(this);
     }
     
     
