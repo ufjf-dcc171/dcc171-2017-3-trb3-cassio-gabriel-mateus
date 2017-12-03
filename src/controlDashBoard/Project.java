@@ -1,6 +1,8 @@
 
 package controlDashBoard;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -11,6 +13,7 @@ public class Project {
     private Date projectDateIni;
     private Date projectDateEnd;
     private String projectDescricao;
+    private ArrayList<Task> tarefas = new ArrayList<>();
 
     public Project(String projectNome, String projectDescricao) {
         this.projectNome = projectNome;
@@ -43,7 +46,20 @@ public class Project {
         this.projectNome = projectNome;
     }
 
-    public Date getProjectDateIni() {
+    public String getProjectDateIni() {
+        if (projectDateIni == null)
+        {
+            return null;
+        }
+        else
+        {
+            SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");     
+            String str = fmt.format(projectDateIni);
+            return str;
+        }
+    }
+    
+    public Date getProjectDateIniBD() {
         return projectDateIni;
     }
 
@@ -56,7 +72,20 @@ public class Project {
         return this.projectNome;
     }
 
-    public Date getProjectDateEnd() {
+    public String getProjectDateEnd() {
+        if (projectDateEnd == null)
+        {
+            return null;
+        }
+        else
+        {
+            SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");     
+            String str = fmt.format(projectDateEnd);
+            return str;
+        }
+    }
+    
+    public Date getProjectDateEndBD() {
         return projectDateEnd;
     }
 
@@ -71,5 +100,14 @@ public class Project {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    public ArrayList<Task> getTarefas() {
+        return tarefas;
+    }
+
+    public void setTarefas(ArrayList<Task> tarefas) {
+        this.tarefas = tarefas;
+    }
+    
     
 }

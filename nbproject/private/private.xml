@@ -7,13 +7,10 @@
             <file>file:/C:/Users/Mateus%20G/Documents/NetBeansProjects/ufjf-dcc171-2017-3-exr-aula13/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/dashboard/Dashboard.java</file>
         </group>
         <group>
-            <file>file:/home/cassio/Área%20de%20Trabalho/Pasta%20sem%20título%202/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/janelaProjeto/DashboardMain.java</file>
-            <file>file:/home/cassio/Área%20de%20Trabalho/Pasta%20sem%20título%202/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/janelaProjeto/Dashboard.java</file>
-            <file>file:/home/cassio/Área%20de%20Trabalho/Pasta%20sem%20título%202/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/janelaTarefa/janelaTarefa.java</file>
-            <file>file:/home/cassio/Área%20de%20Trabalho/Pasta%20sem%20título%202/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/controlDashBoard/Pessoa.java</file>
-            <file>file:/home/cassio/Área%20de%20Trabalho/Pasta%20sem%20título%202/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/controlDashBoard/Task.java</file>
-            <file>file:/home/cassio/Área%20de%20Trabalho/Pasta%20sem%20título%202/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/controlDashBoard/PessoasListModel.java</file>
-            <file>file:/home/cassio/Área%20de%20Trabalho/Pasta%20sem%20título%202/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/controlDashBoard/Project.java</file>
+            <file>file:/C:/Users/Mateus%20G/Documents/NetBeansProjects/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/controlBD/ProjetoDAOJDBC.java</file>
+            <file>file:/C:/Users/Mateus%20G/Documents/NetBeansProjects/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/controlBD/ProjetoDAO.java</file>
+            <file>file:/C:/Users/Mateus%20G/Documents/NetBeansProjects/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/janelaTarefa/JanelaAdicionarTarefa.java</file>
+            <file>file:/C:/Users/Mateus%20G/Documents/NetBeansProjects/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/janelaTarefa/JanelaVerTarefa.java</file>
         </group>
     </open-files>
 </project-private>

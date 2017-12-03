@@ -15,7 +15,7 @@ public class ControleFuncionamento {
     private final List<Project> projeto;
     private final ProjetoDAO daoProjeto;
     private final Dashboard dbm;
-    private final JanelaDetalhesProjeto jdp = new JanelaDetalhesProjeto();
+    private JanelaDetalhesProjeto jdp;
     
     public ControleFuncionamento() throws Exception {
         daoProjeto = new ProjetoDAOJDBC();

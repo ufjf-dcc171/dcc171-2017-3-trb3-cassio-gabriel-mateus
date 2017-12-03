@@ -2,8 +2,8 @@ create table projeto (
     id integer primary key GENERATED ALWAYS AS IDENTITY,
     nome varchar (30) not null,
     descricao varchar (100),
-    dataInicio timestamp,
-    dataFinal timestamp
+    dataInicio date,
+    dataFinal date
 )
 
 create table tarefa (

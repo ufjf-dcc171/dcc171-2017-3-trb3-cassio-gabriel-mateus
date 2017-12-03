@@ -12,9 +12,9 @@ import javax.swing.JOptionPane;
 
 public class Dashboard extends javax.swing.JFrame {
 
-    private final ProjetoDAO daoProjeto;
+    public ProjetoDAO daoProjeto;
     private final List<Project> project; 
-    private final JanelaDetalhesProjeto jdp;
+    private JanelaDetalhesProjeto jdp;
     
     public Dashboard(ProjetoDAO daoProjeto, List<Project> projeto, JanelaDetalhesProjeto jdp) {
         super("DashBoard");
@@ -167,6 +167,7 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void btDetailsProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDetailsProjectActionPerformed
                 Project selecionado = listaProjetos.getSelectedValue();
+                jdp = new JanelaDetalhesProjeto(selecionado, daoProjeto);
                 if (selecionado == null)
                 {
                     JOptionPane.showMessageDialog(null, "Você deveria ter selecionado um projeto.", "Selecione um projeto.", JOptionPane.INFORMATION_MESSAGE);                   

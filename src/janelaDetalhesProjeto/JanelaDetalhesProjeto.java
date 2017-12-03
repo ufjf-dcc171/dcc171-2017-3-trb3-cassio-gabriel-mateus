@@ -1,21 +1,43 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package janelaDetalhesProjeto;
 
-/**
- *
- * @author Mateus G
- */
+import controlBD.ProjetoDAO;
+import controlDashBoard.Project;
+import controlDashBoard.Task;
+import controlDashBoard.TaskListModel;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class JanelaDetalhesProjeto extends javax.swing.JFrame {
 
-    /**
-     * Creates new form DetalhesProjeto2
-     */
-    public JanelaDetalhesProjeto() {
+    private Project projeto;
+    private ProjetoDAO daoProjeto;
+    
+    public JanelaDetalhesProjeto(Project projeto, ProjetoDAO daoProjeto) {
         initComponents();
+        this.projeto = projeto;
+        this.daoProjeto = daoProjeto;
+        nomeProjeto.setText(this.projeto.getProjectNome());
+        if (projeto.getProjectDateIni() == null)
+        {
+            dataInicio.setText("Ainda não iniciado");
+            dataFinal.setText("Ainda não terminado");
+        }
+        else if (projeto.getProjectDateEnd() == null)
+        {
+            dataInicio.setText(projeto.getProjectDateIni());
+            dataFinal.setText("Ainda não terminado"); 
+        }
+        else
+        {
+           dataInicio.setText(projeto.getProjectDateIni());
+           dataFinal.setText(projeto.getProjectDateEnd());
+        }
+        textoDescricao.setText(projeto.getProjectDescricao());
+        List<Task> tarefa = projeto.getTarefas();
+        listaTarefas.setModel(new TaskListModel (tarefa));
+        pack();
     }
 
     /**
@@ -28,20 +50,20 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        nomeProjeto = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        dataInicio = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        dataFinal = new javax.swing.JLabel();
+        btnIniciar = new javax.swing.JButton();
+        btnFinalizar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jButton3 = new javax.swing.JButton();
+        textoDescricao = new javax.swing.JTextArea();
+        alterarDescricao = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        listaTarefas = new javax.swing.JList<>();
         jButton4 = new javax.swing.JButton();
         jToggleButton1 = new javax.swing.JToggleButton();
         jButton5 = new javax.swing.JButton();
@@ -51,35 +73,46 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
 
         jLabel1.setText("Nome do Projeto:");
 
-        jLabel2.setText("Preencher com nome do projeto");
+        nomeProjeto.setText("Preencher com nome do projeto");
 
         jLabel3.setText("Data início:");
 
-        jLabel4.setText("Preencher com a data inicial");
+        dataInicio.setText("Preencher com a data inicial");
 
         jLabel5.setText("Data final:");
 
-        jLabel6.setText("Preencher com a data final");
+        dataFinal.setText("Preencher com a data final");
 
-        jButton1.setText("Iniciar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnIniciar.setText("Iniciar");
+        btnIniciar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnIniciarActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Finalizar");
+        btnFinalizar.setText("Finalizar");
+        btnFinalizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFinalizarActionPerformed(evt);
+            }
+        });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setText("Descrição...\n");
-        jScrollPane1.setViewportView(jTextArea1);
+        textoDescricao.setColumns(20);
+        textoDescricao.setRows(5);
+        textoDescricao.setText("Descrição...\n");
+        jScrollPane1.setViewportView(textoDescricao);
 
-        jButton3.setText("Alterar Descrição");
+        alterarDescricao.setText("Alterar Descrição");
+        alterarDescricao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                alterarDescricaoActionPerformed(evt);
+            }
+        });
 
         jLabel7.setText("Tarefas do Projeto");
 
-        jScrollPane2.setViewportView(jList1);
+        listaTarefas.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane2.setViewportView(listaTarefas);
 
         jButton4.setText("Adicionar Tarefa");
 
@@ -97,7 +130,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(alterarDescricao, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addGap(119, 119, 119)
@@ -110,15 +143,15 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
                             .addComponent(jLabel5))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
+                            .addComponent(nomeProjeto)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel6))
+                                    .addComponent(dataInicio)
+                                    .addComponent(dataFinal))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                    .addComponent(btnFinalizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnIniciar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addComponent(jScrollPane2)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -136,21 +169,21 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel2))
+                    .addComponent(nomeProjeto))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jButton1))
+                    .addComponent(dataInicio)
+                    .addComponent(btnIniciar))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel6)
-                    .addComponent(jButton2))
+                    .addComponent(dataFinal)
+                    .addComponent(btnFinalizar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3)
+                .addComponent(alterarDescricao)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
@@ -171,9 +204,43 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
+        Integer i = 0;
+        Date data = new Date();
+        projeto.setProjectDateIni(data);
+        try {
+            daoProjeto.alterar(projeto, i);
+            dataInicio.setText(projeto.getProjectDateIni());
+            pack();
+        } catch (Exception ex) {
+            Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnIniciarActionPerformed
+
+    private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
+        Integer i = 1;
+        Date data = new Date();
+        projeto.setProjectDateEnd(data);
+        try {
+            daoProjeto.alterar(projeto, i);
+            dataFinal.setText(projeto.getProjectDateEnd());
+            pack();
+        } catch (Exception ex) {
+            Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnFinalizarActionPerformed
+
+    private void alterarDescricaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alterarDescricaoActionPerformed
+        Integer i = 2;
+        projeto.setProjectDescricao(textoDescricao.getText());
+        try {
+            daoProjeto.alterar(projeto, i);
+            textoDescricao.setText(textoDescricao.getText());
+            pack();
+        } catch (Exception ex) {
+            Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_alterarDescricaoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -181,24 +248,32 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton alterarDescricao;
+    private javax.swing.JButton btnFinalizar;
+    private javax.swing.JButton btnIniciar;
+    private javax.swing.JLabel dataFinal;
+    private javax.swing.JLabel dataInicio;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JList<Task> listaTarefas;
+    private javax.swing.JLabel nomeProjeto;
+    private javax.swing.JTextArea textoDescricao;
     // End of variables declaration//GEN-END:variables
+
+    public Project getProjeto() {
+        return projeto;
+    }
+
+    public void setProjeto(Project projeto) {
+        this.projeto = projeto;
+    }
 }
