@@ -15,6 +15,7 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
      * Creates new form WindowTask
      */
     public JanelaAdicionarTarefa() {
+        super("Detalhes");
         initComponents();
     }
 

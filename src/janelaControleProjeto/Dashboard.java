@@ -1,26 +1,27 @@
 package janelaControleProjeto;
 
-import controlBD.BdConnection;
 import controlBD.ProjetoDAO;
 import controlDashBoard.Project;
 import controlDashBoard.ProjectListModel;
-import java.awt.Dimension;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import janelaDetalhesProjeto.JanelaDetalhesProjeto;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class Dashboard extends javax.swing.JFrame {
 
     private final ProjetoDAO daoProjeto;
     private final List<Project> project; 
+    private final JanelaDetalhesProjeto jdp;
     
-    public Dashboard(ProjetoDAO daoProjeto, List<Project> projeto) {
+    public Dashboard(ProjetoDAO daoProjeto, List<Project> projeto, JanelaDetalhesProjeto jdp) {
         super("DashBoard");
         initComponents();
         this.daoProjeto = daoProjeto;
         this.project = projeto;
+        this.jdp = jdp;
         listaProjetos.setModel(new ProjectListModel(this.project));
     }
 
@@ -62,9 +63,16 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
 
+        listaProjetos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        listaProjetos.setToolTipText("");
         jScrollPane1.setViewportView(listaProjetos);
 
         btDetailsProject.setText("Ver detalhes");
+        btDetailsProject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btDetailsProjectActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Descrição:");
 
@@ -134,21 +142,42 @@ public class Dashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtProjectTituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProjectTituloActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_txtProjectTituloActionPerformed
 
     private void btNewProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btNewProjectActionPerformed
         
         Project projeto; 
         try {
-            projeto = new Project(txtProjectTitulo.getText(), txtProjectDescrition.getText());
-            project.add(projeto);
-            listaProjetos.updateUI();
-            daoProjeto.criar(projeto);
+            if (txtProjectTitulo.getText() == null || txtProjectTitulo.getText().equals("Digite aqui o nome do novo projeto..."))
+            {    
+                JOptionPane.showMessageDialog(null, "Você deveria ter digitado um nome correto.", "Digite um nome correto", JOptionPane.INFORMATION_MESSAGE);                   
+            }
+            else
+            {
+                projeto = new Project(txtProjectTitulo.getText(), txtProjectDescrition.getText());
+                project.add(projeto);
+                listaProjetos.updateUI();
+                daoProjeto.criar(projeto);    
+            }
         } catch (Exception ex) {
             Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btNewProjectActionPerformed
+
+    private void btDetailsProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDetailsProjectActionPerformed
+                Project selecionado = listaProjetos.getSelectedValue();
+                if (selecionado == null)
+                {
+                    JOptionPane.showMessageDialog(null, "Você deveria ter selecionado um projeto.", "Selecione um projeto.", JOptionPane.INFORMATION_MESSAGE);                   
+                }
+                else
+                {
+                    jdp.setVisible(true);
+                    jdp.setLocationRelativeTo(null);
+                    jdp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                }
+    }//GEN-LAST:event_btDetailsProjectActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

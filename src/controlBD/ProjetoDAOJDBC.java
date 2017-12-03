@@ -20,7 +20,7 @@ public class ProjetoDAOJDBC implements ProjetoDAO {
             conexao = BdConnection.getConnection();
             operacaoInsere = conexao.prepareStatement("insert into projeto (nome, descricao) values"
                     + "(?, ?)");
-            operacaoListar = conexao.prepareStatement("select nome, descricao, dataInicio, dataFinal from projeto");
+            operacaoListar = conexao.prepareStatement("select id, nome, descricao, dataInicio, dataFinal from projeto");
         } catch (Exception ex) {
             Logger.getLogger(ProjetoDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -43,10 +43,12 @@ public class ProjetoDAOJDBC implements ProjetoDAO {
         while (resultado.next())
         {
             Project p = new Project();
-            p.setProjectNome(resultado.getString(1));
-            p.setProjectDescricao(resultado.getString(2));
-            p.setProjectDateIni(resultado.getDate(3));
-            p.setProjectDateEnd(resultado.getDate(4));
+            p.setId(resultado.getInt(1));
+            System.out.println(p.getId());
+            p.setProjectNome(resultado.getString(2));
+            p.setProjectDescricao(resultado.getString(3));
+            p.setProjectDateIni(resultado.getDate(4));
+            p.setProjectDateEnd(resultado.getDate(5));
             projeto.add(p);
         }
         return projeto;

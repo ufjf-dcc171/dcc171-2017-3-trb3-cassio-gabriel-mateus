@@ -6,6 +6,7 @@ import java.util.Date;
 
 public class Project {
     
+    private Integer id;
     private String projectNome;
     private Date projectDateIni;
     private Date projectDateEnd;
@@ -63,4 +64,12 @@ public class Project {
         this.projectDateEnd = projectDateEnd;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    
 }
