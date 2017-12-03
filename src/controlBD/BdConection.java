@@ -22,7 +22,7 @@ public class BdConection {
     }
     
     public void newProject(String nomeProjeto, String descricao,Date data ) throws Exception {
-       newProject.clearParameters();
+        newProject.clearParameters();
         newProject.setString(1, nomeProjeto);
         newProject.setString(2, descricao);
         newProject.setDate(3, (java.sql.Date) data);
