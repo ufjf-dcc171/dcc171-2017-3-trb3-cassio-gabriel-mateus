@@ -9,6 +9,15 @@ public class Project {
     private String projectNome;
     private Date projectDateIni;
     private Date projectDateEnd;
+    private String projectDescricao;
+
+    public String getProjectDescricao() {
+        return projectDescricao;
+    }
+
+    public void setProjectDescricao(String projectDescricao) {
+        this.projectDescricao = projectDescricao;
+    }
 
     public Project(String projectNome, Date projectDateIni, Date projectDateEnd) {
         this.projectNome = projectNome;
@@ -34,6 +43,11 @@ public class Project {
 
     public void setProjectDateIni(Date projectDateIni) {
         this.projectDateIni = projectDateIni;
+    }
+
+    @Override
+    public String toString() {
+        return "Project{" + "projectNome=" + projectNome + ", projectDateIni=" + projectDateIni + ", projectDateEnd=" + projectDateEnd + ", projectDescricao=" + projectDescricao + '}';
     }
 
     public Date getProjectDateEnd() {

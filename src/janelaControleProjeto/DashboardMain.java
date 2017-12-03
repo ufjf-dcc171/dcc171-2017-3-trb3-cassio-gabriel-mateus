@@ -1,17 +1,21 @@
 package janelaControleProjeto;
 
+import controlBD.BdConection;
+import controlDashBoard.Project;
 import java.awt.Dimension;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DashboardMain extends javax.swing.JFrame {
-    
-    
-    
+
+    Project projeto = new Project();
+
     public DashboardMain() {
-      super("DashBoard");
-      initComponents();
+        super("DashBoard");
+        initComponents();
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -146,10 +150,22 @@ public class DashboardMain extends javax.swing.JFrame {
 
     private void btNewProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btNewProjectActionPerformed
 
+        
+        //#TESTAR - APROVADO OU REPROVADO?
+        
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            BdConection bd = new BdConection();
+            bd.newProject(txtProjectInicio.getText(), txtProjectDescrition.getText(), formato.parse(txtProjectInicio.getText()));
+        } catch (Exception ex) {
+            Logger.getLogger(DashboardMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
 
     }//GEN-LAST:event_btNewProjectActionPerformed
 
- 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btDetailsProject;
     private javax.swing.JButton btNewProject;
