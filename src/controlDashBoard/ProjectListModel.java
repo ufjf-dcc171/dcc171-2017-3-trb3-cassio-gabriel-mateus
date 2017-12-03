@@ -3,15 +3,18 @@ package controlDashBoard;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
 
-public class ProjectListModel {
+public class ProjectListModel implements ListModel<Project> {
+    
     private final List<Project> projetos;
     private final List<ListDataListener> dataListeners;
 
-    public ProjectListModel(List<Project> tarefas) {
-        this.projetos = tarefas;
+
+    public ProjectListModel(List<Project> projeto) {
+        this.projetos = projeto;
         this.dataListeners = new ArrayList<>();
     }
 
