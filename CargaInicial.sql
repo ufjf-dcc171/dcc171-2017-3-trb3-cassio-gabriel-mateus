@@ -17,6 +17,13 @@ create table tarefa (
     fkid_projeto integer,
     constraint fk_projetoId foreign key (fkid_projeto) references projeto (id_projeto)
 );
+create table pessoa (
+
+    PESID integer primary key generated always as identity,
+    PESNOME VARCHAR(255),
+    PESMAIL VARCHAR(255),
+);
+
 create table prerequisito (
 
 
@@ -26,12 +33,3 @@ create table tarefa_pessoa (
 
 
 )
-
-create table pessoa (
-
-    PESCOD int NOT NULL AUTO_INCREMENT,
-    PESNOME VARCHAR(255),
-    PESMAIL VARCHAR(255),
-    PRIMARY KEY (ID)
-
-)   

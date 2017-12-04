@@ -1,11 +1,15 @@
 package janelaControleProjeto;
 
+import controlBD.PessoaDAO;
 import controlBD.ProjetoDAO;
 import controlBD.TaskDAO;
+import controlDashBoard.Pessoa;
 import controlDashBoard.Project;
 import controlDashBoard.ProjectListModel;
 import janelaDetalhesProjeto.JanelaDetalhesProjeto;
+import janelaPessoas.JanelaPessoas;
 import janelaTarefa.JanelaAdicionarTarefa;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,19 +20,28 @@ public class Dashboard extends javax.swing.JFrame {
 
     public ProjetoDAO daoProjeto;
     public TaskDAO daoTask;
+    public PessoaDAO daoPessoa;
     private final List<Project> project;
     private JanelaDetalhesProjeto jdp;
     private JanelaAdicionarTarefa jat;
+    private JanelaPessoas jp;
+    private List<Pessoa> pessoas;
 
-    public Dashboard(ProjetoDAO daoProjeto, List<Project> projeto, JanelaDetalhesProjeto jdp, JanelaAdicionarTarefa jat, TaskDAO daoTask) {
+    public Dashboard(ProjetoDAO daoProjeto, List<Project> projeto, JanelaDetalhesProjeto jdp, 
+            JanelaAdicionarTarefa jat, TaskDAO daoTask, PessoaDAO daoPessoa, JanelaPessoas jp,
+            List<Pessoa> pessoas) {
         super("DashBoard");
         initComponents();
         this.daoProjeto = daoProjeto;
         this.daoTask = daoTask;
+        this.daoPessoa = daoPessoa;
         this.project = projeto;
         this.jdp = jdp;
         this.jat = jat;
+        this.jp = jp;
+        this.pessoas = pessoas;
         listaProjetos.setModel(new ProjectListModel(this.project));
+        pack();
     }
 
     /**
@@ -50,6 +63,7 @@ public class Dashboard extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         txtProjectDescrition = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
+        btnAdicionarPessoa = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -89,6 +103,13 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
         jLabel3.setText("Projetos Existentes");
 
+        btnAdicionarPessoa.setText("Adicionar Pessoa");
+        btnAdicionarPessoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdicionarPessoaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -112,12 +133,13 @@ public class Dashboard extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(10, 10, 10))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnAdicionarPessoa)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btDetailsProject)
                         .addContainerGap())))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btDetailsProject)
-                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -126,21 +148,24 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlProjetos)
                     .addComponent(txtProjectTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
+                        .addGap(20, 20, 20)
                         .addComponent(jLabel2)
-                        .addGap(0, 28, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 57, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addComponent(btNewProject)
                 .addGap(5, 5, 5)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btDetailsProject)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btDetailsProject)
+                    .addComponent(btnAdicionarPessoa))
                 .addGap(27, 27, 27))
         );
 
@@ -182,16 +207,23 @@ public class Dashboard extends javax.swing.JFrame {
             } catch (Exception ex) {
                 Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
 
 
     }//GEN-LAST:event_btDetailsProjectActionPerformed
 
+    private void btnAdicionarPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarPessoaActionPerformed
+        jp = new JanelaPessoas(daoPessoa, pessoas);
+        jp.setVisible(true);
+        jp.setLocationRelativeTo(null);
+        jp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_btnAdicionarPessoaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btDetailsProject;
     private javax.swing.JButton btNewProject;
+    private javax.swing.JButton btnAdicionarPessoa;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;

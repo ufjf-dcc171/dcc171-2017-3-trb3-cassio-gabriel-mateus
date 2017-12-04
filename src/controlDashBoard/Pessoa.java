@@ -2,6 +2,7 @@ package controlDashBoard;
 
 public class Pessoa {
 
+    private Integer pesId;
     private String pesNome;
     private String pesEmail;
 
@@ -27,6 +28,14 @@ public class Pessoa {
     public Pessoa(String pesNome, String pesEmail) {
         this.pesNome = pesNome;
         this.pesEmail = pesEmail;
+    }
+
+    public Integer getPesId() {
+        return pesId;
+    }
+
+    public void setPesId(Integer pesId) {
+        this.pesId = pesId;
     }
 
 }

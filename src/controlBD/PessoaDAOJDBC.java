@@ -18,15 +18,13 @@ public class PessoaDAOJDBC implements PessoaDAO {
    
 
     public PessoaDAOJDBC() {
-
-        
-        /*mateus verifica isso pra mim, nao sei porque esta dando um erro ao gerarm talvez resolva fazendo como voce fez nas tarefas*/
+     
         try {
             try {
                 conexao = BdConnection.getConnection();
-                operacaoInserePessoas = conexao.prepareStatement("insert into pessoas (pescod,pesnome, pesmail) values"
+                operacaoInserePessoas = conexao.prepareStatement("insert into pessoa (pesnome, pesmail) values"
                         + "(?,?)");
-                operacaoListar = conexao.prepareStatement("select pesnome, pesmail from pessoas");
+                operacaoListar = conexao.prepareStatement("select pesid, pesnome, pesmail from pessoa");
                
             } catch (Exception ex) {
                 Logger.getLogger(PessoaDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
@@ -37,22 +35,24 @@ public class PessoaDAOJDBC implements PessoaDAO {
 
     }
 
-    
-    /*#VERIFICAR*/
+    @Override
     public void criar(Pessoa pessoa) throws Exception {
-        operacaoInserePessoas.setString(2, pessoa.getPesNome());
-        operacaoInserePessoas.setString(3, pessoa.getPesEmail());
+        operacaoInserePessoas.clearParameters();
+        operacaoInserePessoas.setString(1, pessoa.getPesNome());
+        operacaoInserePessoas.setString(2, pessoa.getPesEmail());
         operacaoInserePessoas.executeUpdate();
     }
 
+    @Override
     public List<Pessoa> listarTodos() throws Exception {
         List<Pessoa> pessoas = new ArrayList<>();
         operacaoListar.clearParameters();
         ResultSet resultado = operacaoListar.executeQuery();
         while (resultado.next()) {
             Pessoa p = new Pessoa();
-            p.setPesNome(resultado.getString(1));
-            p.setPesEmail(resultado.getString(2));
+            p.setPesId(resultado.getInt(1));
+            p.setPesNome(resultado.getString(2));
+            p.setPesEmail(resultado.getString(3));
             pessoas.add(p);
         }
         return pessoas;
