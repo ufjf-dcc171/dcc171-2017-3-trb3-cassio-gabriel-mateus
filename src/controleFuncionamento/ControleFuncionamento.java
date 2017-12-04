@@ -11,8 +11,8 @@ import janelaControleProjeto.Dashboard;
 import janelaDetalhesProjeto.JanelaDetalhesProjeto;
 import JanelaPessoas.JanelaPessoas;
 import janelaTarefa.JanelaAdicionarTarefa;
-import janelaTarefa.JanelaVerTarefa;
 import java.util.List;
+import janelaTarefa.JanelaVerTarefa;
 import javax.swing.JFrame;
 
 public class ControleFuncionamento {

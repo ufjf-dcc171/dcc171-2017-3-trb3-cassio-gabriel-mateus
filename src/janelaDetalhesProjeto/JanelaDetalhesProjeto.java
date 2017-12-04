@@ -22,8 +22,8 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
     private Project projeto;
     private ProjetoDAO daoProjeto;
     private JanelaAdicionarTarefa jat;
-    public TaskDAO daoTask;
     private JanelaVerTarefa jvt;
+    public TaskDAO daoTask;
     
     public JanelaDetalhesProjeto(Project projeto, ProjetoDAO daoProjeto, JanelaAdicionarTarefa jat, TaskDAO daoTask, JanelaVerTarefa jvt) throws Exception {
         initComponents();
@@ -31,7 +31,6 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         this.daoProjeto = daoProjeto;
         this.daoTask = daoTask;
         this.jat = jat;
-        this.jvt = jvt;
         nomeProjeto.setText(this.projeto.getProjectNome());
         if (projeto.getProjectDateIni() == null)
         {
@@ -283,10 +282,9 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
 
     private void btnVerTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTarefaActionPerformed
         jvt = new JanelaVerTarefa();
-        jvt.setVisible(true);
         jvt.setLocationRelativeTo(null);
         jvt.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
+        jvt.setVisible(true);
     }//GEN-LAST:event_btnVerTarefaActionPerformed
 
     /**
