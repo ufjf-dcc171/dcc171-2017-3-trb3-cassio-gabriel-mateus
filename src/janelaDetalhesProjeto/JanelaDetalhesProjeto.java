@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class JanelaDetalhesProjeto extends javax.swing.JFrame {
 
@@ -253,6 +254,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         try {
             daoProjeto.alterar(projeto, i);
             textoDescricao.setText(textoDescricao.getText());
+            JOptionPane.showMessageDialog(null, "A tarefa foi alterada com sucesso!", "Alteração feita", JOptionPane.INFORMATION_MESSAGE);                   
             pack();
         } catch (Exception ex) {
             Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
