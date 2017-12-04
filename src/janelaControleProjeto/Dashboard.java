@@ -1,9 +1,11 @@
 package janelaControleProjeto;
 
 import controlBD.ProjetoDAO;
+import controlBD.TaskDAO;
 import controlDashBoard.Project;
 import controlDashBoard.ProjectListModel;
 import janelaDetalhesProjeto.JanelaDetalhesProjeto;
+import janelaTarefa.JanelaAdicionarTarefa;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,15 +15,19 @@ import javax.swing.JOptionPane;
 public class Dashboard extends javax.swing.JFrame {
 
     public ProjetoDAO daoProjeto;
+    public TaskDAO daoTask;
     private final List<Project> project; 
     private JanelaDetalhesProjeto jdp;
+    private JanelaAdicionarTarefa jat;
     
-    public Dashboard(ProjetoDAO daoProjeto, List<Project> projeto, JanelaDetalhesProjeto jdp) {
+    public Dashboard(ProjetoDAO daoProjeto, List<Project> projeto, JanelaDetalhesProjeto jdp, JanelaAdicionarTarefa jat, TaskDAO daoTask) {
         super("DashBoard");
         initComponents();
         this.daoProjeto = daoProjeto;
+        this.daoTask = daoTask;
         this.project = projeto;
         this.jdp = jdp;
+        this.jat = jat;
         listaProjetos.setModel(new ProjectListModel(this.project));
     }
 
@@ -167,7 +173,7 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void btDetailsProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDetailsProjectActionPerformed
                 Project selecionado = listaProjetos.getSelectedValue();
-                jdp = new JanelaDetalhesProjeto(selecionado, daoProjeto);
+                jdp = new JanelaDetalhesProjeto(selecionado, daoProjeto, jat, daoTask);
                 if (selecionado == null)
                 {
                     JOptionPane.showMessageDialog(null, "Você deveria ter selecionado um projeto.", "Selecione um projeto.", JOptionPane.INFORMATION_MESSAGE);                   

@@ -25,10 +25,10 @@ public class ProjetoDAOJDBC implements ProjetoDAO {
             conexao = BdConnection.getConnection();
             operacaoInsere = conexao.prepareStatement("insert into projeto (nome, descricao) values"
                     + "(?, ?)");
-            operacaoListar = conexao.prepareStatement("select id, nome, descricao, dataInicio, dataFinal from projeto");
-            operacaoAlterar0 = conexao.prepareStatement("update projeto set dataInicio=? where id=?");
-            operacaoAlterar1 = conexao.prepareStatement("update projeto set dataFinal=? where id=?");
-            operacaoAlterar2 = conexao.prepareStatement("update projeto set descricao=? where id=? ");
+            operacaoListar = conexao.prepareStatement("select id_projeto, nome, descricao, dataInicio, dataFinal from projeto");
+            operacaoAlterar0 = conexao.prepareStatement("update projeto set dataInicio=? where id_projeto=?");
+            operacaoAlterar1 = conexao.prepareStatement("update projeto set dataFinal=? where id_projeto=?");
+            operacaoAlterar2 = conexao.prepareStatement("update projeto set descricao=? where id_projeto=? ");
         } catch (Exception ex) {
             Logger.getLogger(ProjetoDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }

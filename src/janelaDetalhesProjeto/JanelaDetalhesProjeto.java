@@ -1,23 +1,32 @@
 package janelaDetalhesProjeto;
 
 import controlBD.ProjetoDAO;
+import controlBD.TaskDAO;
 import controlDashBoard.Project;
 import controlDashBoard.Task;
 import controlDashBoard.TaskListModel;
+import janelaTarefa.JanelaAdicionarTarefa;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 
 public class JanelaDetalhesProjeto extends javax.swing.JFrame {
 
     private Project projeto;
     private ProjetoDAO daoProjeto;
+    private JanelaAdicionarTarefa jat;
+    public TaskDAO daoTask;
     
-    public JanelaDetalhesProjeto(Project projeto, ProjetoDAO daoProjeto) {
+    public JanelaDetalhesProjeto(Project projeto, ProjetoDAO daoProjeto, JanelaAdicionarTarefa jat, TaskDAO daoTask) {
         initComponents();
         this.projeto = projeto;
         this.daoProjeto = daoProjeto;
+        this.daoTask = daoTask;
+        this.jat = jat;
         nomeProjeto.setText(this.projeto.getProjectNome());
         if (projeto.getProjectDateIni() == null)
         {
@@ -64,10 +73,10 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         jComboBox1 = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         listaTarefas = new javax.swing.JList<>();
-        jButton4 = new javax.swing.JButton();
-        jToggleButton1 = new javax.swing.JToggleButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        btnAdicionarTarefa = new javax.swing.JButton();
+        btnVerTarefa = new javax.swing.JToggleButton();
+        btnExcluirTarefa = new javax.swing.JButton();
+        btnAlterarTarefa = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -114,14 +123,19 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         listaTarefas.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(listaTarefas);
 
-        jButton4.setText("Adicionar Tarefa");
+        btnAdicionarTarefa.setText("Adicionar Tarefa");
+        btnAdicionarTarefa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdicionarTarefaActionPerformed(evt);
+            }
+        });
 
-        jToggleButton1.setText("Ver Tarefa");
-        jToggleButton1.setPreferredSize(new java.awt.Dimension(111, 23));
+        btnVerTarefa.setText("Ver Tarefa");
+        btnVerTarefa.setPreferredSize(new java.awt.Dimension(111, 23));
 
-        jButton5.setText("Excluir Tarefa");
+        btnExcluirTarefa.setText("Excluir Tarefa");
 
-        jButton6.setText("Alterar Tarefa");
+        btnAlterarTarefa.setText("Alterar Tarefa");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -155,12 +169,12 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
                     .addComponent(jScrollPane2)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnAdicionarTarefa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnAlterarTarefa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jToggleButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(btnExcluirTarefa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnVerTarefa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(48, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -192,12 +206,12 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4)
-                    .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnAdicionarTarefa)
+                    .addComponent(btnVerTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6))
+                    .addComponent(btnExcluirTarefa)
+                    .addComponent(btnAlterarTarefa))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -242,6 +256,20 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_alterarDescricaoActionPerformed
 
+    private void btnAdicionarTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarTarefaActionPerformed
+        jat = new JanelaAdicionarTarefa(daoTask, projeto);
+        jat.setVisible(true);
+        jat.setLocationRelativeTo(null);
+        jat.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        jat.addWindowListener(new WindowAdapter() {
+                    @Override
+                        public void windowClosing(WindowEvent evt) {
+                            listaTarefas.updateUI();
+                        }
+        });
+
+    }//GEN-LAST:event_btnAdicionarTarefaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -249,13 +277,14 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton alterarDescricao;
+    private javax.swing.JButton btnAdicionarTarefa;
+    private javax.swing.JButton btnAlterarTarefa;
+    private javax.swing.JButton btnExcluirTarefa;
     private javax.swing.JButton btnFinalizar;
     private javax.swing.JButton btnIniciar;
+    private javax.swing.JToggleButton btnVerTarefa;
     private javax.swing.JLabel dataFinal;
     private javax.swing.JLabel dataInicio;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
@@ -263,7 +292,6 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JList<Task> listaTarefas;
     private javax.swing.JLabel nomeProjeto;
     private javax.swing.JTextArea textoDescricao;
