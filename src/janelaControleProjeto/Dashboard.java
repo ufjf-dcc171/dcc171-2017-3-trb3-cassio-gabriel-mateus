@@ -16,10 +16,10 @@ public class Dashboard extends javax.swing.JFrame {
 
     public ProjetoDAO daoProjeto;
     public TaskDAO daoTask;
-    private final List<Project> project; 
+    private final List<Project> project;
     private JanelaDetalhesProjeto jdp;
     private JanelaAdicionarTarefa jat;
-    
+
     public Dashboard(ProjetoDAO daoProjeto, List<Project> projeto, JanelaDetalhesProjeto jdp, JanelaAdicionarTarefa jat, TaskDAO daoTask) {
         super("DashBoard");
         initComponents();
@@ -152,19 +152,16 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_txtProjectTituloActionPerformed
 
     private void btNewProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btNewProjectActionPerformed
-        
-        Project projeto; 
+
+        Project projeto;
         try {
-            if (txtProjectTitulo.getText() == null || txtProjectTitulo.getText().equals("Digite aqui o nome do novo projeto..."))
-            {    
-                JOptionPane.showMessageDialog(null, "Você deveria ter digitado um nome correto.", "Digite um nome correto", JOptionPane.INFORMATION_MESSAGE);                   
-            }
-            else
-            {
+            if (txtProjectTitulo.getText() == null || txtProjectTitulo.getText().equals("Digite aqui o nome do novo projeto...")) {
+                JOptionPane.showMessageDialog(null, "Você deveria ter digitado um nome correto.", "Digite um nome correto", JOptionPane.INFORMATION_MESSAGE);
+            } else {
                 projeto = new Project(txtProjectTitulo.getText(), txtProjectDescrition.getText());
                 project.add(projeto);
                 listaProjetos.updateUI();
-                daoProjeto.criar(projeto);    
+                daoProjeto.criar(projeto);
             }
         } catch (Exception ex) {
             Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
@@ -172,22 +169,23 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btNewProjectActionPerformed
 
     private void btDetailsProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDetailsProjectActionPerformed
-                Project selecionado = listaProjetos.getSelectedValue();
-        try {
-            jdp = new JanelaDetalhesProjeto(selecionado, daoProjeto, jat, daoTask);
-        } catch (Exception ex) {
-            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        Project selecionado = listaProjetos.getSelectedValue();
+        if (selecionado == null) {
+            JOptionPane.showMessageDialog(null, "Você deveria ter selecionado um projeto.", "Selecione um projeto.", JOptionPane.INFORMATION_MESSAGE);
+
+        } else {
+            try {
+                jdp = new JanelaDetalhesProjeto(selecionado, daoProjeto, jat, daoTask);
+            jdp.setVisible(true);
+            jdp.setLocationRelativeTo(null);
+            jdp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            } catch (Exception ex) {
+                Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         }
-                if (selecionado == null)
-                {
-                    JOptionPane.showMessageDialog(null, "Você deveria ter selecionado um projeto.", "Selecione um projeto.", JOptionPane.INFORMATION_MESSAGE);                   
-                }
-                else
-                {
-                    jdp.setVisible(true);
-                    jdp.setLocationRelativeTo(null);
-                    jdp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                }
+
+
     }//GEN-LAST:event_btDetailsProjectActionPerformed
 
 
