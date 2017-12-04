@@ -29,6 +29,9 @@ create table tarefa_pessoa (
 
 create table pessoa (
 
+    PESCOD int NOT NULL AUTO_INCREMENT,
+    PESNOME VARCHAR(255),
+    PESMAIL VARCHAR(255),
+    PRIMARY KEY (ID)
 
-
-)
+)   

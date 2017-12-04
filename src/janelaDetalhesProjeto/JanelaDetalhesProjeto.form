@@ -61,14 +61,16 @@
                           <Component id="btnAdicionarTarefa" max="32767" attributes="0"/>
                           <Component id="btnAlterarTarefa" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="btnAdicionarPessoa" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="btnExcluirTarefa" max="32767" attributes="0"/>
                           <Component id="btnVerTarefa" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="48" max="32767" attributes="0"/>
+              <EmptySpace pref="38" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -112,6 +114,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnExcluirTarefa" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnAlterarTarefa" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnAdicionarPessoa" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -246,6 +249,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Alterar Tarefa"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnAdicionarPessoa">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Adicionar Pessoas"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAdicionarPessoaActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

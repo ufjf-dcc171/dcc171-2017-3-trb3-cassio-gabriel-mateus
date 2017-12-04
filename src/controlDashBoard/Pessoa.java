@@ -1,12 +1,9 @@
-
 package controlDashBoard;
 
+public class Pessoa {
 
-public class Pessoa
-{
     private String pesNome;
     private String pesEmail;
-    private String pesSenha;
 
     public Pessoa() {
     }
@@ -27,21 +24,9 @@ public class Pessoa
         this.pesEmail = pesEmail;
     }
 
-    public String getPesSenha() {
-        return pesSenha;
-    }
-
-    public void setPesSenha(String pesSenha) {
-        this.pesSenha = pesSenha;
-    }
-
-    public Pessoa(String pesNome, String pesEmail, String pesSenha) {
+    public Pessoa(String pesNome, String pesEmail) {
         this.pesNome = pesNome;
         this.pesEmail = pesEmail;
-        this.pesSenha = pesSenha;
     }
-    
-    
-    
-    
+
 }
