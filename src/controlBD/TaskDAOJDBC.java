@@ -4,6 +4,8 @@ import controlDashBoard.Project;
 import controlDashBoard.Task;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,12 +14,14 @@ public class TaskDAOJDBC implements TaskDAO{
 
     private Connection conexao;
     private PreparedStatement operacaoInsere;
+    private PreparedStatement operacaoLista;
     
     public TaskDAOJDBC() {
         try {
             conexao = BdConnection.getConnection();
             operacaoInsere = conexao.prepareStatement("insert into tarefa (nome, descricao, duracao, progresso, fkid_projeto) values"
-                    + "(?, ?, ?, ?, ?)");    
+                    + "(?, ?, ?, ?, ?)");
+            operacaoLista = conexao.prepareStatement("select id_tarefa, nome, descricao, duracao, progresso, dataInicio, dataFinal, fkid_projeto from tarefa where fkid_projeto = ?");
         } catch (Exception ex) {
             Logger.getLogger(ProjetoDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -41,8 +45,25 @@ public class TaskDAOJDBC implements TaskDAO{
     }
 
     @Override
-    public List<Task> listarTodos() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ArrayList<Task> listarTodos(Integer id) throws Exception {
+        ArrayList<Task> tarefa = new ArrayList<>();
+        operacaoLista.clearParameters();
+        operacaoLista.setInt(1, id);
+        ResultSet resultado = operacaoLista.executeQuery();
+        while (resultado.next())
+        {
+            Task t = new Task();
+            t.setNumero_tarefa(resultado.getInt(1));
+            t.setTaskName(resultado.getString(2));
+            t.setDescricao(resultado.getString(3));
+            t.setDuracao(resultado.getInt(4));
+            t.setProgresso(resultado.getInt(5));
+            t.setTaskDateIni(resultado.getDate(6));
+            t.setTaskDateEnd(resultado.getDate(7));
+            t.setId_projeto(resultado.getInt(8));
+            tarefa.add(t);
+        }
+        return tarefa;
     }
 
     @Override

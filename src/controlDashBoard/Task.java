@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class Task {
     
-    private Integer numero;
+    private Integer numero_tarefa;
     private String descricao;
     private String taskName;
     private Integer duracao;
@@ -16,7 +16,7 @@ public class Task {
     private Integer id_projeto;
     
     public Task(Integer numero, String descricao, String taskName, Integer duracao, Integer id) {
-        this.numero = numero;
+        this.numero_tarefa = numero;
         this.descricao = descricao;
         this.taskName = taskName;
         this.duracao = duracao;
@@ -52,11 +52,11 @@ public class Task {
     }
 
     public Integer getNumero() {
-        return numero;
+        return numero_tarefa;
     }
 
     public void setNumero(Integer numero) {
-        this.numero = numero;
+        this.numero_tarefa = numero;
     }
 
     public String getDescricao() {
@@ -89,6 +89,19 @@ public class Task {
 
     public void setId_projeto(Integer id_projeto) {
         this.id_projeto = id_projeto;
+    }
+
+    public Integer getNumero_tarefa() {
+        return numero_tarefa;
+    }
+
+    public void setNumero_tarefa(Integer numero_tarefa) {
+        this.numero_tarefa = numero_tarefa;
+    }
+
+    @Override
+    public String toString() {
+        return this.taskName;
     }
     
     

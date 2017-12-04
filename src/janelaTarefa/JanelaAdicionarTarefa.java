@@ -7,6 +7,7 @@ import controlDashBoard.Task;
 import static java.lang.Integer.parseInt;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class JanelaAdicionarTarefa extends javax.swing.JFrame {
 
@@ -142,7 +143,7 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
         try {
             daoTask.criar(tarefa, projeto);
             projeto.getTarefas().add(tarefa);
-            setVisible(false);
+            JOptionPane.showMessageDialog(null, "A tarefa foi criada com sucesso!", "Tarefa criada", JOptionPane.INFORMATION_MESSAGE);                   
         } catch (Exception ex) {
             Logger.getLogger(JanelaAdicionarTarefa.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -173,7 +173,11 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void btDetailsProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDetailsProjectActionPerformed
                 Project selecionado = listaProjetos.getSelectedValue();
-                jdp = new JanelaDetalhesProjeto(selecionado, daoProjeto, jat, daoTask);
+        try {
+            jdp = new JanelaDetalhesProjeto(selecionado, daoProjeto, jat, daoTask);
+        } catch (Exception ex) {
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
                 if (selecionado == null)
                 {
                     JOptionPane.showMessageDialog(null, "Você deveria ter selecionado um projeto.", "Selecione um projeto.", JOptionPane.INFORMATION_MESSAGE);                   

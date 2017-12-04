@@ -2,6 +2,7 @@ package janelaDetalhesProjeto;
 
 import controlBD.ProjetoDAO;
 import controlBD.TaskDAO;
+import controlBD.TaskDAOJDBC;
 import controlDashBoard.Project;
 import controlDashBoard.Task;
 import controlDashBoard.TaskListModel;
@@ -21,7 +22,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
     private JanelaAdicionarTarefa jat;
     public TaskDAO daoTask;
     
-    public JanelaDetalhesProjeto(Project projeto, ProjetoDAO daoProjeto, JanelaAdicionarTarefa jat, TaskDAO daoTask) {
+    public JanelaDetalhesProjeto(Project projeto, ProjetoDAO daoProjeto, JanelaAdicionarTarefa jat, TaskDAO daoTask) throws Exception {
         initComponents();
         this.projeto = projeto;
         this.daoProjeto = daoProjeto;
@@ -44,6 +45,8 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
            dataFinal.setText(projeto.getProjectDateEnd());
         }
         textoDescricao.setText(projeto.getProjectDescricao());
+        daoTask = new TaskDAOJDBC();
+        projeto.setTarefas(daoTask.listarTodos(projeto.getId()));
         List<Task> tarefa = projeto.getTarefas();
         listaTarefas.setModel(new TaskListModel (tarefa));
         pack();
