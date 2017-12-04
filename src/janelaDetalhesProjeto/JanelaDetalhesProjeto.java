@@ -6,7 +6,6 @@ import controlBD.TaskDAOJDBC;
 import controlDashBoard.Project;
 import controlDashBoard.Task;
 import controlDashBoard.TaskListModel;
-import janelaPessoas.JanelaPessoas;
 import janelaTarefa.JanelaAdicionarTarefa;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -50,6 +49,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         daoTask = new TaskDAOJDBC();
         projeto.setTarefas(daoTask.listarTodos(projeto.getId()));
         List<Task> tarefa = projeto.getTarefas();
+        listaTarefas.updateUI();
         listaTarefas.setModel(new TaskListModel (tarefa));
         pack();
     }

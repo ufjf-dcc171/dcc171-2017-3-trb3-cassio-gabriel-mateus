@@ -7,7 +7,7 @@ import controlDashBoard.Pessoa;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface TaskDAO {
+public interface TaskPessoaDAO {
     public void associar (Task tarefa, Pessoa Pessoa) throws Exception;
        
 }

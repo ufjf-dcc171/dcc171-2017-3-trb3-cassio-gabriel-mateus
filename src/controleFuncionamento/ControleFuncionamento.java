@@ -9,7 +9,7 @@ import controlDashBoard.Pessoa;
 import controlDashBoard.Project;
 import janelaControleProjeto.Dashboard;
 import janelaDetalhesProjeto.JanelaDetalhesProjeto;
-import janelaPessoas.JanelaPessoas;
+import JanelaPessoas.JanelaPessoas;
 import janelaTarefa.JanelaAdicionarTarefa;
 import java.util.List;
 import javax.swing.JFrame;

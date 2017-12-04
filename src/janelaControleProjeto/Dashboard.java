@@ -7,7 +7,7 @@ import controlDashBoard.Pessoa;
 import controlDashBoard.Project;
 import controlDashBoard.ProjectListModel;
 import janelaDetalhesProjeto.JanelaDetalhesProjeto;
-import janelaPessoas.JanelaPessoas;
+import JanelaPessoas.JanelaPessoas;
 import janelaTarefa.JanelaAdicionarTarefa;
 import java.util.ArrayList;
 import java.util.List;
