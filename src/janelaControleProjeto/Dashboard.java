@@ -9,6 +9,7 @@ import controlDashBoard.ProjectListModel;
 import janelaDetalhesProjeto.JanelaDetalhesProjeto;
 import JanelaPessoas.JanelaPessoas;
 import janelaTarefa.JanelaAdicionarTarefa;
+import janelaTarefa.JanelaVerTarefa;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -26,10 +27,11 @@ public class Dashboard extends javax.swing.JFrame {
     private JanelaAdicionarTarefa jat;
     private JanelaPessoas jp;
     private List<Pessoa> pessoas;
+    private JanelaVerTarefa jvt;
 
     public Dashboard(ProjetoDAO daoProjeto, List<Project> projeto, JanelaDetalhesProjeto jdp, 
             JanelaAdicionarTarefa jat, TaskDAO daoTask, PessoaDAO daoPessoa, JanelaPessoas jp,
-            List<Pessoa> pessoas) {
+            List<Pessoa> pessoas, JanelaVerTarefa jvt) {
         super("DashBoard");
         initComponents();
         this.daoProjeto = daoProjeto;
@@ -39,6 +41,7 @@ public class Dashboard extends javax.swing.JFrame {
         this.jdp = jdp;
         this.jat = jat;
         this.jp = jp;
+        this.jvt = jvt;
         this.pessoas = pessoas;
         listaProjetos.setModel(new ProjectListModel(this.project));
         pack();
@@ -200,7 +203,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         } else {
             try {
-                jdp = new JanelaDetalhesProjeto(selecionado, daoProjeto, jat, daoTask);
+                jdp = new JanelaDetalhesProjeto(selecionado, daoProjeto, jat, daoTask, jvt);
             jdp.setVisible(true);
             jdp.setLocationRelativeTo(null);
             jdp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

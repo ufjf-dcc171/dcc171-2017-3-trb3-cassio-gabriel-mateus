@@ -7,6 +7,7 @@ import controlDashBoard.Project;
 import controlDashBoard.Task;
 import controlDashBoard.TaskListModel;
 import janelaTarefa.JanelaAdicionarTarefa;
+import janelaTarefa.JanelaVerTarefa;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Date;
@@ -22,13 +23,15 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
     private ProjetoDAO daoProjeto;
     private JanelaAdicionarTarefa jat;
     public TaskDAO daoTask;
+    private JanelaVerTarefa jvt;
     
-    public JanelaDetalhesProjeto(Project projeto, ProjetoDAO daoProjeto, JanelaAdicionarTarefa jat, TaskDAO daoTask) throws Exception {
+    public JanelaDetalhesProjeto(Project projeto, ProjetoDAO daoProjeto, JanelaAdicionarTarefa jat, TaskDAO daoTask, JanelaVerTarefa jvt) throws Exception {
         initComponents();
         this.projeto = projeto;
         this.daoProjeto = daoProjeto;
         this.daoTask = daoTask;
         this.jat = jat;
+        this.jvt = jvt;
         nomeProjeto.setText(this.projeto.getProjectNome());
         if (projeto.getProjectDateIni() == null)
         {
@@ -135,6 +138,11 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         });
 
         btnVerTarefa.setText("Ver Tarefa");
+        btnVerTarefa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerTarefaActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Excluir Tarefa");
 
@@ -177,7 +185,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnAdicionarTarefa)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
+                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnVerTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
@@ -272,6 +280,14 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         });
 
     }//GEN-LAST:event_btnAdicionarTarefaActionPerformed
+
+    private void btnVerTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTarefaActionPerformed
+        jvt = new JanelaVerTarefa();
+        jvt.setVisible(true);
+        jvt.setLocationRelativeTo(null);
+        jvt.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+    }//GEN-LAST:event_btnVerTarefaActionPerformed
 
     /**
      * @param args the command line arguments

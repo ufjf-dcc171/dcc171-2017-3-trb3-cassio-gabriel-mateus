@@ -11,6 +11,7 @@ import janelaControleProjeto.Dashboard;
 import janelaDetalhesProjeto.JanelaDetalhesProjeto;
 import JanelaPessoas.JanelaPessoas;
 import janelaTarefa.JanelaAdicionarTarefa;
+import janelaTarefa.JanelaVerTarefa;
 import java.util.List;
 import javax.swing.JFrame;
 
@@ -25,13 +26,14 @@ public class ControleFuncionamento {
     private JanelaDetalhesProjeto jdp;
     private JanelaAdicionarTarefa jat;
     private JanelaPessoas jp;
+    private JanelaVerTarefa jvt;
     
     public ControleFuncionamento() throws Exception {
         daoProjeto = new ProjetoDAOJDBC();
         daoPessoa = new PessoaDAOJDBC();
         projeto = daoProjeto.listarTodos();
         pessoa = daoPessoa.listarTodos();
-        dbm = new Dashboard(daoProjeto, projeto, jdp, jat, daoTask, daoPessoa, jp, pessoa);
+        dbm = new Dashboard(daoProjeto, projeto, jdp, jat, daoTask, daoPessoa, jp, pessoa, jvt);
         dbm.setVisible(true);
         dbm.setLocationRelativeTo(null);
         dbm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
