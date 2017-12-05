@@ -16,21 +16,19 @@ import javax.swing.JPanel;
 public class JanelaAdicionarTarefa extends javax.swing.JFrame {
 
     private int i;
-    private JCheckBox [] chkBox;
+    private JCheckBox[] chkBox;
     private TaskDAO daoTask;
     private Project projeto;
-    
+
     public JanelaAdicionarTarefa(TaskDAO daoTask, Project projeto) {
         super("Detalhes");
         daoTask = new TaskDAOJDBC();
         this.daoTask = daoTask;
         this.projeto = projeto;
         panelTarefas = new JPanel();
-        if (projeto.getTarefas().size() > 1)
-        {
-            chkBox = new JCheckBox[projeto.getTarefas().size()]; 
-            for (i = 0; i < projeto.getTarefas().size(); i++)
-            {
+        if (projeto.getTarefas().size() > 1) {
+            chkBox = new JCheckBox[projeto.getTarefas().size()];
+            for (i = 0; i < projeto.getTarefas().size(); i++) {
                 chkBox[i] = new JCheckBox(projeto.getTarefas().get(i).getTaskName());
                 panelTarefas.add(chkBox[i]);
             }
@@ -176,17 +174,27 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
     }//GEN-LAST:event_duracaoTarefaActionPerformed
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        Integer durac = parseInt(duracaoTarefa.getText());
-        Task tarefa = new Task(projeto.getTarefas().size()+1, descricaoTarefa.getText(), nomeTarefa.getText(), durac, projeto.getId());
-        try {
-            daoTask.criar(tarefa, projeto);
-            projeto.getTarefas().add(tarefa);
-            JOptionPane.showMessageDialog(null, "A tarefa foi criada com sucesso!", "Tarefa criada", JOptionPane.INFORMATION_MESSAGE);                   
-        } catch (Exception ex) {
-            Logger.getLogger(JanelaAdicionarTarefa.class.getName()).log(Level.SEVERE, null, ex);
+        if ("".equals(duracaoTarefa.getText())) {
+            JOptionPane.showMessageDialog(null, "Informe um valor inteiro para a duração da tarefa.", "Valor inválido.", JOptionPane.INFORMATION_MESSAGE);
+        } else if ("".equals(nomeTarefa.getText())) {
+            JOptionPane.showMessageDialog(null, "Informe o nome da tarefa.", "Nome inválido.", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            Integer durac = null;
+            try {
+                durac = parseInt(duracaoTarefa.getText());
+                Task tarefa = new Task(projeto.getTarefas().size() + 1, descricaoTarefa.getText(), nomeTarefa.getText(), durac, projeto.getId());
+                try {
+                    daoTask.criar(tarefa, projeto);
+                    projeto.getTarefas().add(tarefa);
+                    JOptionPane.showMessageDialog(null, "A tarefa foi criada com sucesso!", "Tarefa criada", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) {
+                    Logger.getLogger(JanelaAdicionarTarefa.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Deve ser informado um valor inteiro para a duração.", "Valor Inválido", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     }//GEN-LAST:event_btnConfirmarActionPerformed
-
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
