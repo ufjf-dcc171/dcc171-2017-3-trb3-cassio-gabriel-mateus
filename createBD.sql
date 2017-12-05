@@ -14,15 +14,15 @@ taskcod integer(20) PRIMARY KEY
 procod INTEGER(10),
 taskduracao INTEGER(10),
 taskprogresso INTEGER(10),
-taskdatainicio date
+taskdatainicio date,
 taskdatafim date
 
 );
 
 CREATE TABLE pre_requisito (
 prerequisitocod integer(10) PRIMARY KEY,
-taskcod integer(10)
-duracao VARCHAR(100),
+taskcod integer(10),
+duracao VARCHAR(100)
 );
 
 CREATE TABLE PESSOA (

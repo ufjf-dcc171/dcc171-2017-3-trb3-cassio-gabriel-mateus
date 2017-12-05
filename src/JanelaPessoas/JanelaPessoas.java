@@ -109,13 +109,13 @@ package JanelaPessoas;
          Pessoa pessoa;
  
          try {
-             if (txtEmail.getText() != null && txtNome1.getText() != null) {
+             if (txtEmail.getText() == null || txtNome1.getText() == null) {
+                 JOptionPane.showMessageDialog(null, "Preencher todos os campos.", "Por favor preencha todos os campos.", JOptionPane.INFORMATION_MESSAGE);
+             } else {
                  pessoa = new Pessoa(txtNome1.getText(), txtEmail.getText());
                  daoPessoa.criar(pessoa);
                  pessoas.add(pessoa);
                  JOptionPane.showMessageDialog(null, "Foi adicionado uma pessoa", "Pessoa criada com sucesso", JOptionPane.INFORMATION_MESSAGE);
-             } else {
-                 JOptionPane.showMessageDialog(null, "Preencher todos os campos.", "Por favor preencha todos os campos.", JOptionPane.INFORMATION_MESSAGE);
              }
          } catch (Exception ex) {
              Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);

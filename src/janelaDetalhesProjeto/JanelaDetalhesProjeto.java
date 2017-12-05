@@ -24,7 +24,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
     private JanelaAdicionarTarefa jat;
     private JanelaVerTarefa jvt;
     public TaskDAO daoTask;
-    
+
     public JanelaDetalhesProjeto(Project projeto, ProjetoDAO daoProjeto, JanelaAdicionarTarefa jat, TaskDAO daoTask, JanelaVerTarefa jvt) throws Exception {
         initComponents();
         this.projeto = projeto;
@@ -32,27 +32,22 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         this.daoTask = daoTask;
         this.jat = jat;
         nomeProjeto.setText(this.projeto.getProjectNome());
-        if (projeto.getProjectDateIni() == null)
-        {
+        if (projeto.getProjectDateIni() == null) {
             dataInicio.setText("Ainda não iniciado");
             dataFinal.setText("Ainda não terminado");
-        }
-        else if (projeto.getProjectDateEnd() == null)
-        {
+        } else if (projeto.getProjectDateEnd() == null) {
             dataInicio.setText(projeto.getProjectDateIni());
-            dataFinal.setText("Ainda não terminado"); 
-        }
-        else
-        {
-           dataInicio.setText(projeto.getProjectDateIni());
-           dataFinal.setText(projeto.getProjectDateEnd());
+            dataFinal.setText("Ainda não terminado");
+        } else {
+            dataInicio.setText(projeto.getProjectDateIni());
+            dataFinal.setText(projeto.getProjectDateEnd());
         }
         textoDescricao.setText(projeto.getProjectDescricao());
         daoTask = new TaskDAOJDBC();
         projeto.setTarefas(daoTask.listarTodos(projeto.getId()));
         List<Task> tarefa = projeto.getTarefas();
         listaTarefas.updateUI();
-        listaTarefas.setModel(new TaskListModel (tarefa));
+        listaTarefas.setModel(new TaskListModel(tarefa));
         pack();
     }
 
@@ -144,6 +139,11 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         });
 
         jButton1.setText("Excluir Tarefa");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -259,7 +259,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         try {
             daoProjeto.alterar(projeto, i);
             textoDescricao.setText(textoDescricao.getText());
-            JOptionPane.showMessageDialog(null, "A tarefa foi alterada com sucesso!", "Alteração feita", JOptionPane.INFORMATION_MESSAGE);                   
+            JOptionPane.showMessageDialog(null, "A tarefa foi alterada com sucesso!", "Alteração feita", JOptionPane.INFORMATION_MESSAGE);
             pack();
         } catch (Exception ex) {
             Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
@@ -272,25 +272,34 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         jat.setLocationRelativeTo(null);
         jat.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         jat.addWindowListener(new WindowAdapter() {
-                    @Override
-                        public void windowClosing(WindowEvent evt) {
-                            listaTarefas.updateUI();
-                        }
+            @Override
+            public void windowClosing(WindowEvent evt) {
+                listaTarefas.updateUI();
+            }
         });
 
     }//GEN-LAST:event_btnAdicionarTarefaActionPerformed
 
     private void btnVerTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTarefaActionPerformed
-        jvt = new JanelaVerTarefa();
-        jvt.setLocationRelativeTo(null);
-        jvt.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        jvt.setVisible(true);
+        Task selected = listaTarefas.getSelectedValue();
+        if (selected == null) {
+            JOptionPane.showMessageDialog(null, "Você deveria ter selecionado uma tarefa.", "Selecione uma tarefa.", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            jvt = new JanelaVerTarefa();
+            jvt.setLocationRelativeTo(null);
+            jvt.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            jvt.setVisible(true);
+        }
+
     }//GEN-LAST:event_btnVerTarefaActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
      */
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton alterarDescricao;

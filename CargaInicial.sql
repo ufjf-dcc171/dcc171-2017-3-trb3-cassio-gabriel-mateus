@@ -21,7 +21,7 @@ create table pessoa (
 
     PESID integer primary key generated always as identity,
     PESNOME VARCHAR(255),
-    PESMAIL VARCHAR(255),
+    PESMAIL VARCHAR(255)
 );
 
 create table prerequisito (
