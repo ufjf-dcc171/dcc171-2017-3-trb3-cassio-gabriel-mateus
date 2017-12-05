@@ -26,6 +26,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
     public TaskDAO daoTask;
 
     public JanelaDetalhesProjeto(Project projeto, ProjetoDAO daoProjeto, JanelaAdicionarTarefa jat, TaskDAO daoTask, JanelaVerTarefa jvt) throws Exception {
+        super("Detalhes do Projeto");
         initComponents();
         this.projeto = projeto;
         this.daoProjeto = daoProjeto;
@@ -49,6 +50,15 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         listaTarefas.updateUI();
         listaTarefas.setModel(new TaskListModel(tarefa));
         pack();
+        
+        if(projeto.getProjectDateIni() != null)
+        {
+            btnIniciar.setEnabled(false);
+        }
+        if(projeto.getProjectDateEnd() != null)
+        {
+            btnFinalizar.setEnabled(false);
+        }
     }
 
     /**
@@ -77,7 +87,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         listaTarefas = new javax.swing.JList<>();
         btnAdicionarTarefa = new javax.swing.JButton();
         btnVerTarefa = new javax.swing.JToggleButton();
-        jButton1 = new javax.swing.JButton();
+        btnExcluirTarefa = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -138,10 +148,10 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Excluir Tarefa");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnExcluirTarefa.setText("Excluir Tarefa");
+        btnExcluirTarefa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnExcluirTarefaActionPerformed(evt);
             }
         });
 
@@ -184,7 +194,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnAdicionarTarefa)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnExcluirTarefa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnVerTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
@@ -220,7 +230,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAdicionarTarefa)
                     .addComponent(btnVerTarefa)
-                    .addComponent(jButton1))
+                    .addComponent(btnExcluirTarefa))
                 .addContainerGap(52, Short.MAX_VALUE))
         );
 
@@ -234,6 +244,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         try {
             daoProjeto.alterar(projeto, i);
             dataInicio.setText(projeto.getProjectDateIni());
+            btnIniciar.setEnabled(false);
             pack();
         } catch (Exception ex) {
             Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
@@ -247,6 +258,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         try {
             daoProjeto.alterar(projeto, i);
             dataFinal.setText(projeto.getProjectDateEnd());
+            btnFinalizar.setEnabled(false);
             pack();
         } catch (Exception ex) {
             Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
@@ -293,9 +305,9 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnVerTarefaActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnExcluirTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirTarefaActionPerformed
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnExcluirTarefaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -304,12 +316,12 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton alterarDescricao;
     private javax.swing.JButton btnAdicionarTarefa;
+    private javax.swing.JButton btnExcluirTarefa;
     private javax.swing.JButton btnFinalizar;
     private javax.swing.JButton btnIniciar;
     private javax.swing.JToggleButton btnVerTarefa;
     private javax.swing.JLabel dataFinal;
     private javax.swing.JLabel dataInicio;
-    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
