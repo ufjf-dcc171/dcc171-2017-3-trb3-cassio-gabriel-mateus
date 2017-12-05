@@ -25,11 +25,19 @@ create table pessoa (
 );
 
 create table prerequisito (
-
-
-)
+    pre_cod integer primary key generated always as identity,
+    fkid_tarefa integer,
+    fkid_tarefaPreRequisito integer,
+    constraint fk_idTarefa foreign key (fkid_tarefa) references tarefa (id_tarefa),
+    constraint fk_idTarefaPreRequisito foreign key (fkid_tarefaPreRequisito) references tarefa (id_tarefa)
+);
 
 create table tarefa_pessoa (
 
 
 )
+
+drop table prerequisito;
+drop table tarefa;
+
+select * from prerequisito;

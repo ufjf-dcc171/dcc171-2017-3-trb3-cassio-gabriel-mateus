@@ -1,6 +1,7 @@
 package JanelaPessoas;
 
 import controlBD.PessoaDAO;
+import controlBD.PessoaDAOJDBC;
 import controlDashBoard.Pessoa;
 import janelaControleProjeto.Dashboard;
 import java.util.List;
@@ -13,10 +14,10 @@ public class JanelaPessoas extends javax.swing.JFrame {
     private List<Pessoa> pessoas;
     private final PessoaDAO daoPessoa;
 
-    public JanelaPessoas(PessoaDAO daoPessoa, List<Pessoa> pessoas) {
+    public JanelaPessoas(List<Pessoa> pessoas) {
         super("Detalhes");
         initComponents();
-        this.daoPessoa = daoPessoa;
+        daoPessoa = new PessoaDAOJDBC();
         this.pessoas = pessoas;
     }
 

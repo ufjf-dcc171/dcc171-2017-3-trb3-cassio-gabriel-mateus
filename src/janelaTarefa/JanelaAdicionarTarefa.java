@@ -1,8 +1,11 @@
 package janelaTarefa;
 
 import controlBD.PessoaDAO;
+import controlBD.PessoaDAOJDBC;
 import controlBD.TaskDAO;
 import controlBD.TaskDAOJDBC;
+import controlBD.TaskPreRequisitoDAO;
+import controlBD.TaskPreRequisitoDAOJDBC;
 import controlDashBoard.Pessoa;
 import controlDashBoard.PessoasListModel;
 import controlDashBoard.Project;
@@ -17,29 +20,35 @@ import javax.swing.JOptionPane;
 
 public class JanelaAdicionarTarefa extends javax.swing.JFrame {
    
-    private List<Pessoa> pessoasTarefas;
-    private List<Pessoa> pessoasTodas;
+    private List<Pessoa> pessoasTarefas = new ArrayList<>();
+    private List<Pessoa> pessoasSemTarefas = new ArrayList<>();
     private List<Pessoa> pessoas;
     private PessoaDAO daoPessoa;
     private TaskDAO daoTask;
+    private TaskPreRequisitoDAO daoTaskPreRequisito;
     private Project projeto;
     private ArrayList<Task> tarefas;
-    private ArrayList<Task> tarefasSemRequisitos;
+    private ArrayList<Task> tarefasSemRequisitos = new ArrayList<>();
     private ArrayList<Task> tarefasPreRequisitos = new ArrayList<>();
-    private Task tar;
     
-    public JanelaAdicionarTarefa(TaskDAO daoTask, Project projeto, PessoaDAO daoPessoa) throws Exception {
+    public JanelaAdicionarTarefa(Project projeto) throws Exception {
         super("Detalhes");
         initComponents();
         daoTask = new TaskDAOJDBC();
-        this.daoPessoa = daoPessoa;
-        this.pessoas = daoPessoa.listarTodos();
-        this.pessoasTodas = pessoas;
-        this.daoTask = daoTask;
+        daoPessoa = new PessoaDAOJDBC();
+        daoTaskPreRequisito = new TaskPreRequisitoDAOJDBC();
         this.projeto = projeto;
+        this.pessoas = daoPessoa.listarTodos();
         this.tarefas = projeto.getTarefas();
-        this.tarefasSemRequisitos = projeto.getTarefas();
-        listaPessoas.setModel(new PessoasListModel(pessoas));
+        for (Pessoa p : pessoas)
+        {
+            pessoasSemTarefas.add(p);
+        }
+        for (Task t : tarefas)
+        {
+            tarefasSemRequisitos.add(t);
+        }
+        listaPessoas.setModel(new PessoasListModel(pessoasSemTarefas));
         listaTarefaProjeto.setModel(new TaskListModel(tarefasSemRequisitos));
         pack();
     }
@@ -146,6 +155,11 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
         });
 
         removerPessoaTarefa.setText("<<");
+        removerPessoaTarefa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removerPessoaTarefaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -262,8 +276,19 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
             try {
                 durac = parseInt(duracaoTarefa.getText());
                 Task tarefa = new Task(projeto.getTarefas().size() + 1, descricaoTarefa.getText(), nomeTarefa.getText(), durac, projeto.getId());
+                for (Task t : tarefasPreRequisitos)
+                {
+                    tarefa.getPreRequisito().add(t);
+                }
+                for (Pessoa p : pessoasTarefas)
+                {
+                    tarefa.getPessoa().add(p);
+                }
                 try {
                     daoTask.criar(tarefa, projeto);
+                    ArrayList<Task> tarefasAssociar = tarefa.getPreRequisito();
+                    for (Task tar : tarefasAssociar)
+                        daoTaskPreRequisito.associar(tarefa, tar);
                     projeto.getTarefas().add(tarefa);
                     JOptionPane.showMessageDialog(null, "A tarefa foi criada com sucesso!", "Tarefa criada", JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception ex) {
@@ -307,8 +332,35 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
     }//GEN-LAST:event_removerPreRequisitoActionPerformed
 
     private void adicionarPessoaTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarPessoaTarefaActionPerformed
-        // TODO add your handling code here:
+        Pessoa selecionado = listaPessoas.getSelectedValue();
+        if (selecionado == null)
+        {
+            
+        }
+        else
+        {
+            pessoasTarefas.add(selecionado);
+            pessoasSemTarefas.remove(selecionado);
+            listaPessoasTarefas.setModel(new PessoasListModel(pessoasTarefas));
+            listaPessoas.updateUI();
+            listaPessoasTarefas.updateUI();
+        }
     }//GEN-LAST:event_adicionarPessoaTarefaActionPerformed
+
+    private void removerPessoaTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerPessoaTarefaActionPerformed
+        Pessoa selecionado = listaPessoasTarefas.getSelectedValue();
+        if (selecionado == null)
+        {
+            
+        }
+        else
+        {
+            pessoasTarefas.remove(selecionado);
+            pessoasSemTarefas.add(selecionado);
+            listaPessoas.updateUI();
+            listaPessoasTarefas.updateUI();
+        }
+    }//GEN-LAST:event_removerPessoaTarefaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

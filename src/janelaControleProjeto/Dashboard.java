@@ -8,6 +8,8 @@ import controlDashBoard.Project;
 import controlDashBoard.ProjectListModel;
 import janelaDetalhesProjeto.JanelaDetalhesProjeto;
 import JanelaPessoas.JanelaPessoas;
+import controlBD.ProjetoDAOJDBC;
+import controlBD.TaskPreRequisitoDAO;
 import janelaTarefa.JanelaAdicionarTarefa;
 import janelaTarefa.JanelaVerTarefa;
 import java.util.List;
@@ -18,6 +20,7 @@ import javax.swing.JOptionPane;
 
 public class Dashboard extends javax.swing.JFrame {
 
+    public TaskPreRequisitoDAO daoTaskPreRequisito;
     public ProjetoDAO daoProjeto;
     public TaskDAO daoTask;
     public PessoaDAO daoPessoa;
@@ -28,14 +31,13 @@ public class Dashboard extends javax.swing.JFrame {
     private List<Pessoa> pessoas;
     private JanelaVerTarefa jvt;
 
-    public Dashboard(ProjetoDAO daoProjeto, List<Project> projeto, JanelaDetalhesProjeto jdp, 
-            JanelaAdicionarTarefa jat, TaskDAO daoTask, PessoaDAO daoPessoa, JanelaPessoas jp,
+    public Dashboard(List<Project> projeto, JanelaDetalhesProjeto jdp, 
+            JanelaAdicionarTarefa jat, JanelaPessoas jp,
             List<Pessoa> pessoas, JanelaVerTarefa jvt) {
         super("DashBoard");
         initComponents();
-        this.daoProjeto = daoProjeto;
-        this.daoTask = daoTask;
-        this.daoPessoa = daoPessoa;
+        this.daoTaskPreRequisito = daoTaskPreRequisito;
+        daoProjeto = new ProjetoDAOJDBC();
         this.project = projeto;
         this.jdp = jdp;
         this.jat = jat;
@@ -202,7 +204,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         } else {
             try {
-            jdp = new JanelaDetalhesProjeto(selecionado, daoProjeto, jat, daoTask, jvt, daoPessoa);
+            jdp = new JanelaDetalhesProjeto(selecionado, jat, jvt);
             jdp.setVisible(true);
             jdp.setLocationRelativeTo(null);
             jdp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -215,7 +217,7 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btDetailsProjectActionPerformed
 
     private void btnAdicionarPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarPessoaActionPerformed
-        jp = new JanelaPessoas(daoPessoa, pessoas);
+        jp = new JanelaPessoas(pessoas);
         jp.setVisible(true);
         jp.setLocationRelativeTo(null);
         jp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

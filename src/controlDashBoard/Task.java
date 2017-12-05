@@ -1,6 +1,7 @@
 
 package controlDashBoard;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -14,6 +15,8 @@ public class Task {
     private Date taskDateIni;
     private Date taskDateEnd;
     private Integer id_projeto;
+    private ArrayList <Task> preRequisito;
+    private ArrayList <Pessoa> pessoa;
     
     public Task(Integer numero, String descricao, String taskName, Integer duracao, Integer id) {
         this.numero_tarefa = numero;
@@ -22,6 +25,7 @@ public class Task {
         this.duracao = duracao;
         this.progresso = 0;
         this.id_projeto = id;
+        preRequisito = new ArrayList<>();
     }
 
     public Task() {
@@ -95,8 +99,20 @@ public class Task {
     public String toString() {
         return this.taskName;
     }
-    
-    
-    
-    
+
+    public ArrayList <Task> getPreRequisito() {
+        return preRequisito;
+    }
+
+    public void setPreRequisito(ArrayList <Task> preRequisito) {
+        this.preRequisito = preRequisito;
+    }
+
+    public ArrayList <Pessoa> getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(ArrayList <Pessoa> pessoa) {
+        this.pessoa = pessoa;
+    }
 }

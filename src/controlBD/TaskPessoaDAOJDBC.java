@@ -15,14 +15,12 @@ public class TaskPessoaDAOJDBC implements TaskPessoaDAO{
 
     private Connection conexao;
     private PreparedStatement operacaoInsere;
-    private PreparedStatement operacaoLista;
     
     public TaskPessoaDAOJDBC() {
         try {
             conexao = BdConnection.getConnection();
             operacaoInsere = conexao.prepareStatement("insert into Tarefa_pessoa (id_pessoa, id_tarefa) values"
                     + "(?, ?, ?, ?, ?)");
-    //        operacaoLista = conexao.prepareStatement("select id_tarefa, nome, descricao, duracao, progresso, dataInicio, dataFinal, fkid_projeto from tarefa where fkid_projeto = ?");
         } catch (Exception ex) {
             Logger.getLogger(ProjetoDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }

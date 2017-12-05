@@ -2,8 +2,10 @@ package janelaDetalhesProjeto;
 
 import controlBD.PessoaDAO;
 import controlBD.ProjetoDAO;
+import controlBD.ProjetoDAOJDBC;
 import controlBD.TaskDAO;
 import controlBD.TaskDAOJDBC;
+import controlBD.TaskPreRequisitoDAO;
 import controlDashBoard.Pessoa;
 import controlDashBoard.Project;
 import controlDashBoard.Task;
@@ -12,7 +14,6 @@ import janelaTarefa.JanelaAdicionarTarefa;
 import janelaTarefa.JanelaVerTarefa;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,23 +22,23 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class JanelaDetalhesProjeto extends javax.swing.JFrame {
-
+    
     private Project projeto;
     private List<Pessoa> pessoas;
+    private TaskPreRequisitoDAO daoTaskPreRequisito;
     private ProjetoDAO daoProjeto;
     private PessoaDAO daoPessoa;
     public TaskDAO daoTask;
     private JanelaAdicionarTarefa jat;
     private JanelaVerTarefa jvt;
 
-    public JanelaDetalhesProjeto(Project projeto, ProjetoDAO daoProjeto, JanelaAdicionarTarefa jat, TaskDAO daoTask, JanelaVerTarefa jvt, PessoaDAO daoPessoa) throws Exception {
+    public JanelaDetalhesProjeto(Project projeto, JanelaAdicionarTarefa jat,
+             JanelaVerTarefa jvt) throws Exception {
         super("Detalhes do Projeto");
         initComponents();
+        daoProjeto = new ProjetoDAOJDBC();
         this.projeto = projeto;
-        this.daoProjeto = daoProjeto;
-        this.daoPessoa = daoPessoa;
         this.pessoas = pessoas;
-        this.daoTask = daoTask;
         this.jat = jat;
         nomeProjeto.setText(this.projeto.getProjectNome());
         if (projeto.getProjectDateIni() == null) {
@@ -56,8 +57,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         List<Task> tarefa = projeto.getTarefas();
         listaTarefas.updateUI();
         listaTarefas.setModel(new TaskListModel(tarefa));
-        pack();
-        
+        pack(); 
         if(projeto.getProjectDateIni() != null)
         {
             btnIniciar.setEnabled(false);
@@ -287,7 +287,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
 
     private void btnAdicionarTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarTarefaActionPerformed
         try {
-            jat = new JanelaAdicionarTarefa(daoTask, projeto, daoPessoa);
+            jat = new JanelaAdicionarTarefa(projeto);
             jat.setVisible(true);
             jat.setLocationRelativeTo(null);
             jat.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
