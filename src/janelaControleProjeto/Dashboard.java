@@ -10,7 +10,6 @@ import janelaDetalhesProjeto.JanelaDetalhesProjeto;
 import JanelaPessoas.JanelaPessoas;
 import janelaTarefa.JanelaAdicionarTarefa;
 import janelaTarefa.JanelaVerTarefa;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -203,7 +202,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         } else {
             try {
-                jdp = new JanelaDetalhesProjeto(selecionado, daoProjeto, jat, daoTask, jvt);
+            jdp = new JanelaDetalhesProjeto(selecionado, daoProjeto, jat, daoTask, jvt, daoPessoa);
             jdp.setVisible(true);
             jdp.setLocationRelativeTo(null);
             jdp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

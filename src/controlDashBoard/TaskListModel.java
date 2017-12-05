@@ -7,6 +7,7 @@ import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
 public class TaskListModel implements ListModel<Task>{
+    
     private final List<Task> tarefas;
     private final List<ListDataListener> dataListeners;
 

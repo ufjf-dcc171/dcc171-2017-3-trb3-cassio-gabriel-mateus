@@ -1,39 +1,47 @@
 package janelaTarefa;
 
+import controlBD.PessoaDAO;
 import controlBD.TaskDAO;
 import controlBD.TaskDAOJDBC;
+import controlDashBoard.Pessoa;
+import controlDashBoard.PessoasListModel;
 import controlDashBoard.Project;
 import controlDashBoard.Task;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import controlDashBoard.TaskListModel;
 import static java.lang.Integer.parseInt;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 public class JanelaAdicionarTarefa extends javax.swing.JFrame {
-
-    private int i;
-    private JCheckBox[] chkBox;
+   
+    private List<Pessoa> pessoasTarefas;
+    private List<Pessoa> pessoasTodas;
+    private List<Pessoa> pessoas;
+    private PessoaDAO daoPessoa;
     private TaskDAO daoTask;
     private Project projeto;
-
-    public JanelaAdicionarTarefa(TaskDAO daoTask, Project projeto) {
+    private ArrayList<Task> tarefas;
+    private ArrayList<Task> tarefasSemRequisitos;
+    private ArrayList<Task> tarefasPreRequisitos = new ArrayList<>();
+    private Task tar;
+    
+    public JanelaAdicionarTarefa(TaskDAO daoTask, Project projeto, PessoaDAO daoPessoa) throws Exception {
         super("Detalhes");
+        initComponents();
         daoTask = new TaskDAOJDBC();
+        this.daoPessoa = daoPessoa;
+        this.pessoas = daoPessoa.listarTodos();
+        this.pessoasTodas = pessoas;
         this.daoTask = daoTask;
         this.projeto = projeto;
-        panelTarefas = new JPanel();
-        if (projeto.getTarefas().size() > 1) {
-            chkBox = new JCheckBox[projeto.getTarefas().size()];
-            for (i = 0; i < projeto.getTarefas().size(); i++) {
-                chkBox[i] = new JCheckBox(projeto.getTarefas().get(i).getTaskName());
-                panelTarefas.add(chkBox[i]);
-            }
-        }
-        initComponents();
+        this.tarefas = projeto.getTarefas();
+        this.tarefasSemRequisitos = projeto.getTarefas();
+        listaPessoas.setModel(new PessoasListModel(pessoas));
+        listaTarefaProjeto.setModel(new TaskListModel(tarefasSemRequisitos));
+        pack();
     }
 
     /**
@@ -55,8 +63,20 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         descricaoTarefa = new javax.swing.JTextArea();
         nomeTarefa = new javax.swing.JTextField();
-        panelTarefas = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listaTarefaProjeto = new javax.swing.JList<>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        listaTarefaPreRequisito = new javax.swing.JList<>();
+        jLabel6 = new javax.swing.JLabel();
+        adicionarPreRequisito = new javax.swing.JButton();
+        removerPreRequisito = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        listaPessoas = new javax.swing.JList<>();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        listaPessoasTarefas = new javax.swing.JList<>();
+        jLabel7 = new javax.swing.JLabel();
+        adicionarPessoaTarefa = new javax.swing.JButton();
+        removerPessoaTarefa = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -88,27 +108,44 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
         descricaoTarefa.setRows(5);
         jScrollPane3.setViewportView(descricaoTarefa);
 
-        javax.swing.GroupLayout panelTarefasLayout = new javax.swing.GroupLayout(panelTarefas);
-        panelTarefas.setLayout(panelTarefasLayout);
-        panelTarefasLayout.setHorizontalGroup(
-            panelTarefasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panelTarefasLayout.setVerticalGroup(
-            panelTarefasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 112, Short.MAX_VALUE)
-        );
+        listaTarefaProjeto.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(listaTarefaProjeto);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 245, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 112, Short.MAX_VALUE)
-        );
+        listaTarefaPreRequisito.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane2.setViewportView(listaTarefaPreRequisito);
+
+        jLabel6.setText("Tarefa");
+
+        adicionarPreRequisito.setText(">>");
+        adicionarPreRequisito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adicionarPreRequisitoActionPerformed(evt);
+            }
+        });
+
+        removerPreRequisito.setText("<<");
+        removerPreRequisito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removerPreRequisitoActionPerformed(evt);
+            }
+        });
+
+        listaPessoas.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        listaPessoas.setToolTipText("");
+        jScrollPane4.setViewportView(listaPessoas);
+
+        jScrollPane5.setViewportView(listaPessoasTarefas);
+
+        jLabel7.setText("Pessoas na tarefa");
+
+        adicionarPessoaTarefa.setText(">>");
+        adicionarPessoaTarefa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adicionarPessoaTarefaActionPerformed(evt);
+            }
+        });
+
+        removerPessoaTarefa.setText("<<");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -117,26 +154,48 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(nomeTarefa))
-                        .addComponent(jLabel4)
-                        .addComponent(jLabel3)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel2)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(duracaoTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(btnConfirmar)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5)
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnConfirmar))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel5))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(panelTarefas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(21, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane3)
+                                    .addComponent(nomeTarefa)
+                                    .addComponent(duracaoTarefa))))
+                        .addGap(3, 3, 3))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(removerPreRequisito, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(adicionarPreRequisito, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jLabel4)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(adicionarPessoaTarefa)
+                                    .addComponent(removerPessoaTarefa))))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel3))
+                                .addGap(0, 11, Short.MAX_VALUE)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,15 +212,35 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelTarefas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel4)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addComponent(adicionarPreRequisito)
+                        .addGap(18, 18, 18)
+                        .addComponent(removerPreRequisito)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel4))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(adicionarPessoaTarefa)
+                        .addGap(18, 18, 18)
+                        .addComponent(removerPessoaTarefa))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(33, 33, 33)
                 .addComponent(btnConfirmar)
                 .addContainerGap())
         );
@@ -196,8 +275,45 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
+    private void adicionarPreRequisitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarPreRequisitoActionPerformed
+        Task selecionada = listaTarefaProjeto.getSelectedValue();
+        if (selecionada == null)
+        {
+            
+        }
+        else
+        {
+            tarefasPreRequisitos.add(selecionada);
+            tarefasSemRequisitos.remove(selecionada);
+            listaTarefaPreRequisito.setModel(new TaskListModel(tarefasPreRequisitos));
+            listaTarefaProjeto.updateUI();
+            listaTarefaPreRequisito.updateUI();
+        }
+    }//GEN-LAST:event_adicionarPreRequisitoActionPerformed
+
+    private void removerPreRequisitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerPreRequisitoActionPerformed
+        Task selecionada = listaTarefaPreRequisito.getSelectedValue();
+        if (selecionada == null)
+        {
+            
+        }
+        else
+        {
+            tarefasPreRequisitos.remove(selecionada);
+            tarefasSemRequisitos.add(selecionada);
+            listaTarefaProjeto.updateUI();
+            listaTarefaPreRequisito.updateUI();
+        }
+    }//GEN-LAST:event_removerPreRequisitoActionPerformed
+
+    private void adicionarPessoaTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarPessoaTarefaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_adicionarPessoaTarefaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton adicionarPessoaTarefa;
+    private javax.swing.JButton adicionarPreRequisito;
     private javax.swing.JButton btnConfirmar;
     private javax.swing.JTextArea descricaoTarefa;
     private javax.swing.JTextField duracaoTarefa;
@@ -206,9 +322,19 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JList<Pessoa> listaPessoas;
+    private javax.swing.JList<Pessoa> listaPessoasTarefas;
+    private javax.swing.JList<Task> listaTarefaPreRequisito;
+    private javax.swing.JList<Task> listaTarefaProjeto;
     private javax.swing.JTextField nomeTarefa;
-    private javax.swing.JPanel panelTarefas;
+    private javax.swing.JButton removerPessoaTarefa;
+    private javax.swing.JButton removerPreRequisito;
     // End of variables declaration//GEN-END:variables
 }

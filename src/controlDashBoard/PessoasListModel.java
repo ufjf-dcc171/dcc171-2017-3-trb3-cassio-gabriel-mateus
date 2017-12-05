@@ -3,10 +3,11 @@ package controlDashBoard;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
 
-public class PessoasListModel {
+public class PessoasListModel implements ListModel<Pessoa>{
     
      private final List<Pessoa> pessoas;
      private final List<ListDataListener> dataListeners;

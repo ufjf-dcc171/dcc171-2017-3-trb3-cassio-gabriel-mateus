@@ -1,8 +1,10 @@
 package janelaDetalhesProjeto;
 
+import controlBD.PessoaDAO;
 import controlBD.ProjetoDAO;
 import controlBD.TaskDAO;
 import controlBD.TaskDAOJDBC;
+import controlDashBoard.Pessoa;
 import controlDashBoard.Project;
 import controlDashBoard.Task;
 import controlDashBoard.TaskListModel;
@@ -10,6 +12,7 @@ import janelaTarefa.JanelaAdicionarTarefa;
 import janelaTarefa.JanelaVerTarefa;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -20,16 +23,20 @@ import javax.swing.JOptionPane;
 public class JanelaDetalhesProjeto extends javax.swing.JFrame {
 
     private Project projeto;
+    private List<Pessoa> pessoas;
     private ProjetoDAO daoProjeto;
+    private PessoaDAO daoPessoa;
+    public TaskDAO daoTask;
     private JanelaAdicionarTarefa jat;
     private JanelaVerTarefa jvt;
-    public TaskDAO daoTask;
 
-    public JanelaDetalhesProjeto(Project projeto, ProjetoDAO daoProjeto, JanelaAdicionarTarefa jat, TaskDAO daoTask, JanelaVerTarefa jvt) throws Exception {
+    public JanelaDetalhesProjeto(Project projeto, ProjetoDAO daoProjeto, JanelaAdicionarTarefa jat, TaskDAO daoTask, JanelaVerTarefa jvt, PessoaDAO daoPessoa) throws Exception {
         super("Detalhes do Projeto");
         initComponents();
         this.projeto = projeto;
         this.daoProjeto = daoProjeto;
+        this.daoPessoa = daoPessoa;
+        this.pessoas = pessoas;
         this.daoTask = daoTask;
         this.jat = jat;
         nomeProjeto.setText(this.projeto.getProjectNome());
@@ -279,17 +286,20 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
     }//GEN-LAST:event_alterarDescricaoActionPerformed
 
     private void btnAdicionarTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarTarefaActionPerformed
-        jat = new JanelaAdicionarTarefa(daoTask, projeto);
-        jat.setVisible(true);
-        jat.setLocationRelativeTo(null);
-        jat.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        jat.addWindowListener(new WindowAdapter() {
+        try {
+            jat = new JanelaAdicionarTarefa(daoTask, projeto, daoPessoa);
+            jat.setVisible(true);
+            jat.setLocationRelativeTo(null);
+            jat.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            jat.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent evt) {
                 listaTarefas.updateUI();
             }
         });
-
+        } catch (Exception ex) {
+            Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnAdicionarTarefaActionPerformed
 
     private void btnVerTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTarefaActionPerformed

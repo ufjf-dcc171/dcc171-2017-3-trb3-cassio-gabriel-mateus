@@ -38,4 +38,10 @@ public class Pessoa {
         this.pesId = pesId;
     }
 
+    @Override
+    public String toString() {
+        return pesNome;
+    }
+
+    
 }

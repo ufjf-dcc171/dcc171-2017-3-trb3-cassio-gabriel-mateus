@@ -51,14 +51,6 @@ public class Task {
         this.taskDateEnd = taskDateEnd;
     }
 
-    public Integer getNumero() {
-        return numero_tarefa;
-    }
-
-    public void setNumero(Integer numero) {
-        this.numero_tarefa = numero;
-    }
-
     public String getDescricao() {
         return descricao;
     }

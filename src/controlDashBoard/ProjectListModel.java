@@ -1,4 +1,3 @@
-
 package controlDashBoard;
 
 import java.util.ArrayList;
@@ -32,8 +31,5 @@ public class ProjectListModel implements ListModel<Project> {
 
     public void removeListDataListener(ListDataListener l) {
         this.dataListeners.remove(l);
-    }
-    
-   
-    
+    }    
 }
