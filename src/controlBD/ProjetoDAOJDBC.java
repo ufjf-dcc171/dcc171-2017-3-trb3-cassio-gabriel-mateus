@@ -37,6 +37,7 @@ public class ProjetoDAOJDBC implements ProjetoDAO {
     
     @Override
     public void criar(Project proj) throws Exception {
+        contadorDeProjetos++;
         proj.setId(contadorDeProjetos);
         operacaoInsere.clearParameters();
         operacaoInsere.setString(1, proj.getProjectNome());
