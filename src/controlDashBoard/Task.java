@@ -61,8 +61,17 @@ public class Task {
         this.taskDateIni = taskDateIni;
     }
 
-    public Date getTaskDateEnd() {
-        return taskDateEnd;
+    public String getTaskDateEnd() {
+        if (taskDateEnd == null)
+        {
+            return null;
+        }
+        else
+        {
+            SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");     
+            String str = fmt.format(taskDateEnd);
+            return str;
+        }
     }
 
     public void setTaskDateEnd(Date taskDateEnd) {

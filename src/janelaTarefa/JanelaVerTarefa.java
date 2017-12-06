@@ -36,6 +36,16 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
         this.pessoas = pessoas;
         this.tarefas = tarefas;
         this.tarefa = tarefa;
+        if (tarefa.getTaskDateIni()== null) {
+            dataInicio.setText("Ainda não iniciado");
+            dataFinal.setText("Ainda não terminado");
+        } else if (tarefa.getTaskDateEnd()== null) {
+            dataInicio.setText(tarefa.getTaskDateIni());
+            dataFinal.setText("Ainda não terminado");
+        } else {
+            dataInicio.setText(tarefa.getTaskDateIni());
+            dataFinal.setText(tarefa.getTaskDateEnd());
+        }
         daoTask = new TaskDAOJDBC();
         daoTaskPessoa = new TaskPessoaDAOJDBC();
         daoTaskPessoa.buscar(tarefa, pessoas);
@@ -259,7 +269,17 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
-        // TODO add your handling code here:
+        Integer i = 1;
+        Date data = new Date();
+        tarefa.setTaskDateEnd(data);
+        try {
+            daoTask.alterar(tarefa, i);
+            dataFinal.setText(tarefa.getTaskDateEnd());
+            btnFinalizar.setEnabled(false);
+            pack();
+        } catch (Exception ex) {
+            Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnFinalizarActionPerformed
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
@@ -267,7 +287,7 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
         Date data = new Date();
         tarefa.setTaskDateIni(data);
         try {
-            //daoTask.alterar(tarefa, i); ------------------------------------------ Problema Aqui
+            daoTask.alterar(tarefa, i);
             dataInicio.setText(tarefa.getTaskDateIni());
             btnIniciar.setEnabled(false);
             pack();
@@ -277,7 +297,7 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIniciarActionPerformed
 
     private void btnAlterarEstimativaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarEstimativaActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnAlterarEstimativaActionPerformed
 
     private void btnAterarProgressoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAterarProgressoActionPerformed
