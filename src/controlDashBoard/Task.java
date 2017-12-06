@@ -1,6 +1,7 @@
 
 package controlDashBoard;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -43,8 +44,17 @@ public class Task {
         this.taskName = taskName;
     }
 
-    public Date getTaskDateIni() {
-        return taskDateIni;
+    public String getTaskDateIni() {
+        if (taskDateIni == null)
+        {
+            return null;
+        }
+        else
+        {
+            SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");     
+            String str = fmt.format(taskDateIni);
+            return str;
+        }
     }
 
     public void setTaskDateIni(Date taskDateIni) {
@@ -126,5 +136,13 @@ public class Task {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+    
+    public Date getTaskDateIniBD() {
+        return taskDateIni;
+    }
+
+    public Date getTaskDateEndBD() {
+        return taskDateEnd;
     }
 }

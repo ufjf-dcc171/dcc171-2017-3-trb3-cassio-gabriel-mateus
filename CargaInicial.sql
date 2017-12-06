@@ -41,10 +41,10 @@ create table tarefa_pessoa (
     constraint fk_idPessoa foreign key (fkid_pessoa) references pessoa (pesid)
 );
 
-drop table tarefa_pessoa;
+/*drop table tarefa_pessoa;
 drop table prerequisito;
 drop table pessoa;
 drop table tarefa;
-drop table projeto;
+drop table projeto;*/
 
 select * from prerequisito;

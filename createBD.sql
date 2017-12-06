@@ -1,5 +1,5 @@
 CREATE TABLE Projeto (
-procod INTEGER(10) PRIMARY KEY
+procod INTEGER(10) PRIMARY KEY,
 pronome VARCHAR(100),
 prodescricao VARCHAR(255),
 prodatainicio DATE,
@@ -10,7 +10,7 @@ prodatafim Date
 
 
 CREATE TABLE Task (
-taskcod integer(20) PRIMARY KEY
+taskcod integer(20) PRIMARY KEY,
 procod INTEGER(10),
 taskduracao INTEGER(10),
 taskprogresso INTEGER(10),

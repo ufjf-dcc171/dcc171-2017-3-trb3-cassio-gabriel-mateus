@@ -1,5 +1,7 @@
 package janelaTarefa;
 
+import controlBD.TaskDAO;
+import controlBD.TaskDAOJDBC;
 import controlBD.TaskPessoaDAO;
 import controlBD.TaskPessoaDAOJDBC;
 import controlBD.TaskPreRequisitoDAO;
@@ -8,7 +10,11 @@ import controlDashBoard.Pessoa;
 import controlDashBoard.PessoasListModel;
 import controlDashBoard.Task;
 import controlDashBoard.TaskListModel;
+import janelaDetalhesProjeto.JanelaDetalhesProjeto;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ListModel;
 
 public class JanelaVerTarefa extends javax.swing.JFrame {
@@ -17,6 +23,8 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
     private TaskPreRequisitoDAO daoTaskPreRequisito;
     private List<Pessoa> pessoas;
     private List<Task> tarefas;
+    private Task tarefa;
+    public TaskDAO daoTask; 
     
     public JanelaVerTarefa(Task tarefa, List<Pessoa> pessoas, List<Task> tarefas) throws Exception {
         super("Ver tarefas");
@@ -27,6 +35,8 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
         areaDescricao.setText(tarefa.getDescricao());
         this.pessoas = pessoas;
         this.tarefas = tarefas;
+        this.tarefa = tarefa;
+        daoTask = new TaskDAOJDBC();
         daoTaskPessoa = new TaskPessoaDAOJDBC();
         daoTaskPessoa.buscar(tarefa, pessoas);
         daoTaskPreRequisito = new TaskPreRequisitoDAOJDBC();
@@ -35,6 +45,14 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
             listaPreRequisito.setModel(new TaskListModel(tarefa.getPreRequisito()));
         if (tarefa.getPessoa().size() > 0)
             listaPessoa.setModel(new PessoasListModel(tarefa.getPessoa()));
+        if(tarefa.getTaskDateIni() != null)
+        {
+            btnIniciar.setEnabled(false);
+        }
+        if(tarefa.getTaskDateEnd() != null)
+        {
+            btnFinalizar.setEnabled(false);
+        }
     }
 
     /**
@@ -65,7 +83,7 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         areaDescricao = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
+        btnAlterarDescricao = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         listaPessoa = new javax.swing.JList<>();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -81,8 +99,18 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
         });
 
         btnAterarProgresso.setText("Alterar Progresso");
+        btnAterarProgresso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAterarProgressoActionPerformed(evt);
+            }
+        });
 
         btnAlterarEstimativa.setText("Alterar Estimativa");
+        btnAlterarEstimativa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarEstimativaActionPerformed(evt);
+            }
+        });
 
         nomeTarefa.setText("(colocar nome)");
 
@@ -119,7 +147,12 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
         areaDescricao.setRows(5);
         jScrollPane3.setViewportView(areaDescricao);
 
-        jButton1.setText("Alterar Descrição");
+        btnAlterarDescricao.setText("Alterar Descrição");
+        btnAlterarDescricao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarDescricaoActionPerformed(evt);
+            }
+        });
 
         listaPessoa.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane4.setViewportView(listaPessoa);
@@ -179,7 +212,7 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(btnFinalizar))
                         .addComponent(jScrollPane3))
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(btnAlterarDescricao, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(28, 28, 28))
         );
         layout.setVerticalGroup(
@@ -216,7 +249,7 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1))
+                        .addComponent(btnAlterarDescricao))
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -230,12 +263,35 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
     }//GEN-LAST:event_btnFinalizarActionPerformed
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
-        // TODO add your handling code here:
+        Integer i = 0;
+        Date data = new Date();
+        tarefa.setTaskDateIni(data);
+        try {
+            //daoTask.alterar(tarefa, i); ------------------------------------------ Problema Aqui
+            dataInicio.setText(tarefa.getTaskDateIni());
+            btnIniciar.setEnabled(false);
+            pack();
+        } catch (Exception ex) {
+            Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnIniciarActionPerformed
+
+    private void btnAlterarEstimativaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarEstimativaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAlterarEstimativaActionPerformed
+
+    private void btnAterarProgressoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAterarProgressoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAterarProgressoActionPerformed
+
+    private void btnAlterarDescricaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarDescricaoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAlterarDescricaoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea areaDescricao;
+    private javax.swing.JButton btnAlterarDescricao;
     private javax.swing.JButton btnAlterarEstimativa;
     private javax.swing.JButton btnAterarProgresso;
     private javax.swing.JButton btnFinalizar;
@@ -243,7 +299,6 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
     private javax.swing.JLabel dataFinal;
     private javax.swing.JLabel dataInicio;
     private javax.swing.JLabel duracao;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
