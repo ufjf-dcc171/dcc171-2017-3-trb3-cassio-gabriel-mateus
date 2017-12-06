@@ -21,7 +21,7 @@ public class TaskDAOJDBC implements TaskDAO{
             conexao = BdConnection.getConnection();
             operacaoInsere = conexao.prepareStatement("insert into tarefa (nome, descricao, duracao, progresso, fkid_projeto) values"
                     + "(?, ?, ?, ?, ?)");
-            operacaoLista = conexao.prepareStatement("select id_tarefa, nome, descricao, duracao, progresso, dataInicio, dataFinal, fkid_projeto from tarefa where fkid_projeto = ?");
+            operacaoLista = conexao.prepareStatement("select id_tarefa, nome, status, descricao, duracao, progresso, dataInicio, dataFinal, fkid_projeto from tarefa where fkid_projeto = ?");
         } catch (Exception ex) {
             Logger.getLogger(ProjetoDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -55,12 +55,13 @@ public class TaskDAOJDBC implements TaskDAO{
             Task t = new Task();
             t.setNumero_tarefa(resultado.getInt(1));
             t.setTaskName(resultado.getString(2));
-            t.setDescricao(resultado.getString(3));
-            t.setDuracao(resultado.getInt(4));
-            t.setProgresso(resultado.getInt(5));
-            t.setTaskDateIni(resultado.getDate(6));
-            t.setTaskDateEnd(resultado.getDate(7));
-            t.setId_projeto(resultado.getInt(8));
+            t.setStatus(resultado.getString(3));
+            t.setDescricao(resultado.getString(4));
+            t.setDuracao(resultado.getInt(5));
+            t.setProgresso(resultado.getInt(6));
+            t.setTaskDateIni(resultado.getDate(7));
+            t.setTaskDateEnd(resultado.getDate(8));
+            t.setId_projeto(resultado.getInt(9));
             tarefa.add(t);
         }
         return tarefa;

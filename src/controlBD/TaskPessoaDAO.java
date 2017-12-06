@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface TaskPessoaDAO {
     public void associar (Task tarefa, Pessoa Pessoa) throws Exception;
-       
+    public void buscar (Task tarefa, List<Pessoa> pessoas) throws Exception;
 }

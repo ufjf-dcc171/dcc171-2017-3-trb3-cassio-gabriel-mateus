@@ -10,6 +10,7 @@ public class Task {
     private Integer numero_tarefa;
     private String descricao;
     private String taskName;
+    private String status;
     private Integer duracao;
     private Integer progresso;
     private Date taskDateIni;
@@ -26,9 +27,12 @@ public class Task {
         this.progresso = 0;
         this.id_projeto = id;
         preRequisito = new ArrayList<>();
+        pessoa = new ArrayList<>();
     }
 
     public Task() {
+        preRequisito = new ArrayList<>();
+        pessoa = new ArrayList<>();
     }
 
     public String getTaskName() {
@@ -114,5 +118,13 @@ public class Task {
 
     public void setPessoa(ArrayList <Pessoa> pessoa) {
         this.pessoa = pessoa;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -204,7 +204,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         } else {
             try {
-            jdp = new JanelaDetalhesProjeto(selecionado, jat, jvt);
+            jdp = new JanelaDetalhesProjeto(selecionado, jat, jvt, pessoas);
             jdp.setVisible(true);
             jdp.setLocationRelativeTo(null);
             jdp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

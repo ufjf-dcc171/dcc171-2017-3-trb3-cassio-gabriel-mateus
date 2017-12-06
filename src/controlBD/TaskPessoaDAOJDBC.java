@@ -15,20 +15,20 @@ public class TaskPessoaDAOJDBC implements TaskPessoaDAO{
 
     private Connection conexao;
     private PreparedStatement operacaoInsere;
+    private PreparedStatement operacaoBuscar;
     
     public TaskPessoaDAOJDBC() {
         try {
             conexao = BdConnection.getConnection();
-            operacaoInsere = conexao.prepareStatement("insert into Tarefa_pessoa (id_pessoa, id_tarefa) values"
-                    + "(?, ?, ?, ?, ?)");
+            operacaoInsere = conexao.prepareStatement("insert into Tarefa_pessoa (fkid_pessoa, fkid_tarefa) values"
+                    + "(?, ?)");
+            operacaoBuscar = conexao.prepareStatement("select fkid_pessoa from tarefa_pessoa where fkid_tarefa = ?");
         } catch (Exception ex) {
             Logger.getLogger(ProjetoDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
     
-
-
     @Override
     public void associar(Task tarefa, Pessoa pessoa) throws Exception {
         operacaoInsere.clearParameters();
@@ -37,5 +37,23 @@ public class TaskPessoaDAOJDBC implements TaskPessoaDAO{
         operacaoInsere.executeUpdate();    
     }
 
-   
+    @Override
+    public void buscar(Task tarefa, List<Pessoa> pessoas) throws Exception {
+        ArrayList<Pessoa> pTarefa = new ArrayList<>();
+        operacaoBuscar.clearParameters();
+        operacaoBuscar.setInt(1, tarefa.getNumero_tarefa());
+        ResultSet resultado = operacaoBuscar.executeQuery();
+        while (resultado.next())
+        {
+            int i = resultado.getInt(1);
+            for (Pessoa p : pessoas)
+            {
+                if (i == p.getPesId())
+                {
+                    pTarefa.add(p);
+                }
+            }
+        }
+        tarefa.setPessoa(pTarefa);
+    }
 }

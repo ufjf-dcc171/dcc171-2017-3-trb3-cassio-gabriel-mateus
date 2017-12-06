@@ -62,7 +62,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
-                              <Component id="jComboBox1" min="-2" pref="125" max="-2" attributes="0"/>
+                              <Component id="ComboBoxSelecionar" min="-2" pref="125" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="btnAdicionarTarefa" min="-2" max="-2" attributes="0"/>
@@ -105,7 +105,7 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ComboBoxSelecionar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jScrollPane2" min="-2" max="-2" attributes="0"/>
@@ -196,10 +196,15 @@
         <Property name="text" type="java.lang.String" value="Tarefas do Projeto"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JComboBox" name="jComboBox1">
+    <Component class="javax.swing.JComboBox" name="ComboBoxSelecionar">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="0"/>
+          <StringArray count="4">
+            <StringItem index="0" value="Todas "/>
+            <StringItem index="1" value="Conclu&#xed;das "/>
+            <StringItem index="2" value="A fazer "/>
+            <StringItem index="3" value="Podem ser iniciadas"/>
+          </StringArray>
         </Property>
       </Properties>
       <AuxValues>

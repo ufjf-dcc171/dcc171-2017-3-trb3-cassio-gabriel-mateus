@@ -10,6 +10,7 @@ create table tarefa (
     id_tarefa integer primary key GENERATED ALWAYS AS IDENTITY,
     nome varchar (30) not null,
     descricao varchar (100),
+    status varchar (30),
     duracao integer,
     progresso integer,
     dataInicio date,
@@ -33,11 +34,17 @@ create table prerequisito (
 );
 
 create table tarefa_pessoa (
+    pre_cod integer primary key generated always as identity,
+    fkid_tarefa integer,
+    fkid_pessoa integer,
+    constraint fk_idTarefaProjeto foreign key (fkid_tarefa) references tarefa (id_tarefa),
+    constraint fk_idPessoa foreign key (fkid_pessoa) references pessoa (pesid)
+);
 
-
-)
-
+drop table tarefa_pessoa;
 drop table prerequisito;
+drop table pessoa;
 drop table tarefa;
+drop table projeto;
 
 select * from prerequisito;

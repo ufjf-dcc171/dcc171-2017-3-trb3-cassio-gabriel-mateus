@@ -23,6 +23,7 @@ import javax.swing.JOptionPane;
 
 public class JanelaDetalhesProjeto extends javax.swing.JFrame {
     
+    private List<Task> tarefas;
     private Project projeto;
     private List<Pessoa> pessoas;
     private TaskPreRequisitoDAO daoTaskPreRequisito;
@@ -31,9 +32,9 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
     public TaskDAO daoTask;
     private JanelaAdicionarTarefa jat;
     private JanelaVerTarefa jvt;
-
+    
     public JanelaDetalhesProjeto(Project projeto, JanelaAdicionarTarefa jat,
-             JanelaVerTarefa jvt) throws Exception {
+             JanelaVerTarefa jvt, List<Pessoa> pessoas) throws Exception {
         super("Detalhes do Projeto");
         initComponents();
         daoProjeto = new ProjetoDAOJDBC();
@@ -53,10 +54,11 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         }
         textoDescricao.setText(projeto.getProjectDescricao());
         daoTask = new TaskDAOJDBC();
+        ComboBoxSelecionar.updateUI();
         projeto.setTarefas(daoTask.listarTodos(projeto.getId()));
-        List<Task> tarefa = projeto.getTarefas();
+        this.tarefas = projeto.getTarefas();
         listaTarefas.updateUI();
-        listaTarefas.setModel(new TaskListModel(tarefa));
+        listaTarefas.setModel(new TaskListModel(tarefas));
         pack(); 
         if(projeto.getProjectDateIni() != null)
         {
@@ -89,7 +91,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         textoDescricao = new javax.swing.JTextArea();
         alterarDescricao = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        ComboBoxSelecionar = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         listaTarefas = new javax.swing.JList<>();
         btnAdicionarTarefa = new javax.swing.JButton();
@@ -137,6 +139,8 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         });
 
         jLabel7.setText("Tarefas do Projeto");
+
+        ComboBoxSelecionar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todas ", "Concluídas ", "A fazer ", "Podem ser iniciadas" }));
 
         listaTarefas.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(listaTarefas);
@@ -197,7 +201,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(ComboBoxSelecionar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnAdicionarTarefa)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -230,7 +234,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ComboBoxSelecionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -287,7 +291,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
 
     private void btnAdicionarTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarTarefaActionPerformed
         try {
-            jat = new JanelaAdicionarTarefa(projeto);
+            jat = new JanelaAdicionarTarefa(projeto, pessoas);
             jat.setVisible(true);
             jat.setLocationRelativeTo(null);
             jat.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -307,10 +311,14 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         if (selected == null) {
             JOptionPane.showMessageDialog(null, "Você deveria ter selecionado uma tarefa.", "Selecione uma tarefa.", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            jvt = new JanelaVerTarefa();
-            jvt.setLocationRelativeTo(null);
-            jvt.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            jvt.setVisible(true);
+            try {
+                jvt = new JanelaVerTarefa(selected, pessoas, tarefas);
+                jvt.setLocationRelativeTo(null);
+                jvt.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                jvt.setVisible(true);
+            } catch (Exception ex) {
+                Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }//GEN-LAST:event_btnVerTarefaActionPerformed
@@ -324,6 +332,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> ComboBoxSelecionar;
     private javax.swing.JButton alterarDescricao;
     private javax.swing.JButton btnAdicionarTarefa;
     private javax.swing.JButton btnExcluirTarefa;
@@ -332,7 +341,6 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
     private javax.swing.JToggleButton btnVerTarefa;
     private javax.swing.JLabel dataFinal;
     private javax.swing.JLabel dataInicio;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
