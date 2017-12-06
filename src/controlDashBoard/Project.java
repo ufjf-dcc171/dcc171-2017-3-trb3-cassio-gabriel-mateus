@@ -4,6 +4,7 @@ package controlDashBoard;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class Project {
@@ -13,7 +14,7 @@ public class Project {
     private Date projectDateIni;
     private Date projectDateEnd;
     private String projectDescricao;
-    private ArrayList<Task> tarefas = new ArrayList<>();
+    private List<Task> tarefas = new ArrayList<>();
 
     public Project(String projectNome, String projectDescricao) {
         this.projectNome = projectNome;
@@ -101,7 +102,7 @@ public class Project {
         this.id = id;
     }
 
-    public ArrayList<Task> getTarefas() {
+    public List<Task> getTarefas() {
         return tarefas;
     }
 

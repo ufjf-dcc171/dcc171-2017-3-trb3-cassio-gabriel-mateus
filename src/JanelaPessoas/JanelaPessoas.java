@@ -4,6 +4,7 @@ import controlBD.PessoaDAO;
 import controlBD.PessoaDAOJDBC;
 import controlDashBoard.Pessoa;
 import janelaControleProjeto.Dashboard;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -113,7 +114,8 @@ public class JanelaPessoas extends javax.swing.JFrame {
             if ("".equals(txtEmail.getText()) || "".equals(txtNome1.getText())) {
                 JOptionPane.showMessageDialog(null, "Preencher todos os campos.", "Por favor preencha todos os campos.", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                pessoa = new Pessoa(txtNome1.getText(), txtEmail.getText());
+                List<Pessoa> pessoas = daoPessoa.listarTodos();
+                pessoa = new Pessoa(pessoas.size()+1, txtNome1.getText(), txtEmail.getText());
                 daoPessoa.criar(pessoa);
                 pessoas.add(pessoa);
                 JOptionPane.showMessageDialog(null, "Foi adicionado uma pessoa.", "Pessoa criada com sucesso.", JOptionPane.INFORMATION_MESSAGE);

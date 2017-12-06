@@ -11,6 +11,7 @@ import controlDashBoard.PessoasListModel;
 import controlDashBoard.Task;
 import controlDashBoard.TaskListModel;
 import janelaDetalhesProjeto.JanelaDetalhesProjeto;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -33,6 +34,7 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
         nomeTarefa.setText(tarefa.getTaskName());
         duracao.setText(Integer.toString(tarefa.getDuracao()) + " dias");
         progresso.setValue(tarefa.getProgresso());
+        porcentagem.setText(Integer.toString(tarefa.getProgresso()) + "%");
         areaDescricao.setText(tarefa.getDescricao());
         this.pessoas = pessoas;
         this.tarefas = tarefas;
@@ -63,10 +65,10 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
         }
         if (tarefa.getTaskDateEnd() != null) {
             tarefa.setProgresso(100);
-            progresso.setValue(100);
             btnFinalizar.setEnabled(false);
             btnAlterarEstimativa.setEnabled(false);
             btnAterarProgresso.setEnabled(false);
+            btnAlterarDescricao.setEnabled(false);
         }
     }
 
@@ -103,6 +105,7 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
         listaPessoa = new javax.swing.JList<>();
         jScrollPane5 = new javax.swing.JScrollPane();
         listaPreRequisito = new javax.swing.JList<>();
+        porcentagem = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -175,6 +178,8 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
         listaPreRequisito.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane5.setViewportView(listaPreRequisito);
 
+        porcentagem.setText("% concluída");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -195,17 +200,19 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(nomeTarefa))
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel3))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(progresso, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
-                                    .addComponent(duracao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(nomeTarefa)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(porcentagem)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(progresso, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                                        .addComponent(duracao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnAlterarEstimativa)
@@ -246,7 +253,9 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
                         .addComponent(btnIniciar)
                         .addComponent(btnAterarProgresso)
                         .addComponent(dataInicio)))
-                .addGap(18, 18, 18)
+                .addGap(1, 1, 1)
+                .addComponent(porcentagem)
+                .addGap(3, 3, 3)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jLabel5)
@@ -280,17 +289,22 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
             int resposta = JOptionPane.showConfirmDialog(null, "Uma vez finalizada, não será possível alterar os dados da tarefa.", "Tem certeza que deseja finalizar?", JOptionPane.YES_NO_OPTION);
             if (resposta == JOptionPane.YES_OPTION) {
                 Integer i = 1;
+                Integer j = 4;
+                Integer k = 5;
                 Date data = new Date();
-                tarefa.setStatus("Concluida");
+                tarefa.setStatus("Concluída");
                 tarefa.setProgresso(100);
                 tarefa.setTaskDateEnd(data);
                 try {
                     daoTask.alterar(tarefa, i);
+                    daoTask.alterar(tarefa, j);
+                    daoTask.alterar(tarefa, k);
                     dataFinal.setText(tarefa.getTaskDateEnd());
                     btnFinalizar.setEnabled(false);
                     btnAlterarEstimativa.setEnabled(false);
                     btnAterarProgresso.setEnabled(false);
                     progresso.setValue(tarefa.getProgresso());
+                    porcentagem.setText(Integer.toString(tarefa.getProgresso()) + "%");
                     pack();
                 } catch (Exception ex) {
                     Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
@@ -301,14 +315,48 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
         Integer i = 0;
-        Date data = new Date();
-        tarefa.setStatus("Iniciada");
-        tarefa.setTaskDateIni(data);
+        Integer j = 5;
+        Boolean podeIniciar = false;
         try {
-            daoTask.alterar(tarefa, i);
-            dataInicio.setText(tarefa.getTaskDateIni());
-            btnIniciar.setEnabled(false);
-            pack();
+            if (tarefa.getPreRequisito().size() > 0)
+            {
+                 ArrayList<Task> tar = tarefa.getPreRequisito();
+                for (Task t : tar)
+                {
+                    if ("Concluída".equals(t.getStatus()))
+                    {
+                        podeIniciar = true;
+                    }
+                }
+                if (podeIniciar)
+                {
+                    Date data = new Date();
+                    tarefa.setStatus("Iniciada");
+                    tarefa.setTaskDateIni(data);
+                    daoTask.alterar(tarefa, i);
+                    daoTask.alterar(tarefa, j);
+                    dataInicio.setText(tarefa.getTaskDateIni());
+                    btnIniciar.setEnabled(false);
+                    pack();
+                }
+                else
+                {
+                    tarefa.setStatus("Pré-requisito");
+                    daoTask.alterar(tarefa, j);
+                }
+            }
+            else
+            {
+                Date data = new Date();
+                tarefa.setStatus("Iniciada");
+                tarefa.setTaskDateIni(data);
+                daoTask.alterar(tarefa, i);
+                daoTask.alterar(tarefa, j);
+                dataInicio.setText(tarefa.getTaskDateIni());
+                btnIniciar.setEnabled(false);
+                pack(); 
+            }
+                        
         } catch (Exception ex) {
             Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -349,6 +397,7 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
         }
         try {
             daoTask.alterar(tarefa, i);
+            porcentagem.setText(Integer.toString(tarefa.getProgresso()) + "%");
             progresso.setValue(tarefa.getProgresso());
             pack();
         } catch (Exception ex) {
@@ -392,6 +441,7 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
     private javax.swing.JList<Pessoa> listaPessoa;
     private javax.swing.JList<Task> listaPreRequisito;
     private javax.swing.JLabel nomeTarefa;
+    private javax.swing.JLabel porcentagem;
     private javax.swing.JProgressBar progresso;
     // End of variables declaration//GEN-END:variables
 }

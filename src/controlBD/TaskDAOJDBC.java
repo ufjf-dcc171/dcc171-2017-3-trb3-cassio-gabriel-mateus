@@ -20,6 +20,7 @@ public class TaskDAOJDBC implements TaskDAO {
     private PreparedStatement operacaoAlterar2;
     private PreparedStatement operacaoAlterar3;
     private PreparedStatement operacaoAlterar4;
+    private PreparedStatement operacaoAlterar5;
 
     public TaskDAOJDBC() {
         try {
@@ -32,6 +33,7 @@ public class TaskDAOJDBC implements TaskDAO {
             operacaoAlterar2 = conexao.prepareStatement("update tarefa set descricao=? where id_tarefa=?");
             operacaoAlterar3 = conexao.prepareStatement("update tarefa set duracao=? where id_tarefa=?");
             operacaoAlterar4 = conexao.prepareStatement("update tarefa set progresso=? where id_tarefa=?");
+            operacaoAlterar5 = conexao.prepareStatement("update tarefa set status=? where id_tarefa=?");
         } catch (Exception ex) {
             Logger.getLogger(ProjetoDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -116,6 +118,14 @@ public class TaskDAOJDBC implements TaskDAO {
                 operacaoAlterar4.setInt(1, tarefa.getProgresso());
                 operacaoAlterar4.setInt(2, tarefa.getNumero_tarefa());
                 operacaoAlterar4.executeUpdate();
+                break;
+            }
+            case 5:
+            {
+                operacaoAlterar5.clearParameters();
+                operacaoAlterar5.setString(1, tarefa.getStatus());
+                operacaoAlterar5.setInt(2, tarefa.getNumero_tarefa());
+                operacaoAlterar5.executeUpdate();
                 break;
             }
             

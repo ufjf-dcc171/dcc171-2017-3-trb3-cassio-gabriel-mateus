@@ -12,14 +12,19 @@ import controlDashBoard.Task;
 import controlDashBoard.TaskListModel;
 import janelaTarefa.JanelaAdicionarTarefa;
 import janelaTarefa.JanelaVerTarefa;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 
 public class JanelaDetalhesProjeto extends javax.swing.JFrame {
     
@@ -41,7 +46,11 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         this.projeto = projeto;
         this.pessoas = pessoas;
         this.jat = jat;
+        this.tarefas = projeto.getTarefas();
+        textoDescricao.setText(this.projeto.getProjectDescricao());
         nomeProjeto.setText(this.projeto.getProjectNome());
+        daoTask = new TaskDAOJDBC();
+        this.projeto.setTarefas(daoTask.listarTodos(projeto.getId()));
         if (projeto.getProjectDateIni() == null) {
             dataInicio.setText("Ainda não iniciado");
             dataFinal.setText("Ainda não terminado");
@@ -52,14 +61,6 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
             dataInicio.setText(projeto.getProjectDateIni());
             dataFinal.setText(projeto.getProjectDateEnd());
         }
-        textoDescricao.setText(projeto.getProjectDescricao());
-        daoTask = new TaskDAOJDBC();
-        ComboBoxSelecionar.updateUI();
-        projeto.setTarefas(daoTask.listarTodos(projeto.getId()));
-        this.tarefas = projeto.getTarefas();
-        listaTarefas.updateUI();
-        listaTarefas.setModel(new TaskListModel(tarefas));
-        pack(); 
         if(projeto.getProjectDateIni() != null)
         {
             btnIniciar.setEnabled(false);
@@ -68,6 +69,29 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         {
             btnFinalizar.setEnabled(false);
         }
+        defaultTela();
+        ComboBoxSelecionar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                switch (ComboBoxSelecionar.getSelectedIndex())
+                {
+                    case 0:
+                    {
+                        try {
+                            defaultTela();
+                        } catch (Exception ex) {
+                            Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        break;
+                    }
+                    case 1:
+                    {
+                        defaultTelaConcluida();
+                        break;
+                    }
+                }
+            }
+        });       
     }
 
     /**
@@ -358,5 +382,34 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
 
     public void setProjeto(Project projeto) {
         this.projeto = projeto;
+    }
+
+    private void defaultTela() throws Exception {
+        System.out.println(this.projeto.getTarefas().size());
+        listaTarefas.setModel(new TaskListModel(tarefas));
+        listaTarefas.updateUI();
+        pack();
+    }
+    
+    private void defaultTelaConcluida()
+    {
+        System.out.println("q");
+        Integer i = 0;
+        List<Task> tar = new ArrayList<>();
+        if (this.projeto.getTarefas().size() > 0)
+        {
+            for (Task t : this.projeto.getTarefas())
+            {
+                if ("Concluido".equals(t.getStatus()))
+                {
+                    tar.add(t);
+                }
+            }
+        }
+        if (tar.size() > 0)
+        {
+            this.listaTarefas.setModel(new TaskListModel(tarefas));
+            listaTarefas.updateUI();
+        }
     }
 }

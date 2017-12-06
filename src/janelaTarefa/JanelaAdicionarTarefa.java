@@ -30,9 +30,9 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
     private TaskPessoaDAO daoTaskPessoa;
     private TaskPreRequisitoDAO daoTaskPreRequisito;
     private Project projeto;
-    private ArrayList<Task> tarefas;
-    private ArrayList<Task> tarefasSemRequisitos = new ArrayList<>();
-    private ArrayList<Task> tarefasPreRequisitos = new ArrayList<>();
+    private List<Task> tarefas;
+    private List<Task> tarefasSemRequisitos = new ArrayList<>();
+    private List<Task> tarefasPreRequisitos = new ArrayList<>();
     
     public JanelaAdicionarTarefa(Project projeto, List<Pessoa> pessoas) throws Exception {
         super("Detalhes");
@@ -46,6 +46,7 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
         this.tarefas = projeto.getTarefas();
         for (Pessoa p : pessoas)
         {
+            System.out.println("queijo");
             pessoasSemTarefas.add(p);
         }
         for (Task t : tarefas)
@@ -287,6 +288,7 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
                 }
                 for (Pessoa p : pessoasTarefas)
                 {
+                    System.out.println("q");
                     tarefa.getPessoa().add(p);
                 }
                 try {

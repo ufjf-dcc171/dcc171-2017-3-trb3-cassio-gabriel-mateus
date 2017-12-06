@@ -6,6 +6,12 @@ public class Pessoa {
     private String pesNome;
     private String pesEmail;
 
+    public Pessoa(Integer pesId, String pesNome, String pesEmail) {
+        this.pesId = pesId;
+        this.pesNome = pesNome;
+        this.pesEmail = pesEmail;
+    }
+    
     public Pessoa() {
     }
 
@@ -22,11 +28,6 @@ public class Pessoa {
     }
 
     public void setPesEmail(String pesEmail) {
-        this.pesEmail = pesEmail;
-    }
-
-    public Pessoa(String pesNome, String pesEmail) {
-        this.pesNome = pesNome;
         this.pesEmail = pesEmail;
     }
 

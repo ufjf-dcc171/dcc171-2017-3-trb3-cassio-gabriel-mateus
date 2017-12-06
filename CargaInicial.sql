@@ -1,4 +1,4 @@
-/*create table projeto (
+create table projeto (
     id_projeto integer primary key GENERATED ALWAYS AS IDENTITY,
     nome varchar (30) not null,
     descricao varchar (100),
@@ -40,14 +40,15 @@ create table tarefa_pessoa (
     constraint fk_idTarefaProjeto foreign key (fkid_tarefa) references tarefa (id_tarefa),
     constraint fk_idPessoa foreign key (fkid_pessoa) references pessoa (pesid)
 );
-
+/*
 drop table tarefa_pessoa;
 drop table prerequisito;
 drop table pessoa;
 drop table tarefa;
 drop table projeto;
 
-select * from prerequisito;*/
+
+select * from prerequisito;
 
 select * from tarefa
-
+*/
