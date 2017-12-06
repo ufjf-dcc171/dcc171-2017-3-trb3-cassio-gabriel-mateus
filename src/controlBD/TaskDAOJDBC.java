@@ -29,6 +29,9 @@ public class TaskDAOJDBC implements TaskDAO {
             operacaoLista = conexao.prepareStatement("select id_tarefa, nome, status, descricao, duracao, progresso, dataInicio, dataFinal, fkid_projeto from tarefa where fkid_projeto = ?");
             operacaoAlterar0 = conexao.prepareStatement("update tarefa set dataInicio=? where id_tarefa=?");
             operacaoAlterar1 = conexao.prepareStatement("update tarefa set dataFinal=? where id_tarefa=?");
+            operacaoAlterar2 = conexao.prepareStatement("update tarefa set descricao=? where id_tarefa=?");
+            operacaoAlterar3 = conexao.prepareStatement("update tarefa set duracao=? where id_tarefa=?");
+            operacaoAlterar4 = conexao.prepareStatement("update tarefa set progresso=? where id_tarefa=?");
         } catch (Exception ex) {
             Logger.getLogger(ProjetoDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }

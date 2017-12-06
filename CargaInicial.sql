@@ -1,4 +1,4 @@
-create table projeto (
+/*create table projeto (
     id_projeto integer primary key GENERATED ALWAYS AS IDENTITY,
     nome varchar (30) not null,
     descricao varchar (100),
@@ -47,7 +47,7 @@ drop table pessoa;
 drop table tarefa;
 drop table projeto;
 
-select * from prerequisito;
+select * from prerequisito;*/
 
 select * from tarefa
 
