@@ -206,9 +206,9 @@ public class Dashboard extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Você deveria ter digitado um nome correto.", "Digite um nome correto", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 projeto = new Project(txtProjectTitulo.getText(), txtProjectDescrition.getText());
+                sp.getDaoProjeto().criar(projeto);
                 sp.getProjeto().add(projeto);
                 listaProjetos.updateUI();
-                sp.getDaoProjeto().criar(projeto);
             }
         } catch (Exception ex) {
             Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
@@ -253,7 +253,7 @@ public class Dashboard extends javax.swing.JFrame {
                     sp.getDaoTaskPreRequisito().excluir(tar.getNumero_tarefa());
                     for (Pessoa pes: tar.getPessoa())
                     {
-                        sp.getDaoTaskPessoa().excluir(tar.getNumero_tarefa(), pes.getPesId());
+                          sp.getDaoTaskPessoa().excluir(tar.getNumero_tarefa());
                     }
                     sp.getDaoTask().excluir(tar);
                 }

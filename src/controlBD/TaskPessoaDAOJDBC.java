@@ -24,7 +24,7 @@ public class TaskPessoaDAOJDBC implements TaskPessoaDAO{
             operacaoInsere = conexao.prepareStatement("insert into Tarefa_pessoa (fkid_pessoa, fkid_tarefa) values"
                     + "(?, ?)");
             operacaoBuscar = conexao.prepareStatement("select fkid_pessoa from tarefa_pessoa where fkid_tarefa = ?");
-            operacaoExcluir = conexao.prepareStatement("delete from Tarefa_pessoa where fkid_pessoa = ? AND fkid_tarefa= ?");
+            operacaoExcluir = conexao.prepareStatement("delete from Tarefa_pessoa where  fkid_tarefa= ?");
         } catch (Exception ex) {
             Logger.getLogger(ProjetoDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -60,10 +60,9 @@ public class TaskPessoaDAOJDBC implements TaskPessoaDAO{
     }
 
     @Override
-    public void excluir(Integer i, Integer j) throws Exception {
+    public void excluir(Integer i) throws Exception {
         operacaoExcluir.clearParameters();
-        operacaoExcluir.setInt(1, j);
-        operacaoExcluir.setInt(1, i);
+        operacaoExcluir.setInt(1,i);
         operacaoExcluir.executeUpdate();
     }
 }

@@ -64,6 +64,7 @@ public class TaskDAOJDBC implements TaskDAO {
     public ArrayList<Task> listarTodos(Integer id) throws Exception {
         ArrayList<Task> tarefa = new ArrayList<>();
         operacaoLista.clearParameters();
+        System.out.println(id);
         operacaoLista.setInt(1, id);
         ResultSet resultado = operacaoLista.executeQuery();
         while (resultado.next()) {
