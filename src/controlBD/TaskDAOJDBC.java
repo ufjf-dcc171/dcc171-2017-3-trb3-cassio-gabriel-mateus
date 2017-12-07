@@ -5,6 +5,7 @@ import controlDashBoard.Task;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -22,6 +23,7 @@ public class TaskDAOJDBC implements TaskDAO {
     private PreparedStatement operacaoAlterar4;
     private PreparedStatement operacaoAlterar5;
     private PreparedStatement operacaoExcluir;
+    private PreparedStatement operacaoVarrerTarefa;
 
     public TaskDAOJDBC() {
         try {
@@ -36,6 +38,7 @@ public class TaskDAOJDBC implements TaskDAO {
             operacaoAlterar4 = conexao.prepareStatement("update tarefa set progresso=? where id_tarefa=?");
             operacaoAlterar5 = conexao.prepareStatement("update tarefa set status=? where id_tarefa=?");
             operacaoExcluir = conexao.prepareStatement("delete from tarefa where id_tarefa = ?");
+            operacaoVarrerTarefa = conexao.prepareStatement("select id_tarefa from tarefa order by id_tarefa desc");
         } catch (Exception ex) {
             Logger.getLogger(ProjetoDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -64,7 +67,6 @@ public class TaskDAOJDBC implements TaskDAO {
     public ArrayList<Task> listarTodos(Integer id) throws Exception {
         ArrayList<Task> tarefa = new ArrayList<>();
         operacaoLista.clearParameters();
-        System.out.println(id);
         operacaoLista.setInt(1, id);
         ResultSet resultado = operacaoLista.executeQuery();
         while (resultado.next()) {
@@ -142,6 +144,17 @@ public class TaskDAOJDBC implements TaskDAO {
         operacaoExcluir.clearParameters();
         operacaoExcluir.setInt(1, tarefa.getNumero_tarefa());
         operacaoExcluir.executeUpdate();
+    }
+
+    @Override
+    public Integer varrerTarefa() throws SQLException{
+        Integer i = 0;
+        ResultSet resultado = operacaoVarrerTarefa.executeQuery();
+        while (resultado.next())
+        {
+            i = resultado.getInt(1);
+        }
+        return i;    
     }
 
 }

@@ -1,11 +1,4 @@
-select * from tarefa where fkid_projeto = 2;
+insert into Tarefa_pessoa (fkid_pessoa, fkid_tarefa) values (1,7)
 
-select * from tarefa_pessoa
-select * from projeto
-
-
-select * from prerequisito;
-
-select * from tarefa where 
-
---delete from tarefa_pessoa where fkid_tarefa = ?
+SELECT * FROM TAREFA
+                    

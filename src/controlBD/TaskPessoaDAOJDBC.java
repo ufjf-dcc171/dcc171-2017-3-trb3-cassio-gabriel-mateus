@@ -34,6 +34,8 @@ public class TaskPessoaDAOJDBC implements TaskPessoaDAO{
     @Override
     public void associar(Task tarefa, Pessoa pessoa) throws Exception {
         operacaoInsere.clearParameters();
+        System.out.println("Pessoa: " + pessoa.getPesId());
+        System.out.println("tarefa: " + tarefa.getNumero_tarefa());
         operacaoInsere.setInt(1, pessoa.getPesId());
         operacaoInsere.setInt(2, tarefa.getNumero_tarefa());
         operacaoInsere.executeUpdate();    

@@ -274,7 +274,7 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
             Integer durac = null;
             try {
                 durac = parseInt(duracaoTarefa.getText());
-                Task tarefa = new Task(projeto.getTarefas().size() + 1, descricaoTarefa.getText(), nomeTarefa.getText(), durac, projeto.getId());
+                Task tarefa = new Task(sp.getDaoTask().varrerTarefa(), descricaoTarefa.getText(), nomeTarefa.getText(), durac, projeto.getId());
                 tarefa.setStatus("Não iniciada");
                 for (Task t : tarefasPreRequisitos)
                 {
