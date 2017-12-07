@@ -1,13 +1,5 @@
 package janelaTarefa;
 
-import controlBD.PessoaDAO;
-import controlBD.PessoaDAOJDBC;
-import controlBD.TaskDAO;
-import controlBD.TaskDAOJDBC;
-import controlBD.TaskPessoaDAO;
-import controlBD.TaskPessoaDAOJDBC;
-import controlBD.TaskPreRequisitoDAO;
-import controlBD.TaskPreRequisitoDAOJDBC;
 import controlDashBoard.Pessoa;
 import controlDashBoard.PessoasListModel;
 import controlDashBoard.Project;
@@ -278,23 +270,27 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
                 tarefa.setStatus("Não iniciada");
                 for (Task t : tarefasPreRequisitos)
                 {
+                    System.out.println("q1");
                     tarefa.getPreRequisito().add(t);
                 }
                 for (Pessoa p : pessoasTarefas)
                 {
+                    System.out.println("q2");
                     tarefa.getPessoa().add(p);
                 }
                 try {
                     sp.getDaoTask().criar(tarefa, projeto);
                     tarefa.setNumero_tarefa(sp.getDaoTask().varrerTarefa());
-                    ArrayList<Task> tarefasAssociar = tarefa.getPreRequisito();
-                    for (Task tar : tarefasAssociar)
-                        sp.getDaoTaskPreRequisito().associar(tarefa, tar);
-                    
-                    ArrayList<Pessoa> pessoasAssociar = tarefa.getPessoa();
-                    for (Pessoa pes : pessoasAssociar)
-                        sp.getDaoTaskPessoa().associar(tarefa, pes);
-                    
+                    if (tarefa.getPreRequisito().size() >0)
+                    {
+                        System.out.println("q3");
+                        sp.getDaoTaskPreRequisito().associar(tarefa, tarefa.getPreRequisito());
+                    }
+                    if (tarefa.getPessoa().size() > 0)
+                    {
+                        System.out.println("q4");
+                        sp.getDaoTaskPessoa().associar(tarefa, tarefa.getPessoa());
+                    }
                     projeto.getTarefas().add(tarefa);
                     JOptionPane.showMessageDialog(null, "A tarefa foi criada com sucesso!", "Tarefa criada", JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception ex) {

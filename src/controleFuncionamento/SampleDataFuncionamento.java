@@ -98,7 +98,7 @@ public class SampleDataFuncionamento {
             {
                 daoTaskPreRequisito.buscar(t, p.getTarefas());
                 daoTaskPessoa.buscar(t, pessoa);
-            }            
+            }
         }
     } 
 }

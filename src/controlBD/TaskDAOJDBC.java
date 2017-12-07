@@ -38,7 +38,7 @@ public class TaskDAOJDBC implements TaskDAO {
             operacaoAlterar4 = conexao.prepareStatement("update tarefa set progresso=? where id_tarefa=?");
             operacaoAlterar5 = conexao.prepareStatement("update tarefa set status=? where id_tarefa=?");
             operacaoExcluir = conexao.prepareStatement("delete from tarefa where id_tarefa = ?");
-            operacaoVarrerTarefa = conexao.prepareStatement("select id_tarefa from tarefa order by id_tarefa desc");
+            operacaoVarrerTarefa = conexao.prepareStatement("select id_tarefa from tarefa");
         } catch (Exception ex) {
             Logger.getLogger(ProjetoDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -142,6 +142,7 @@ public class TaskDAOJDBC implements TaskDAO {
     @Override
     public void excluir(Task tarefa) throws Exception {
         operacaoExcluir.clearParameters();
+        System.out.println(tarefa.getNumero_tarefa());
         operacaoExcluir.setInt(1, tarefa.getNumero_tarefa());
         operacaoExcluir.executeUpdate();
     }

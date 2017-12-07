@@ -32,13 +32,19 @@ public class TaskPessoaDAOJDBC implements TaskPessoaDAO{
     }
     
     @Override
-    public void associar(Task tarefa, Pessoa pessoa) throws Exception {
-        operacaoInsere.clearParameters();
-        System.out.println("Pessoa: " + pessoa.getPesId());
-        System.out.println("tarefa: " + tarefa.getNumero_tarefa());
-        operacaoInsere.setInt(1, pessoa.getPesId());
-        operacaoInsere.setInt(2, tarefa.getNumero_tarefa());
-        operacaoInsere.executeUpdate();    
+    public void associar(Task tarefa, List<Pessoa> pessoa) throws Exception {
+        if (pessoa.size() >= 1)
+        {
+            for (Pessoa p: pessoa)
+            {
+                operacaoInsere.clearParameters();
+                System.out.println(p.getPesId());
+                operacaoInsere.setInt(1, p.getPesId());
+                System.out.println(tarefa.getNumero_tarefa());
+                operacaoInsere.setInt(2, tarefa.getNumero_tarefa());
+                operacaoInsere.executeUpdate();
+            }
+        }
     }
 
     @Override
@@ -58,6 +64,13 @@ public class TaskPessoaDAOJDBC implements TaskPessoaDAO{
                 }
             }
         }
+        /*
+            System.out.println(tarefa.getTaskName());
+            System.out.println(tarefa.getNumero_tarefa());
+        for (Pessoa p: pTarefa)
+        {
+            System.out.println(p.getPesNome());
+        }*/
         tarefa.setPessoa(pTarefa);
     }
 

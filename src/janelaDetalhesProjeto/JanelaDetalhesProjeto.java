@@ -1,12 +1,5 @@
 package janelaDetalhesProjeto;
 
-import controlBD.PessoaDAO;
-import controlBD.ProjetoDAO;
-import controlBD.ProjetoDAOJDBC;
-import controlBD.TaskDAO;
-import controlBD.TaskDAOJDBC;
-import controlBD.TaskPreRequisitoDAO;
-import controlBD.TaskPreRequisitoDAOJDBC;
 import controlDashBoard.Pessoa;
 import controlDashBoard.Project;
 import controlDashBoard.Task;
@@ -41,8 +34,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         initComponents();
         this.jat = jat;
         this.sp = sp;
-        this.projeto = projeto;
-        this.projeto.setTarefas(sp.getDaoTask().listarTodos(projeto.getId()));        
+        this.projeto = projeto;;        
         this.tarefas = projeto.getTarefas();
         textoDescricao.setText(this.projeto.getProjectDescricao());
         nomeProjeto.setText(this.projeto.getProjectNome());
@@ -350,7 +342,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Você deveria ter selecionado uma tarefa.", "Selecione uma tarefa.", JOptionPane.INFORMATION_MESSAGE);
         } else {
             try {
-                jvt = new JanelaVerTarefa(selected, tarefas, sp);
+                jvt = new JanelaVerTarefa(selected, tarefas, sp, btnIniciar, btnFinalizar);
                 jvt.setLocationRelativeTo(null);
                 jvt.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 jvt.setVisible(true);

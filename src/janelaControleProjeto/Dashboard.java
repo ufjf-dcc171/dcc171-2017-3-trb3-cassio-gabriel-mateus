@@ -237,27 +237,40 @@ public class Dashboard extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Você deveria ter selecionado um projeto.", "Selecione um projeto.", JOptionPane.INFORMATION_MESSAGE);
         } else {
             try {
-                for (Task tar: sp.getDaoTask().listarTodos(selecionado.getId()))
+                if (selecionado.getTarefas().size() > 0)
                 {
-                    sp.getDaoTaskPessoa().buscar(tar, sp.getPessoa());
-                    if (sp.getDaoTask().listarTodos(selecionado.getId()).size() > 1)
-                    {   
-                        sp.getDaoTaskPreRequisito().excluir(tar.getNumero_tarefa());
-                        for (Pessoa pes: tar.getPessoa())
+                    for (Task tar: sp.getDaoTask().listarTodos(selecionado.getId()))
+                    {
+                        System.out.println("q");
+                        sp.getDaoTaskPessoa().buscar(tar, sp.getPessoa());
+                        if (sp.getDaoTask().listarTodos(selecionado.getId()).size() > 1)
                         {
-                             sp.getDaoTaskPessoa().excluir(tar.getNumero_tarefa());
+                            sp.getDaoTaskPreRequisito().excluir(tar.getNumero_tarefa());
+                            for (Pessoa pes: tar.getPessoa())
+                            {
+                                sp.getDaoTaskPessoa().excluir(tar.getNumero_tarefa());
+                            }
+                        }
+                        else
+                        {
+                            sp.getDaoTaskPreRequisito().excluir(tar.getNumero_tarefa());
+                            sp.getDaoTaskPessoa().excluir(tar.getNumero_tarefa());
                         }
                     }
-                    else
+                    for (Task t : selecionado.getTarefas())
                     {
-                        sp.getDaoTaskPreRequisito().excluir(tar.getNumero_tarefa());
-                        sp.getDaoTaskPessoa().excluir(tar.getNumero_tarefa());
+                        sp.getDaoTask().excluir(t);
                     }
-                    sp.getDaoTask().excluir(tar);
+                    sp.getDaoProjeto().excluir(selecionado);
+                    sp.getProjeto().remove(listaProjetos.getSelectedValue());
+                    listaProjetos.updateUI();
                 }
-                sp.getDaoProjeto().excluir(selecionado);
-                sp.getProjeto().remove(listaProjetos.getSelectedValue());
-                listaProjetos.updateUI();
+                else
+                {
+                    sp.getDaoProjeto().excluir(selecionado);
+                    sp.getProjeto().remove(listaProjetos.getSelectedValue());
+                    listaProjetos.updateUI();
+                }
             } catch (Exception ex) {
                 Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
             }

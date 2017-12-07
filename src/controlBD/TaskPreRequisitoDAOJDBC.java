@@ -29,11 +29,21 @@ public class TaskPreRequisitoDAOJDBC implements TaskPreRequisitoDAO{
     }
 
     @Override
-    public void associar(Task tarefa, Task preRequisito) throws Exception {
-        operacaoInsere.clearParameters();
-        operacaoInsere.setInt(1, tarefa.getNumero_tarefa());
-        operacaoInsere.setInt(2, preRequisito.getNumero_tarefa());
-        operacaoInsere.executeUpdate();
+    public void associar(Task tarefa, List<Task> preRequisito) throws Exception {
+        if (preRequisito.size() >= 1)
+        {
+            for (Task t : preRequisito)
+            {
+                operacaoInsere.clearParameters();
+                operacaoInsere.setInt(1, tarefa.getNumero_tarefa());
+                operacaoInsere.setInt(2, t.getNumero_tarefa());
+                operacaoInsere.executeUpdate();
+            }
+        }
+        else
+        {
+            
+        }
     }
 
     @Override

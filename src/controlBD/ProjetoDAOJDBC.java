@@ -35,7 +35,7 @@ public class ProjetoDAOJDBC implements ProjetoDAO {
             operacaoAlterar1 = conexao.prepareStatement("update projeto set dataFinal=? where id_projeto=?");
             operacaoAlterar2 = conexao.prepareStatement("update projeto set descricao=? where id_projeto=? ");
             operacaoExcluir = conexao.prepareStatement("delete from projeto where id_projeto = ?");
-            operacaoVarrerProjeto = conexao.prepareStatement("select id_projeto from projeto order by id_projeto desc");
+            operacaoVarrerProjeto = conexao.prepareStatement("select id_projeto from projeto");
         } catch (Exception ex) {
             Logger.getLogger(ProjetoDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }

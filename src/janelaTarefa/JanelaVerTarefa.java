@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.ListModel;
 
@@ -26,7 +27,7 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
     private List<Task> tarefas;
     private Task tarefa;
 
-    public JanelaVerTarefa(Task tarefa, List<Task> tarefas, SampleDataFuncionamento sp) throws Exception {
+    public JanelaVerTarefa(Task tarefa, List<Task> tarefas, SampleDataFuncionamento sp, JButton btnIniciar, JButton btnFinalizar) throws Exception {
         super("Ver tarefas");
         initComponents();
         this.sp = sp;
@@ -356,7 +357,7 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
                     .addComponent(jLabel10))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
