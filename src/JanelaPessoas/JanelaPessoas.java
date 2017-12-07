@@ -2,8 +2,16 @@ package JanelaPessoas;
 
 import controlBD.PessoaDAO;
 import controlBD.PessoaDAOJDBC;
+import controlBD.ProjetoDAO;
+import controlBD.ProjetoDAOJDBC;
+import controlBD.TaskDAO;
+import controlBD.TaskDAOJDBC;
+import controlBD.TaskPessoaDAO;
+import controlBD.TaskPessoaDAOJDBC;
 import controlDashBoard.Pessoa;
 import controlDashBoard.PessoasListModel;
+import controlDashBoard.Project;
+import controlDashBoard.Task;
 import janelaControleProjeto.Dashboard;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -30,7 +38,8 @@ public class JanelaPessoas extends JFrame {
 
     private List<Pessoa> pessoas;
     private final PessoaDAO daoPessoa;
-
+    private JTextField nome;
+    private JTextField email;
     private final JComboBox<String> opcoes = new JComboBox<>(new String[]{"Adicionar Pessoa", "Alterar Pessoa", "Remover Pessoa"});
     private final JPanel painel = new JPanel();
 
@@ -46,22 +55,36 @@ public class JanelaPessoas extends JFrame {
             public void actionPerformed(ActionEvent ae) {
                 switch (opcoes.getSelectedIndex()) {
                     case 0:
+                    {
                         painel.removeAll();
                         painel.updateUI();
                         addPessoa();
                         break;
-
+                    }
                     case 1:
+                    {
                         painel.removeAll();
                         painel.updateUI();
-                        alterarPessoa();
+                        {
+                            try {
+                            alterarPessoa();
+                        } catch (Exception ex) {
+                            Logger.getLogger(JanelaPessoas.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        }
                         break;
-
+                    }
                     case 2:
+                    {
                         painel.removeAll();
                         painel.updateUI();
-                        removerPessoa();
+                       try {
+                            removerPessoa();
+                        } catch (Exception ex) {
+                            Logger.getLogger(JanelaPessoas.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                         break;
+                    }
                 }
             }
         });
@@ -93,7 +116,6 @@ public class JanelaPessoas extends JFrame {
                     if ("".equals(email.getText()) || "".equals(nome.getText())) {
                         JOptionPane.showMessageDialog(null, "Preencher todos os campos.", "Por favor preencha todos os campos.", JOptionPane.INFORMATION_MESSAGE);
                     } else {
-                        List<Pessoa> pessoas = daoPessoa.listarTodos();
                         pessoa = new Pessoa(pessoas.size() + 1, nome.getText(), email.getText());
                         daoPessoa.criar(pessoa);
                         pessoas.add(pessoa);
@@ -106,27 +128,42 @@ public class JanelaPessoas extends JFrame {
         });
     }
 
-    private void alterarPessoa() {
+    private void alterarPessoa() throws Exception {
         JList<Pessoa> listaPessoas = new JList<>(new DefaultListModel<>());
+        List<Pessoa> p = daoPessoa.listarTodos();
         JButton btnAlterar = new JButton("Alterar");
-        listaPessoas.setModel(new PessoasListModel(pessoas));
+        listaPessoas.setModel(new PessoasListModel(p));
         listaPessoas.setMinimumSize(new Dimension(100,400));
         listaPessoas.setPreferredSize(new Dimension(100,400));
         listaPessoas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         painel.add(new JScrollPane(listaPessoas), BorderLayout.CENTER);
         painel.add(btnAlterar);
-        
         btnAlterar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-            
+                Pessoa pe = listaPessoas.getSelectedValue();
+                if (pe != null)
+                {
+                    nome = new JTextField(pe.getPesNome());
+                    email = new JTextField(pe.getPesEmail());
+                    painel.add(nome, BorderLayout.SOUTH);
+                    painel.add(email, BorderLayout.SOUTH);
+                    painel.updateUI();
+                }
+                else
+                {
+                    // colocar JOptionPane
+                }
             }
         });
     }
 
-    private void removerPessoa() {
+    private void removerPessoa() throws Exception {
         JList<Pessoa> listaPessoas = new JList<>(new DefaultListModel<>());
         JButton btnRemover = new JButton("Remover");
+        TaskDAO daoTask = new TaskDAOJDBC();
+        TaskPessoaDAO daoTaskPessoa = new TaskPessoaDAOJDBC();
+        ProjetoDAO daoProjeto = new ProjetoDAOJDBC();
         listaPessoas.setModel(new PessoasListModel(pessoas));
         listaPessoas.setMinimumSize(new Dimension(100,400));
         listaPessoas.setPreferredSize(new Dimension(100,400));
@@ -137,6 +174,18 @@ public class JanelaPessoas extends JFrame {
         btnRemover.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) { 
+                try {
+                    for (Project p : daoProjeto.listarTodos())
+                    {
+                        for (Task t : daoTask.listarTodos(p.getId()))
+                        {
+                            daoTaskPessoa.buscar(t, pessoas);
+                        }
+                        System.out.println(p.getTarefas().size());
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(JanelaPessoas.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

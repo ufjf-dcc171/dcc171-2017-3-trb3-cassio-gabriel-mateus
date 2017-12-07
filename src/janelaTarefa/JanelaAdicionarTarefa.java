@@ -13,6 +13,7 @@ import controlDashBoard.PessoasListModel;
 import controlDashBoard.Project;
 import controlDashBoard.Task;
 import controlDashBoard.TaskListModel;
+import controleFuncionamento.SampleDataFuncionamento;
 import static java.lang.Integer.parseInt;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,27 +23,21 @@ import javax.swing.JOptionPane;
 
 public class JanelaAdicionarTarefa extends javax.swing.JFrame {
    
+    private SampleDataFuncionamento sp;
+    private Project projeto;
     private List<Pessoa> pessoasTarefas = new ArrayList<>();
     private List<Pessoa> pessoasSemTarefas = new ArrayList<>();
     private List<Pessoa> pessoas;
-    private PessoaDAO daoPessoa;
-    private TaskDAO daoTask;
-    private TaskPessoaDAO daoTaskPessoa;
-    private TaskPreRequisitoDAO daoTaskPreRequisito;
-    private Project projeto;
     private List<Task> tarefas;
     private List<Task> tarefasSemRequisitos = new ArrayList<>();
     private List<Task> tarefasPreRequisitos = new ArrayList<>();
     
-    public JanelaAdicionarTarefa(Project projeto) throws Exception {
+    public JanelaAdicionarTarefa(Project projeto, SampleDataFuncionamento sp) throws Exception {
         super("Detalhes");
         initComponents();
-        daoTask = new TaskDAOJDBC();
-        daoPessoa = new PessoaDAOJDBC();
-        daoTaskPessoa = new TaskPessoaDAOJDBC();
-        daoTaskPreRequisito = new TaskPreRequisitoDAOJDBC();
+        this.sp = sp;
         this.projeto = projeto;
-        this.pessoas = daoPessoa.listarTodos();
+        this.pessoas = sp.getDaoPessoa().listarTodos();
         this.tarefas = projeto.getTarefas();
         for (Pessoa p : this.pessoas)
         {
@@ -290,14 +285,14 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
                     tarefa.getPessoa().add(p);
                 }
                 try {
-                    daoTask.criar(tarefa, projeto);
+                    sp.getDaoTask().criar(tarefa, projeto);
                     ArrayList<Task> tarefasAssociar = tarefa.getPreRequisito();
                     for (Task tar : tarefasAssociar)
-                        daoTaskPreRequisito.associar(tarefa, tar);
+                        sp.getDaoTaskPreRequisito().associar(tarefa, tar);
                     
                     ArrayList<Pessoa> pessoasAssociar = tarefa.getPessoa();
                     for (Pessoa pes : pessoasAssociar)
-                        daoTaskPessoa.associar(tarefa, pes);
+                        sp.getDaoTaskPessoa().associar(tarefa, pes);
                     
                     projeto.getTarefas().add(tarefa);
                     JOptionPane.showMessageDialog(null, "A tarefa foi criada com sucesso!", "Tarefa criada", JOptionPane.INFORMATION_MESSAGE);

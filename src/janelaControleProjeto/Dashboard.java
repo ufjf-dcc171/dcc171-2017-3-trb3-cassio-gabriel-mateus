@@ -16,6 +16,7 @@ import controlBD.TaskPessoaDAOJDBC;
 import controlBD.TaskPreRequisitoDAO;
 import controlBD.TaskPreRequisitoDAOJDBC;
 import controlDashBoard.Task;
+import controleFuncionamento.SampleDataFuncionamento;
 import janelaTarefa.JanelaAdicionarTarefa;
 import janelaTarefa.JanelaVerTarefa;
 import java.util.List;
@@ -26,34 +27,23 @@ import javax.swing.JOptionPane;
 
 public class Dashboard extends javax.swing.JFrame {
 
-    public TaskPreRequisitoDAO daoTaskPreRequisito;
-    public ProjetoDAO daoProjeto;
-    public TaskDAO daoTask;
-    private TaskPessoaDAO daoTaskPessoa;
-    public PessoaDAO daoPessoa;
-    private final List<Project> project;
+    public SampleDataFuncionamento sp;
     private JanelaDetalhesProjeto jdp;
     private JanelaAdicionarTarefa jat;
     private JanelaPessoas jp;
-    private List<Pessoa> pessoas;
     private JanelaVerTarefa jvt;
-
-    public Dashboard(List<Project> projeto, JanelaDetalhesProjeto jdp, 
+    
+    public Dashboard(JanelaDetalhesProjeto jdp, 
             JanelaAdicionarTarefa jat, JanelaPessoas jp,
-            List<Pessoa> pessoas, JanelaVerTarefa jvt) {
+            JanelaVerTarefa jvt, SampleDataFuncionamento sp) {
         super("DashBoard");
         initComponents();
-        this.daoTaskPreRequisito = daoTaskPreRequisito;
-        daoProjeto = new ProjetoDAOJDBC();
-        daoTask = new TaskDAOJDBC();
-        this.project = projeto;
+        this.sp = sp;
         this.jdp = jdp;
         this.jat = jat;
         this.jp = jp;
         this.jvt = jvt;
-        this.pessoas = pessoas;
-        listaProjetos.setModel(new ProjectListModel(this.project));
-        pack();
+        listaProjetos.setModel(new ProjectListModel(sp.getProjeto()));
     }
 
     /**
@@ -216,9 +206,9 @@ public class Dashboard extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Você deveria ter digitado um nome correto.", "Digite um nome correto", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 projeto = new Project(txtProjectTitulo.getText(), txtProjectDescrition.getText());
-                project.add(projeto);
+                sp.getProjeto().add(projeto);
                 listaProjetos.updateUI();
-                daoProjeto.criar(projeto);
+                sp.getDaoProjeto().criar(projeto);
             }
         } catch (Exception ex) {
             Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
@@ -232,7 +222,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         } else {
             try {
-            jdp = new JanelaDetalhesProjeto(selecionado, jat, jvt, pessoas);
+            jdp = new JanelaDetalhesProjeto(selecionado, jat, jvt, sp);
             jdp.setVisible(true);
             jdp.setLocationRelativeTo(null);
             jdp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -245,7 +235,7 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btDetailsProjectActionPerformed
 
     private void btnGerenciarPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenciarPessoaActionPerformed
-        jp = new JanelaPessoas(pessoas);
+        jp = new JanelaPessoas(sp.getPessoa());
         jp.setSize(410,300);
         jp.setLocationRelativeTo(null);
         jp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -254,23 +244,21 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void excluirProjetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirProjetoActionPerformed
         Project selecionado = listaProjetos.getSelectedValue();
-        daoTaskPreRequisito = new TaskPreRequisitoDAOJDBC();
-        daoTaskPessoa = new TaskPessoaDAOJDBC();
         if (selecionado == null) {
             JOptionPane.showMessageDialog(null, "Você deveria ter selecionado um projeto.", "Selecione um projeto.", JOptionPane.INFORMATION_MESSAGE);
         } else {
             try {
-                for (Task tar: daoTask.listarTodos(selecionado.getId()))
+                for (Task tar: sp.getDaoTask().listarTodos(selecionado.getId()))
                 {
-                    daoTaskPreRequisito.excluir(tar.getNumero_tarefa());
+                    sp.getDaoTaskPreRequisito().excluir(tar.getNumero_tarefa());
                     for (Pessoa pes: tar.getPessoa())
                     {
-                        daoTaskPessoa.excluir(tar.getNumero_tarefa(), pes.getPesId());
+                        sp.getDaoTaskPessoa().excluir(tar.getNumero_tarefa(), pes.getPesId());
                     }
-                    daoTask.excluir(tar);
+                    sp.getDaoTask().excluir(tar);
                 }
-                daoProjeto.excluir(selecionado);
-                project.remove(listaProjetos.getSelectedValue());
+                sp.getDaoProjeto().excluir(selecionado);
+                sp.getProjeto().remove(listaProjetos.getSelectedValue());
                 listaProjetos.updateUI();
             } catch (Exception ex) {
                 Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);

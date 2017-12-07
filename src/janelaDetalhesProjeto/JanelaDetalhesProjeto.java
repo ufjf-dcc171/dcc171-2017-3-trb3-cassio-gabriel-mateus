@@ -11,6 +11,7 @@ import controlDashBoard.Pessoa;
 import controlDashBoard.Project;
 import controlDashBoard.Task;
 import controlDashBoard.TaskListModel;
+import controleFuncionamento.SampleDataFuncionamento;
 import janelaTarefa.JanelaAdicionarTarefa;
 import janelaTarefa.JanelaVerTarefa;
 import java.awt.event.ActionEvent;
@@ -27,33 +28,27 @@ import javax.swing.JOptionPane;
 
 public class JanelaDetalhesProjeto extends javax.swing.JFrame {
     
+    private SampleDataFuncionamento sp;
     private List<Task> tarefas;
     private Project projeto;
     private List<Pessoa> pessoas;
-    private TaskPreRequisitoDAO daoTaskPreRequisito;
-    private ProjetoDAO daoProjeto;
-    private PessoaDAO daoPessoa;
-    public TaskDAO daoTask;
     private JanelaAdicionarTarefa jat;
     private JanelaVerTarefa jvt;
     
     public JanelaDetalhesProjeto(Project projeto, JanelaAdicionarTarefa jat,
-             JanelaVerTarefa jvt, List<Pessoa> pessoas) throws Exception {
+             JanelaVerTarefa jvt, SampleDataFuncionamento sp) throws Exception {
         super("Detalhes do Projeto");
         initComponents();
-        daoProjeto = new ProjetoDAOJDBC();
-        this.projeto = projeto;
-        this.pessoas = pessoas;
         this.jat = jat;
-        daoTask = new TaskDAOJDBC();
-        this.projeto.setTarefas(daoTask.listarTodos(projeto.getId()));        
+        this.sp = sp;
+        this.projeto = projeto;
+        this.projeto.setTarefas(sp.getDaoTask().listarTodos(projeto.getId()));        
         this.tarefas = projeto.getTarefas();
         textoDescricao.setText(this.projeto.getProjectDescricao());
         nomeProjeto.setText(this.projeto.getProjectNome());
-        daoTaskPreRequisito = new TaskPreRequisitoDAOJDBC();
         for (Task t : tarefas)
         {
-            daoTaskPreRequisito.buscar(t, this.tarefas);
+            sp.getDaoTaskPreRequisito().buscar(t, this.tarefas);
         }
         if (projeto.getProjectDateIni() == null) {
             dataInicio.setText("Ainda não iniciado");
@@ -296,7 +291,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         Date data = new Date();
         projeto.setProjectDateIni(data);
         try {
-            daoProjeto.alterar(projeto, i);
+            sp.getDaoProjeto().alterar(projeto, i);
             dataInicio.setText(projeto.getProjectDateIni());
             btnIniciar.setEnabled(false);
             pack();
@@ -310,7 +305,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         Date data = new Date();
         projeto.setProjectDateEnd(data);
         try {
-            daoProjeto.alterar(projeto, i);
+            sp.getDaoProjeto().alterar(projeto, i);
             dataFinal.setText(projeto.getProjectDateEnd());
             btnFinalizar.setEnabled(false);
             pack();
@@ -323,7 +318,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         Integer i = 2;
         projeto.setProjectDescricao(textoDescricao.getText());
         try {
-            daoProjeto.alterar(projeto, i);
+            sp.getDaoProjeto().alterar(projeto, i);
             textoDescricao.setText(textoDescricao.getText());
             JOptionPane.showMessageDialog(null, "A tarefa foi alterada com sucesso!", "Alteração feita", JOptionPane.INFORMATION_MESSAGE);
             pack();
@@ -334,7 +329,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
 
     private void btnAdicionarTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarTarefaActionPerformed
         try {
-            jat = new JanelaAdicionarTarefa(projeto);
+            jat = new JanelaAdicionarTarefa(projeto, sp);
             jat.setVisible(true);
             jat.setLocationRelativeTo(null);
             jat.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -355,7 +350,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Você deveria ter selecionado uma tarefa.", "Selecione uma tarefa.", JOptionPane.INFORMATION_MESSAGE);
         } else {
             try {
-                jvt = new JanelaVerTarefa(selected, pessoas, tarefas);
+                jvt = new JanelaVerTarefa(selected, tarefas, sp);
                 jvt.setLocationRelativeTo(null);
                 jvt.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 jvt.setVisible(true);

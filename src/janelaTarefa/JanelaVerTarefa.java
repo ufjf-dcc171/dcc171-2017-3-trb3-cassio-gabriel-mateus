@@ -10,6 +10,7 @@ import controlDashBoard.Pessoa;
 import controlDashBoard.PessoasListModel;
 import controlDashBoard.Task;
 import controlDashBoard.TaskListModel;
+import controleFuncionamento.SampleDataFuncionamento;
 import janelaDetalhesProjeto.JanelaDetalhesProjeto;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,50 +22,44 @@ import javax.swing.ListModel;
 
 public class JanelaVerTarefa extends javax.swing.JFrame {
 
-    private TaskPessoaDAO daoTaskPessoa;
-    private TaskPreRequisitoDAO daoTaskPreRequisito;
-    private List<Pessoa> pessoas;
+    private SampleDataFuncionamento sp;
     private List<Task> tarefas;
     private Task tarefa;
-    public TaskDAO daoTask;
 
-    public JanelaVerTarefa(Task tarefa, List<Pessoa> pessoas, List<Task> tarefas) throws Exception {
+    public JanelaVerTarefa(Task tarefa, List<Task> tarefas, SampleDataFuncionamento sp) throws Exception {
         super("Ver tarefas");
         initComponents();
-        nomeTarefa.setText(tarefa.getTaskName());
-        duracao.setText(Integer.toString(tarefa.getDuracao()) + " dias");
-        progresso.setValue(tarefa.getProgresso());
-        porcentagem.setText(Integer.toString(tarefa.getProgresso()) + "%");
-        areaDescricao.setText(tarefa.getDescricao());
-        this.pessoas = pessoas;
+        this.sp = sp;
         this.tarefas = tarefas;
         this.tarefa = tarefa;
-        if (tarefa.getTaskDateIni() == null) {
+        nomeTarefa.setText(this.tarefa.getTaskName());
+        duracao.setText(Integer.toString(tarefa.getDuracao()) + " dias");
+        progresso.setValue(this.tarefa.getProgresso());
+        porcentagem.setText(Integer.toString(tarefa.getProgresso()) + "%");
+        areaDescricao.setText(this.tarefa.getDescricao());
+        if (this.tarefa.getTaskDateIni() == null) {
             dataInicio.setText("Ainda não iniciado");
             dataFinal.setText("Ainda não terminado");
-        } else if (tarefa.getTaskDateEnd() == null) {
-            dataInicio.setText(tarefa.getTaskDateIni());
+        } else if (this.tarefa.getTaskDateEnd() == null) {
+            dataInicio.setText(this.tarefa.getTaskDateIni());
             dataFinal.setText("Ainda não terminado");
         } else {
-            dataInicio.setText(tarefa.getTaskDateIni());
-            dataFinal.setText(tarefa.getTaskDateEnd());
+            dataInicio.setText(this.tarefa.getTaskDateIni());
+            dataFinal.setText(this.tarefa.getTaskDateEnd());
         }
-        daoTask = new TaskDAOJDBC();
-        daoTaskPessoa = new TaskPessoaDAOJDBC();
-        daoTaskPessoa.buscar(tarefa, pessoas);
-        daoTaskPreRequisito = new TaskPreRequisitoDAOJDBC();
-        daoTaskPreRequisito.buscar(tarefa, this.tarefas);
-        if (tarefa.getPreRequisito().size() > 0) {
-            listaPreRequisito.setModel(new TaskListModel(tarefa.getPreRequisito()));
+        sp.getDaoTaskPessoa().buscar(tarefa, sp.getPessoa());
+        sp.getDaoTaskPreRequisito().buscar(tarefa, this.tarefas);
+        if (this.tarefa.getPreRequisito().size() > 0) {
+            listaPreRequisito.setModel(new TaskListModel(this.tarefa.getPreRequisito()));
         }
-        if (tarefa.getPessoa().size() > 0) {
-            listaPessoa.setModel(new PessoasListModel(tarefa.getPessoa()));
+        if (this.tarefa.getPessoa().size() > 0) {
+            listaPessoa.setModel(new PessoasListModel(this.tarefa.getPessoa()));
         }
-        if (tarefa.getTaskDateIni() != null) {
+        if (this.tarefa.getTaskDateIni() != null) {
             btnIniciar.setEnabled(false);
         }
-        if (tarefa.getTaskDateEnd() != null) {
-            tarefa.setProgresso(100);
+        if (this.tarefa.getTaskDateEnd() != null) {
+            this.tarefa.setProgresso(100);
             btnFinalizar.setEnabled(false);
             btnAlterarEstimativa.setEnabled(false);
             btnAterarProgresso.setEnabled(false);
@@ -299,7 +294,7 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
-        if (tarefa.getTaskDateIni() == null) {
+        if (this.tarefa.getTaskDateIni() == null) {
             JOptionPane.showMessageDialog(null, "Você não pode finalizar uma tarefa que não foi iniciada.", "Erro", JOptionPane.ERROR_MESSAGE);
         } else {
             int resposta = JOptionPane.showConfirmDialog(null, "Uma vez finalizada, não será possível alterar os dados da tarefa.", "Tem certeza que deseja finalizar?", JOptionPane.YES_NO_OPTION);
@@ -308,19 +303,19 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
                 Integer j = 4;
                 Integer k = 5;
                 Date data = new Date();
-                tarefa.setStatus("Concluída");
-                tarefa.setProgresso(100);
-                tarefa.setTaskDateEnd(data);
+                this.tarefa.setStatus("Concluída");
+                this.tarefa.setProgresso(100);
+                this.tarefa.setTaskDateEnd(data);
                 try {
-                    daoTask.alterar(tarefa, i);
-                    daoTask.alterar(tarefa, j);
-                    daoTask.alterar(tarefa, k);
-                    dataFinal.setText(tarefa.getTaskDateEnd());
+                    sp.getDaoTask().alterar(this.tarefa, i);
+                    sp.getDaoTask().alterar(this.tarefa, j);
+                    sp.getDaoTask().alterar(this.tarefa, k);
+                    dataFinal.setText(this.tarefa.getTaskDateEnd());
                     btnFinalizar.setEnabled(false);
                     btnAlterarEstimativa.setEnabled(false);
                     btnAterarProgresso.setEnabled(false);
-                    progresso.setValue(tarefa.getProgresso());
-                    porcentagem.setText(Integer.toString(tarefa.getProgresso()) + "%");
+                    progresso.setValue(this.tarefa.getProgresso());
+                    porcentagem.setText(Integer.toString(this.tarefa.getProgresso()) + "%");
                     pack();
                 } catch (Exception ex) {
                     Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
@@ -334,9 +329,9 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
         Integer j = 5;
         Boolean podeIniciar = false;
         try {
-            if (tarefa.getPreRequisito().size() > 0)
+            if (this.tarefa.getPreRequisito().size() > 0)
             {
-                 ArrayList<Task> tar = tarefa.getPreRequisito();
+                ArrayList<Task> tar = this.tarefa.getPreRequisito();
                 for (Task t : tar)
                 {
                     if ("Concluída".equals(t.getStatus()))
@@ -347,28 +342,28 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
                 if (podeIniciar)
                 {
                     Date data = new Date();
-                    tarefa.setStatus("Iniciada");
-                    tarefa.setTaskDateIni(data);
-                    daoTask.alterar(tarefa, i);
-                    daoTask.alterar(tarefa, j);
-                    dataInicio.setText(tarefa.getTaskDateIni());
+                    this.tarefa.setStatus("Iniciada");
+                    this.tarefa.setTaskDateIni(data);
+                    sp.getDaoTask().alterar(this.tarefa, i);
+                    sp.getDaoTask().alterar(this.tarefa, j);
+                    dataInicio.setText(this.tarefa.getTaskDateIni());
                     btnIniciar.setEnabled(false);
                     pack();
                 }
                 else
                 {
-                    tarefa.setStatus("Pré-requisito");
-                    daoTask.alterar(tarefa, j);
+                    this.tarefa.setStatus("Pré-requisito");
+                    sp.getDaoTask().alterar(this.tarefa, j);
                 }
             }
             else
             {
                 Date data = new Date();
-                tarefa.setStatus("Iniciada");
-                tarefa.setTaskDateIni(data);
-                daoTask.alterar(tarefa, i);
-                daoTask.alterar(tarefa, j);
-                dataInicio.setText(tarefa.getTaskDateIni());
+                this.tarefa.setStatus("Iniciada");
+                this.tarefa.setTaskDateIni(data);
+                sp.getDaoTask().alterar(this.tarefa, i);
+                sp.getDaoTask().alterar(this.tarefa, j);
+                dataInicio.setText(this.tarefa.getTaskDateIni());
                 btnIniciar.setEnabled(false);
                 pack(); 
             }
@@ -385,14 +380,14 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
             if (d < 0) {
                 JOptionPane.showMessageDialog(null, "Informe um valor inteiro positivo ou 0.", "Valor inválido", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                tarefa.setDuracao(d);
+                this.tarefa.setDuracao(d);
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Informe um valor numérico para a estimativa.", "Erro", JOptionPane.INFORMATION_MESSAGE);
         }
         try {
-            daoTask.alterar(tarefa, i);
-            duracao.setText(tarefa.getDuracao().toString() + " dias");
+            sp.getDaoTask().alterar(this.tarefa, i);
+            duracao.setText(this.tarefa.getDuracao().toString() + " dias");
             pack();
         } catch (Exception ex) {
             Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
@@ -406,15 +401,15 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
             if (p < 0) {
                 JOptionPane.showMessageDialog(null, "Informe um valor inteiro positivo ou 0.", "Valor inválido", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                tarefa.setProgresso(p);
+                this.tarefa.setProgresso(p);
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Informe um valor numérico para o progresso.", "Erro", JOptionPane.INFORMATION_MESSAGE);
         }
         try {
-            daoTask.alterar(tarefa, i);
-            porcentagem.setText(Integer.toString(tarefa.getProgresso()) + "%");
-            progresso.setValue(tarefa.getProgresso());
+            sp.getDaoTask().alterar(tarefa, i);
+            porcentagem.setText(Integer.toString(this.tarefa.getProgresso()) + "%");
+            progresso.setValue(this.tarefa.getProgresso());
             pack();
         } catch (Exception ex) {
             Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
@@ -425,7 +420,7 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
         Integer i = 2;
         tarefa.setDescricao(areaDescricao.getText());
         try {
-            daoTask.alterar(tarefa, i);
+            sp.getDaoTask().alterar(this.tarefa, i);
             pack();
         } catch (Exception ex) {
             Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
