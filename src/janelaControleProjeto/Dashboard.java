@@ -8,6 +8,7 @@ import controlDashBoard.Project;
 import controlDashBoard.ProjectListModel;
 import janelaDetalhesProjeto.JanelaDetalhesProjeto;
 import JanelaPessoas.JanelaPessoas;
+import JanelaPessoas.JanelaPessoas;
 import controlBD.ProjetoDAOJDBC;
 import controlBD.TaskDAOJDBC;
 import controlBD.TaskPessoaDAO;
@@ -245,9 +246,10 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void btnGerenciarPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenciarPessoaActionPerformed
         jp = new JanelaPessoas(pessoas);
-        jp.setVisible(true);
+        jp.setSize(410,300);
         jp.setLocationRelativeTo(null);
         jp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        jp.setVisible(true);
     }//GEN-LAST:event_btnGerenciarPessoaActionPerformed
 
     private void excluirProjetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirProjetoActionPerformed

@@ -3,134 +3,141 @@ package JanelaPessoas;
 import controlBD.PessoaDAO;
 import controlBD.PessoaDAOJDBC;
 import controlDashBoard.Pessoa;
+import controlDashBoard.PessoasListModel;
 import janelaControleProjeto.Dashboard;
-import java.util.ArrayList;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Box;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 
-public class JanelaPessoas extends javax.swing.JFrame {
+public class JanelaPessoas extends JFrame {
 
     private List<Pessoa> pessoas;
     private final PessoaDAO daoPessoa;
 
-    public JanelaPessoas(List<Pessoa> pessoas) {
+    private final JComboBox<String> opcoes = new JComboBox<>(new String[]{"Adicionar Pessoa", "Alterar Pessoa", "Remover Pessoa"});
+    private final JPanel painel = new JPanel();
+
+    public JanelaPessoas(List<Pessoa> pessoas) throws HeadlessException {
         super("Detalhes");
-        initComponents();
+        addPessoa();
         daoPessoa = new PessoaDAOJDBC();
         this.pessoas = pessoas;
+        add(opcoes, BorderLayout.NORTH);
+        add(new JScrollPane(painel), BorderLayout.CENTER);
+        opcoes.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                switch (opcoes.getSelectedIndex()) {
+                    case 0:
+                        painel.removeAll();
+                        painel.updateUI();
+                        addPessoa();
+                        break;
+
+                    case 1:
+                        painel.removeAll();
+                        painel.updateUI();
+                        alterarPessoa();
+                        break;
+
+                    case 2:
+                        painel.removeAll();
+                        painel.updateUI();
+                        removerPessoa();
+                        break;
+                }
+            }
+        });
     }
 
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void addPessoa() {
+        JButton btnConfirmar = new JButton("Confirmar");
+        JTextField nome = new JTextField(30);
+        JTextField email = new JTextField(30);
 
-        jLabel1 = new javax.swing.JLabel();
-        txtEmail = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        txtNome1 = new javax.swing.JTextField();
-        btnCadastrar = new javax.swing.JButton();
+        Box vertical = Box.createVerticalBox();
+        Box horizontal1 = Box.createHorizontalBox();
+        Box horizontal2 = Box.createHorizontalBox();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        horizontal1.add(new JLabel("Nome: "));
+        horizontal1.add(nome);
+        horizontal2.add(new JLabel("E-mail: "));
+        horizontal2.add(email);
+        vertical.add(horizontal1);
+        vertical.add(horizontal2);
+        vertical.add(btnConfirmar, BorderLayout.WEST);
+        painel.add(vertical);
 
-        jLabel1.setText("Email:");
-
-        txtEmail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtEmailActionPerformed(evt);
+        btnConfirmar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                Pessoa pessoa;
+                try {
+                    if ("".equals(email.getText()) || "".equals(nome.getText())) {
+                        JOptionPane.showMessageDialog(null, "Preencher todos os campos.", "Por favor preencha todos os campos.", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        List<Pessoa> pessoas = daoPessoa.listarTodos();
+                        pessoa = new Pessoa(pessoas.size() + 1, nome.getText(), email.getText());
+                        daoPessoa.criar(pessoa);
+                        pessoas.add(pessoa);
+                        JOptionPane.showMessageDialog(null, "Foi adicionado uma pessoa.", "Pessoa criada com sucesso.", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
+    }
 
-        jLabel2.setText("Nome:");
-
-        txtNome1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNome1ActionPerformed(evt);
+    private void alterarPessoa() {
+        JList<Pessoa> listaPessoas = new JList<>(new DefaultListModel<>());
+        JButton btnAlterar = new JButton("Alterar");
+        listaPessoas.setModel(new PessoasListModel(pessoas));
+        listaPessoas.setMinimumSize(new Dimension(100,400));
+        listaPessoas.setPreferredSize(new Dimension(100,400));
+        listaPessoas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        painel.add(new JScrollPane(listaPessoas), BorderLayout.CENTER);
+        painel.add(btnAlterar);
+        
+        btnAlterar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+            
             }
         });
+    }
 
-        btnCadastrar.setText("Cadastrar");
-        btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCadastrarActionPerformed(evt);
+    private void removerPessoa() {
+        JList<Pessoa> listaPessoas = new JList<>(new DefaultListModel<>());
+        JButton btnRemover = new JButton("Remover");
+        listaPessoas.setModel(new PessoasListModel(pessoas));
+        listaPessoas.setMinimumSize(new Dimension(100,400));
+        listaPessoas.setPreferredSize(new Dimension(100,400));
+        listaPessoas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        painel.add(new JScrollPane(listaPessoas), BorderLayout.CENTER);
+        painel.add(btnRemover);
+        
+        btnRemover.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) { 
             }
         });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addGap(21, 21, 21)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(jLabel1)
-                                                .addComponent(txtNome1)
-                                                .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE))
-                                        .addComponent(btnCadastrar))
-                                .addContainerGap(36, Short.MAX_VALUE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                        .addGap(22, 22, 22)
-                                        .addComponent(jLabel2)
-                                        .addContainerGap(274, Short.MAX_VALUE)))
-        );
-        layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addGap(78, 78, 78)
-                                .addComponent(txtNome1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-                                .addComponent(btnCadastrar)
-                                .addGap(80, 80, 80))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                        .addGap(52, 52, 52)
-                                        .addComponent(jLabel2)
-                                        .addContainerGap(234, Short.MAX_VALUE)))
-        );
-
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtEmailActionPerformed
-
-    private void txtNome1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNome1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNome1ActionPerformed
-
-    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-
-        Pessoa pessoa;
-
-        try {
-            if ("".equals(txtEmail.getText()) || "".equals(txtNome1.getText())) {
-                JOptionPane.showMessageDialog(null, "Preencher todos os campos.", "Por favor preencha todos os campos.", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                List<Pessoa> pessoas = daoPessoa.listarTodos();
-                pessoa = new Pessoa(pessoas.size()+1, txtNome1.getText(), txtEmail.getText());
-                daoPessoa.criar(pessoa);
-                pessoas.add(pessoa);
-                JOptionPane.showMessageDialog(null, "Foi adicionado uma pessoa.", "Pessoa criada com sucesso.", JOptionPane.INFORMATION_MESSAGE);
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }//GEN-LAST:event_btnCadastrarActionPerformed
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCadastrar;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JTextField txtEmail;
-    private javax.swing.JTextField txtNome1;
-    // End of variables declaration//GEN-END:variables
+    }
 }

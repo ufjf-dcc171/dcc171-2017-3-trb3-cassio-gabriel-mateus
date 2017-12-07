@@ -1,5 +1,5 @@
 select * from tarefa;
-select * from projeto;
+/*select * from projeto;
 
 drop table tarefa_pessoa;
 drop table prerequisito;
