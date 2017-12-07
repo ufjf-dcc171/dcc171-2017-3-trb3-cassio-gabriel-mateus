@@ -16,7 +16,7 @@ create table tarefa (
     dataInicio date,
     dataFinal date,
     fkid_projeto integer,
-    constraint fk_projetoId foreign key (fkid_projeto) references projeto (id_projeto)
+    foreign key (fkid_projeto) references projeto (id_projeto)
 );
 create table pessoa (
 
@@ -29,18 +29,18 @@ create table prerequisito (
     pre_cod integer primary key generated always as identity,
     fkid_tarefa integer,
     fkid_tarefaPreRequisito integer,
-    constraint fk_idTarefa foreign key (fkid_tarefa) references tarefa (id_tarefa),
-    constraint fk_idTarefaPreRequisito foreign key (fkid_tarefaPreRequisito) references tarefa (id_tarefa)
+    foreign key (fkid_tarefa) references tarefa (id_tarefa),
+    foreign key (fkid_tarefaPreRequisito) references tarefa (id_tarefa) 
 );
 
 create table tarefa_pessoa (
     pre_cod integer primary key generated always as identity,
     fkid_tarefa integer,
     fkid_pessoa integer,
-    constraint fk_idTarefaProjeto foreign key (fkid_tarefa) references tarefa (id_tarefa),
-    constraint fk_idPessoa foreign key (fkid_pessoa) references pessoa (pesid)
+    foreign key (fkid_tarefa) references tarefa (id_tarefa),
+    foreign key (fkid_pessoa) references pessoa (pesid) 
 );
-/*
+
 drop table tarefa_pessoa;
 drop table prerequisito;
 drop table pessoa;
@@ -51,4 +51,4 @@ drop table projeto;
 select * from prerequisito;
 
 select * from tarefa
-*/
+

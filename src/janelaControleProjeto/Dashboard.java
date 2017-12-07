@@ -9,7 +9,12 @@ import controlDashBoard.ProjectListModel;
 import janelaDetalhesProjeto.JanelaDetalhesProjeto;
 import JanelaPessoas.JanelaPessoas;
 import controlBD.ProjetoDAOJDBC;
+import controlBD.TaskDAOJDBC;
+import controlBD.TaskPessoaDAO;
+import controlBD.TaskPessoaDAOJDBC;
 import controlBD.TaskPreRequisitoDAO;
+import controlBD.TaskPreRequisitoDAOJDBC;
+import controlDashBoard.Task;
 import janelaTarefa.JanelaAdicionarTarefa;
 import janelaTarefa.JanelaVerTarefa;
 import java.util.List;
@@ -23,6 +28,7 @@ public class Dashboard extends javax.swing.JFrame {
     public TaskPreRequisitoDAO daoTaskPreRequisito;
     public ProjetoDAO daoProjeto;
     public TaskDAO daoTask;
+    private TaskPessoaDAO daoTaskPessoa;
     public PessoaDAO daoPessoa;
     private final List<Project> project;
     private JanelaDetalhesProjeto jdp;
@@ -38,6 +44,7 @@ public class Dashboard extends javax.swing.JFrame {
         initComponents();
         this.daoTaskPreRequisito = daoTaskPreRequisito;
         daoProjeto = new ProjetoDAOJDBC();
+        daoTask = new TaskDAOJDBC();
         this.project = projeto;
         this.jdp = jdp;
         this.jat = jat;
@@ -68,6 +75,8 @@ public class Dashboard extends javax.swing.JFrame {
         txtProjectDescrition = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
         btnAdicionarPessoa = new javax.swing.JButton();
+        excluirProjeto = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -114,12 +123,20 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
 
+        excluirProjeto.setText("Excluir Projeto");
+        excluirProjeto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                excluirProjetoActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Adicione pessoas para todos os projetos");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,22 +145,29 @@ public class Dashboard extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtProjectTitulo)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btNewProject))
                             .addComponent(jScrollPane2)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(10, 10, 10))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnAdicionarPessoa)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btNewProject)))
+                .addGap(10, 10, 10))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnAdicionarPessoa))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(btDetailsProject)
-                        .addContainerGap())))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(excluirProjeto))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -156,21 +180,24 @@ public class Dashboard extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 57, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 48, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addComponent(btNewProject)
-                .addGap(5, 5, 5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btDetailsProject)
-                    .addComponent(btnAdicionarPessoa))
-                .addGap(27, 27, 27))
+                    .addComponent(excluirProjeto))
+                .addGap(49, 49, 49)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAdicionarPessoa))
         );
 
         pack();
@@ -223,11 +250,40 @@ public class Dashboard extends javax.swing.JFrame {
         jp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_btnAdicionarPessoaActionPerformed
 
+    private void excluirProjetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirProjetoActionPerformed
+        Project selecionado = listaProjetos.getSelectedValue();
+        daoTaskPreRequisito = new TaskPreRequisitoDAOJDBC();
+        daoTaskPessoa = new TaskPessoaDAOJDBC();
+        if (selecionado == null) {
+            JOptionPane.showMessageDialog(null, "Você deveria ter selecionado um projeto.", "Selecione um projeto.", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            try {
+                for (Task tar: daoTask.listarTodos(selecionado.getId()))
+                {
+                    daoTaskPreRequisito.excluir(tar.getNumero_tarefa());
+                    for (Pessoa pes: tar.getPessoa())
+                    {
+                        daoTaskPessoa.excluir(tar.getNumero_tarefa(), pes.getPesId());
+                    }
+                    daoTask.excluir(tar);
+                }
+                daoProjeto.excluir(selecionado);
+                project.remove(listaProjetos.getSelectedValue());
+                listaProjetos.updateUI();
+            } catch (Exception ex) {
+                Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+    }//GEN-LAST:event_excluirProjetoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btDetailsProject;
     private javax.swing.JButton btNewProject;
     private javax.swing.JButton btnAdicionarPessoa;
+    private javax.swing.JButton excluirProjeto;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;

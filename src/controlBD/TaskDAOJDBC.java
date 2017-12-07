@@ -21,6 +21,7 @@ public class TaskDAOJDBC implements TaskDAO {
     private PreparedStatement operacaoAlterar3;
     private PreparedStatement operacaoAlterar4;
     private PreparedStatement operacaoAlterar5;
+    private PreparedStatement operacaoExcluir;
 
     public TaskDAOJDBC() {
         try {
@@ -34,6 +35,7 @@ public class TaskDAOJDBC implements TaskDAO {
             operacaoAlterar3 = conexao.prepareStatement("update tarefa set duracao=? where id_tarefa=?");
             operacaoAlterar4 = conexao.prepareStatement("update tarefa set progresso=? where id_tarefa=?");
             operacaoAlterar5 = conexao.prepareStatement("update tarefa set status=? where id_tarefa=?");
+            operacaoExcluir = conexao.prepareStatement("delete from tarefa where id_tarefa = ?");
         } catch (Exception ex) {
             Logger.getLogger(ProjetoDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -135,7 +137,9 @@ public class TaskDAOJDBC implements TaskDAO {
 
     @Override
     public void excluir(Task tarefa) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        operacaoExcluir.clearParameters();
+        operacaoExcluir.setInt(1, tarefa.getNumero_tarefa());
+        operacaoExcluir.executeUpdate();
     }
 
 }

@@ -19,6 +19,7 @@ public class ProjetoDAOJDBC implements ProjetoDAO {
     private PreparedStatement operacaoAlterar0;
     private PreparedStatement operacaoAlterar1;
     private PreparedStatement operacaoAlterar2;
+    private PreparedStatement operacaoExcluir;
     
     public ProjetoDAOJDBC() {
         try {
@@ -29,6 +30,7 @@ public class ProjetoDAOJDBC implements ProjetoDAO {
             operacaoAlterar0 = conexao.prepareStatement("update projeto set dataInicio=? where id_projeto=?");
             operacaoAlterar1 = conexao.prepareStatement("update projeto set dataFinal=? where id_projeto=?");
             operacaoAlterar2 = conexao.prepareStatement("update projeto set descricao=? where id_projeto=? ");
+            operacaoExcluir = conexao.prepareStatement("delete from projeto where id_projeto = ?");
         } catch (Exception ex) {
             Logger.getLogger(ProjetoDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -66,7 +68,9 @@ public class ProjetoDAOJDBC implements ProjetoDAO {
 
     @Override
     public void excluir(Project prod) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         operacaoExcluir.clearParameters();
+         operacaoExcluir.setInt(1, prod.getId());
+         operacaoExcluir.executeUpdate();
     }
 
     @Override

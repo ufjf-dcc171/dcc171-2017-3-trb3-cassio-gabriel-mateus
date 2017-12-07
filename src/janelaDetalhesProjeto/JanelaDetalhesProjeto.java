@@ -499,7 +499,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
                 }
                 else 
                 {
-                    if (t.getStatus().equals("Concluída") || t.getStatus().equals("Iniciada") || t.getStatus().equals("Não iniciada"))
+                    if (t.getStatus().equals("Concluída") || t.getStatus().equals("Iniciada") || t.getStatus().equals("Pré-requisito"))
                     {}
                     else
                         tar.add(t);
@@ -532,7 +532,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
                 {
                     for (Task tasks : t.getPreRequisito())
                     {
-                        if (tasks.getStatus().equals("Não iniciada") || tasks.getStatus().equals("Iniciada") || tasks.getStatus().equals("Não iniciada"))
+                        if (tasks.getStatus().equals("Não iniciada") || tasks.getStatus().equals("Iniciada"))
                         {
                             preRequisito = true;
                         }

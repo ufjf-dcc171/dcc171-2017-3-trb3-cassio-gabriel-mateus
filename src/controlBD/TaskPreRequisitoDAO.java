@@ -7,4 +7,5 @@ import java.util.List;
 public interface TaskPreRequisitoDAO {
     public void associar (Task tarefa, Task preRequisito) throws Exception;
     public void buscar (Task tarefa, List<Task> tarefas) throws Exception;
+    public void excluir (Integer id) throws Exception;
 }

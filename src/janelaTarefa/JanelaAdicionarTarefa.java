@@ -42,9 +42,9 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
         daoTaskPessoa = new TaskPessoaDAOJDBC();
         daoTaskPreRequisito = new TaskPreRequisitoDAOJDBC();
         this.projeto = projeto;
-        this.pessoas = pessoas;
+        this.pessoas = daoPessoa.listarTodos();
         this.tarefas = projeto.getTarefas();
-        for (Pessoa p : pessoas)
+        for (Pessoa p : this.pessoas)
         {
             pessoasSemTarefas.add(p);
         }
