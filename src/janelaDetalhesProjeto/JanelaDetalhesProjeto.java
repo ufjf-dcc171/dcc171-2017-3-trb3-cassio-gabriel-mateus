@@ -53,7 +53,6 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         daoTaskPreRequisito = new TaskPreRequisitoDAOJDBC();
         for (Task t : tarefas)
         {
-            System.out.println(t.getStatus());
             daoTaskPreRequisito.buscar(t, this.tarefas);
         }
         if (projeto.getProjectDateIni() == null) {
@@ -335,7 +334,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
 
     private void btnAdicionarTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarTarefaActionPerformed
         try {
-            jat = new JanelaAdicionarTarefa(projeto, pessoas);
+            jat = new JanelaAdicionarTarefa(projeto);
             jat.setVisible(true);
             jat.setLocationRelativeTo(null);
             jat.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -368,7 +367,12 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVerTarefaActionPerformed
 
     private void btnExcluirTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirTarefaActionPerformed
-
+        Task selected = listaTarefas.getSelectedValue();
+        if (selected == null) {
+            JOptionPane.showMessageDialog(null, "Você deveria ter selecionado uma tarefa.", "Selecione uma tarefa.", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            
+        }
     }//GEN-LAST:event_btnExcluirTarefaActionPerformed
 
     /**

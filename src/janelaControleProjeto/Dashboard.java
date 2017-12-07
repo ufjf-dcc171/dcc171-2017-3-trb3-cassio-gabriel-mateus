@@ -74,7 +74,7 @@ public class Dashboard extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         txtProjectDescrition = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
-        btnAdicionarPessoa = new javax.swing.JButton();
+        btnGerenciarPessoa = new javax.swing.JButton();
         excluirProjeto = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
@@ -116,10 +116,10 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
         jLabel3.setText("Projetos Existentes");
 
-        btnAdicionarPessoa.setText("Adicionar Pessoa");
-        btnAdicionarPessoa.addActionListener(new java.awt.event.ActionListener() {
+        btnGerenciarPessoa.setText("Gerenciar Pessoas");
+        btnGerenciarPessoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAdicionarPessoaActionPerformed(evt);
+                btnGerenciarPessoaActionPerformed(evt);
             }
         });
 
@@ -130,7 +130,7 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Adicione pessoas para todos os projetos");
+        jLabel1.setText("Adicione, altere e exclua pessoas");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -158,14 +158,13 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnAdicionarPessoa))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(btDetailsProject)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(excluirProjeto))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(btnGerenciarPessoa))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -194,10 +193,11 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btDetailsProject)
                     .addComponent(excluirProjeto))
-                .addGap(49, 49, 49)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnAdicionarPessoa))
+                .addComponent(btnGerenciarPessoa)
+                .addGap(31, 31, 31))
         );
 
         pack();
@@ -243,12 +243,12 @@ public class Dashboard extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btDetailsProjectActionPerformed
 
-    private void btnAdicionarPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarPessoaActionPerformed
+    private void btnGerenciarPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenciarPessoaActionPerformed
         jp = new JanelaPessoas(pessoas);
         jp.setVisible(true);
         jp.setLocationRelativeTo(null);
         jp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    }//GEN-LAST:event_btnAdicionarPessoaActionPerformed
+    }//GEN-LAST:event_btnGerenciarPessoaActionPerformed
 
     private void excluirProjetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirProjetoActionPerformed
         Project selecionado = listaProjetos.getSelectedValue();
@@ -281,7 +281,7 @@ public class Dashboard extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btDetailsProject;
     private javax.swing.JButton btNewProject;
-    private javax.swing.JButton btnAdicionarPessoa;
+    private javax.swing.JButton btnGerenciarPessoa;
     private javax.swing.JButton excluirProjeto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

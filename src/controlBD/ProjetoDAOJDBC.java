@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -12,25 +13,30 @@ import java.util.logging.Logger;
 
 public class ProjetoDAOJDBC implements ProjetoDAO {
 
-    private Integer contadorDeProjetos = 0;
+    private Integer ContadorDeProjetos;
     private Connection conexao;
     private PreparedStatement operacaoInsere;
+    private PreparedStatement operacaoInsere2;
     private PreparedStatement operacaoListar;
     private PreparedStatement operacaoAlterar0;
     private PreparedStatement operacaoAlterar1;
     private PreparedStatement operacaoAlterar2;
     private PreparedStatement operacaoExcluir;
+    private PreparedStatement operacaoVarrerProjeto;
     
     public ProjetoDAOJDBC() {
         try {
             conexao = BdConnection.getConnection();
             operacaoInsere = conexao.prepareStatement("insert into projeto (nome, descricao) values"
                     + "(?, ?)");
+            operacaoInsere2 = conexao.prepareStatement("select id_projeto from projeto where id_projeto = ?");
             operacaoListar = conexao.prepareStatement("select id_projeto, nome, descricao, dataInicio, dataFinal from projeto");
             operacaoAlterar0 = conexao.prepareStatement("update projeto set dataInicio=? where id_projeto=?");
             operacaoAlterar1 = conexao.prepareStatement("update projeto set dataFinal=? where id_projeto=?");
             operacaoAlterar2 = conexao.prepareStatement("update projeto set descricao=? where id_projeto=? ");
             operacaoExcluir = conexao.prepareStatement("delete from projeto where id_projeto = ?");
+            operacaoVarrerProjeto = conexao.prepareStatement("select id_projeto from projeto");
+            ContadorDeProjetos = varrerProjeto();
         } catch (Exception ex) {
             Logger.getLogger(ProjetoDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -39,12 +45,17 @@ public class ProjetoDAOJDBC implements ProjetoDAO {
     
     @Override
     public void criar(Project proj) throws Exception {
-        contadorDeProjetos++;
-        proj.setId(contadorDeProjetos);
+        ContadorDeProjetos++;
         operacaoInsere.clearParameters();
         operacaoInsere.setString(1, proj.getProjectNome());
         operacaoInsere.setString(2, proj.getProjectDescricao());
         operacaoInsere.executeUpdate();
+        operacaoInsere2.setInt(1, ContadorDeProjetos);
+        ResultSet resultado = operacaoInsere2.executeQuery();
+        while (resultado.next())
+        {
+            proj.setId(resultado.getInt(1));
+        }
     }
 
     @Override
@@ -54,7 +65,6 @@ public class ProjetoDAOJDBC implements ProjetoDAO {
         ResultSet resultado = operacaoListar.executeQuery();
         while (resultado.next())
         {
-            contadorDeProjetos++;
             Project p = new Project();
             p.setId(resultado.getInt(1));
             p.setProjectNome(resultado.getString(2));
@@ -112,5 +122,14 @@ public class ProjetoDAOJDBC implements ProjetoDAO {
             }
         }
     }
-    
+
+    private Integer varrerProjeto() throws SQLException {
+        Integer i = 0;
+        ResultSet resultado = operacaoVarrerProjeto.executeQuery();
+        while (resultado.next())
+        {
+            i = resultado.getInt(1);
+        }
+        return i;
+    }   
 }

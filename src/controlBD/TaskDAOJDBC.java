@@ -44,6 +44,7 @@ public class TaskDAOJDBC implements TaskDAO {
 
     @Override
     public void criar(Task tarefa, Project prod) throws Exception {
+        tarefa.setId_projeto(prod.getId());
         operacaoInsere.clearParameters();
         operacaoInsere.setString(1, tarefa.getTaskName());
         operacaoInsere.setString(2, tarefa.getStatus());

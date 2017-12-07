@@ -34,7 +34,7 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
     private List<Task> tarefasSemRequisitos = new ArrayList<>();
     private List<Task> tarefasPreRequisitos = new ArrayList<>();
     
-    public JanelaAdicionarTarefa(Project projeto, List<Pessoa> pessoas) throws Exception {
+    public JanelaAdicionarTarefa(Project projeto) throws Exception {
         super("Detalhes");
         initComponents();
         daoTask = new TaskDAOJDBC();
