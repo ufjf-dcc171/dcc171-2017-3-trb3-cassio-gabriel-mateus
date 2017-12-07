@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 public class ProjetoDAOJDBC implements ProjetoDAO {
 
-    private  Integer ContadorDeProjetos;
+    private Integer ContadorDeProjetos;
     private Connection conexao;
     private PreparedStatement operacaoInsere;
     private PreparedStatement operacaoInsere2;

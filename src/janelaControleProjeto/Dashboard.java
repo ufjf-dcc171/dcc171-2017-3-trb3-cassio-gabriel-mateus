@@ -1,25 +1,14 @@
 package janelaControleProjeto;
 
-import controlBD.PessoaDAO;
-import controlBD.ProjetoDAO;
-import controlBD.TaskDAO;
 import controlDashBoard.Pessoa;
 import controlDashBoard.Project;
 import controlDashBoard.ProjectListModel;
 import janelaDetalhesProjeto.JanelaDetalhesProjeto;
 import JanelaPessoas.JanelaPessoas;
-import JanelaPessoas.JanelaPessoas;
-import controlBD.ProjetoDAOJDBC;
-import controlBD.TaskDAOJDBC;
-import controlBD.TaskPessoaDAO;
-import controlBD.TaskPessoaDAOJDBC;
-import controlBD.TaskPreRequisitoDAO;
-import controlBD.TaskPreRequisitoDAOJDBC;
 import controlDashBoard.Task;
 import controleFuncionamento.SampleDataFuncionamento;
 import janelaTarefa.JanelaAdicionarTarefa;
 import janelaTarefa.JanelaVerTarefa;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -235,7 +224,7 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btDetailsProjectActionPerformed
 
     private void btnGerenciarPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenciarPessoaActionPerformed
-        jp = new JanelaPessoas(sp.getPessoa());
+        jp = new JanelaPessoas(sp.getPessoa(), sp);
         jp.setSize(410,300);
         jp.setLocationRelativeTo(null);
         jp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -250,10 +239,19 @@ public class Dashboard extends javax.swing.JFrame {
             try {
                 for (Task tar: sp.getDaoTask().listarTodos(selecionado.getId()))
                 {
-                    sp.getDaoTaskPreRequisito().excluir(tar.getNumero_tarefa());
-                    for (Pessoa pes: tar.getPessoa())
+                    sp.getDaoTaskPessoa().buscar(tar, sp.getPessoa());
+                    if (sp.getDaoTask().listarTodos(selecionado.getId()).size() > 1)
+                    {   
+                        sp.getDaoTaskPreRequisito().excluir(tar.getNumero_tarefa());
+                        for (Pessoa pes: tar.getPessoa())
+                        {
+                             sp.getDaoTaskPessoa().excluir(tar.getNumero_tarefa());
+                        }
+                    }
+                    else
                     {
-                          sp.getDaoTaskPessoa().excluir(tar.getNumero_tarefa());
+                        sp.getDaoTaskPreRequisito().excluir(tar.getNumero_tarefa());
+                        sp.getDaoTaskPessoa().excluir(tar.getNumero_tarefa());
                     }
                     sp.getDaoTask().excluir(tar);
                 }

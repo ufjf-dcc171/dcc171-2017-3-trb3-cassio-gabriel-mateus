@@ -15,7 +15,8 @@ public class PessoaDAOJDBC implements PessoaDAO {
     private Connection conexao;
     private PreparedStatement operacaoInserePessoas;
     private PreparedStatement operacaoListar;
-   
+    private PreparedStatement operacaoAlterar;
+    private PreparedStatement operacaoAlterar2;
 
     public PessoaDAOJDBC() {
      
@@ -25,7 +26,8 @@ public class PessoaDAOJDBC implements PessoaDAO {
                 operacaoInserePessoas = conexao.prepareStatement("insert into pessoa (pesnome, pesmail) values"
                         + "(?,?)");
                 operacaoListar = conexao.prepareStatement("select pesid, pesnome, pesmail from pessoa");
-               
+                operacaoAlterar = conexao.prepareStatement("update pessoa set PESNOME=? where PESID = ?");
+                operacaoAlterar2 = conexao.prepareStatement("update pessoa set PESMAIL=? where PESID = ?");
             } catch (Exception ex) {
                 Logger.getLogger(PessoaDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -56,6 +58,23 @@ public class PessoaDAOJDBC implements PessoaDAO {
             pessoas.add(p);
         }
         return pessoas;
+    }
+
+    @Override
+    public void alterar(Pessoa pessoa) throws Exception {
+        operacaoAlterar.clearParameters();
+        operacaoAlterar2.clearParameters();
+        operacaoAlterar.setString(1, pessoa.getPesNome());
+        operacaoAlterar.setInt(2, pessoa.getPesId());
+        operacaoAlterar.executeUpdate();
+        operacaoAlterar2.setString(1, pessoa.getPesEmail());
+        operacaoAlterar2.setInt(2, pessoa.getPesId());
+        operacaoAlterar2.executeUpdate();
+    }
+
+    @Override
+    public void excluir(Pessoa pessoa) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

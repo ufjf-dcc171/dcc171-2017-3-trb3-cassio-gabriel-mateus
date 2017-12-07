@@ -12,10 +12,10 @@ import controlDashBoard.Pessoa;
 import controlDashBoard.PessoasListModel;
 import controlDashBoard.Project;
 import controlDashBoard.Task;
+import controleFuncionamento.SampleDataFuncionamento;
 import janelaControleProjeto.Dashboard;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,17 +37,17 @@ import javax.swing.ListSelectionModel;
 
 public class JanelaPessoas extends JFrame {
 
+    private SampleDataFuncionamento sp;
     private List<Pessoa> pessoas;
-    private final PessoaDAO daoPessoa;
     private JTextField nome;
     private JTextField email;
     private final JComboBox<String> opcoes = new JComboBox<>(new String[]{"Adicionar Pessoa", "Alterar Pessoa", "Remover Pessoa"});
     private final JPanel painel = new JPanel();
 
-    public JanelaPessoas(List<Pessoa> pessoas) throws HeadlessException {
+    public JanelaPessoas(List<Pessoa> pessoas, SampleDataFuncionamento sp) throws HeadlessException {
         super("Detalhes");
+        this.sp = sp;
         addPessoa();
-        daoPessoa = new PessoaDAOJDBC();
         this.pessoas = pessoas;
         add(opcoes, BorderLayout.NORTH);
         add(new JScrollPane(painel), BorderLayout.CENTER);
@@ -115,7 +115,7 @@ public class JanelaPessoas extends JFrame {
                         JOptionPane.showMessageDialog(null, "Preencher todos os campos.", "Por favor preencha todos os campos.", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         pessoa = new Pessoa(pessoas.size() + 1, nome.getText(), email.getText());
-                        daoPessoa.criar(pessoa);
+                        sp.getDaoPessoa().criar(pessoa);
                         pessoas.add(pessoa);
                         JOptionPane.showMessageDialog(null, "Foi adicionado uma pessoa.", "Pessoa criada com sucesso.", JOptionPane.INFORMATION_MESSAGE);
                     }
@@ -142,7 +142,7 @@ public class JanelaPessoas extends JFrame {
         vertical.add(horizontal1);
         vertical.add(horizontal2);
         vertical.add(btnAlterar);
-        List<Pessoa> p = daoPessoa.listarTodos();
+        List<Pessoa> p = sp.getDaoPessoa().listarTodos();
         listaPessoas.setModel(new PessoasListModel(p));
         listaPessoas.setMinimumSize(new Dimension(100, 400));
         listaPessoas.setPreferredSize(new Dimension(100, 400));
@@ -157,7 +157,11 @@ public class JanelaPessoas extends JFrame {
                         if ("".equals(email.getText()) || "".equals(nome.getText())) {
                             JOptionPane.showMessageDialog(null, "Preencher todos os campos.", "Por favor preencha todos os campos.", JOptionPane.INFORMATION_MESSAGE);
                         } else {
-                            // Faça as alterações aqui <<<<<<<<<<<<<<<<<<<<<<<
+                            Pessoa p = listaPessoas.getSelectedValue();
+                            p.setPesNome(nome.getText());
+                            p.setPesEmail(email.getText());
+                            sp.getDaoPessoa().alterar(p);
+                            listaPessoas.updateUI();
                             JOptionPane.showMessageDialog(null, "Uma pessoa foi alterada.", "Pessoa alterada com sucesso.", JOptionPane.INFORMATION_MESSAGE);
                         }
                     } catch (Exception ex) {

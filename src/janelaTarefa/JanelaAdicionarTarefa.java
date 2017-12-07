@@ -274,7 +274,7 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
             Integer durac = null;
             try {
                 durac = parseInt(duracaoTarefa.getText());
-                Task tarefa = new Task(sp.getDaoTask().varrerTarefa(), descricaoTarefa.getText(), nomeTarefa.getText(), durac, projeto.getId());
+                Task tarefa = new Task(descricaoTarefa.getText(), nomeTarefa.getText(), durac, projeto.getId());
                 tarefa.setStatus("Não iniciada");
                 for (Task t : tarefasPreRequisitos)
                 {
@@ -286,6 +286,7 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
                 }
                 try {
                     sp.getDaoTask().criar(tarefa, projeto);
+                    tarefa.setNumero_tarefa(sp.getDaoTask().varrerTarefa());
                     ArrayList<Task> tarefasAssociar = tarefa.getPreRequisito();
                     for (Task tar : tarefasAssociar)
                         sp.getDaoTaskPreRequisito().associar(tarefa, tar);
@@ -301,6 +302,8 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
                 }
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Deve ser informado um valor inteiro para a duração.", "Valor Inválido", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                Logger.getLogger(JanelaAdicionarTarefa.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_btnConfirmarActionPerformed

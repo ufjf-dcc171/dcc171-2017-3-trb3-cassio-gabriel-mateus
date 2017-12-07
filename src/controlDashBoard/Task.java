@@ -20,8 +20,7 @@ public class Task {
     private ArrayList <Task> preRequisito;
     private ArrayList <Pessoa> pessoa;
     
-    public Task(Integer numero, String descricao, String taskName, Integer duracao, Integer id) {
-        this.numero_tarefa = numero;
+    public Task(String descricao, String taskName, Integer duracao, Integer id) {
         this.descricao = descricao;
         this.taskName = taskName;
         this.duracao = duracao;
