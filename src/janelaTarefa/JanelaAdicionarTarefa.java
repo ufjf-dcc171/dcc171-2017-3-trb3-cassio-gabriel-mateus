@@ -46,7 +46,6 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
         this.tarefas = projeto.getTarefas();
         for (Pessoa p : pessoas)
         {
-            System.out.println("queijo");
             pessoasSemTarefas.add(p);
         }
         for (Task t : tarefas)
@@ -288,7 +287,6 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
                 }
                 for (Pessoa p : pessoasTarefas)
                 {
-                    System.out.println("q");
                     tarefa.getPessoa().add(p);
                 }
                 try {

@@ -25,8 +25,8 @@ public class TaskDAOJDBC implements TaskDAO {
     public TaskDAOJDBC() {
         try {
             conexao = BdConnection.getConnection();
-            operacaoInsere = conexao.prepareStatement("insert into tarefa (nome, descricao, duracao, progresso, fkid_projeto) values"
-                    + "(?, ?, ?, ?, ?)");
+            operacaoInsere = conexao.prepareStatement("insert into tarefa (nome, status, descricao, duracao, progresso, fkid_projeto) values"
+                    + "(?, ?, ?, ?, ?, ?)");
             operacaoLista = conexao.prepareStatement("select id_tarefa, nome, status, descricao, duracao, progresso, dataInicio, dataFinal, fkid_projeto from tarefa where fkid_projeto = ?");
             operacaoAlterar0 = conexao.prepareStatement("update tarefa set dataInicio=? where id_tarefa=?");
             operacaoAlterar1 = conexao.prepareStatement("update tarefa set dataFinal=? where id_tarefa=?");
@@ -44,10 +44,11 @@ public class TaskDAOJDBC implements TaskDAO {
     public void criar(Task tarefa, Project prod) throws Exception {
         operacaoInsere.clearParameters();
         operacaoInsere.setString(1, tarefa.getTaskName());
-        operacaoInsere.setString(2, tarefa.getDescricao());
-        operacaoInsere.setInt(3, tarefa.getDuracao());
-        operacaoInsere.setInt(4, tarefa.getProgresso());
-        operacaoInsere.setInt(5, tarefa.getId_projeto());
+        operacaoInsere.setString(2, tarefa.getStatus());
+        operacaoInsere.setString(3, tarefa.getDescricao());
+        operacaoInsere.setInt(4, tarefa.getDuracao());
+        operacaoInsere.setInt(5, tarefa.getProgresso());
+        operacaoInsere.setInt(6, tarefa.getId_projeto());
         operacaoInsere.executeUpdate();
     }
 

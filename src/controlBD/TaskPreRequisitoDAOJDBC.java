@@ -37,7 +37,6 @@ public class TaskPreRequisitoDAOJDBC implements TaskPreRequisitoDAO{
     @Override
     public void buscar(Task tarefa, List<Task> tarefas) throws Exception {
         ArrayList<Task> tarefaPreRequisito = new ArrayList<>();
-        System.out.println(tarefas.size());
         operacaoBuscar.clearParameters();
         operacaoBuscar.setInt(1, tarefa.getNumero_tarefa());
         ResultSet resultado = operacaoBuscar.executeQuery();

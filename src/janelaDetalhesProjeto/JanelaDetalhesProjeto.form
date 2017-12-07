@@ -62,7 +62,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
-                              <Component id="ComboBoxSelecionar" min="-2" pref="125" max="-2" attributes="0"/>
+                              <Component id="ComboBoxSelecionar" min="-2" pref="188" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="btnAdicionarTarefa" min="-2" max="-2" attributes="0"/>
@@ -199,11 +199,12 @@
     <Component class="javax.swing.JComboBox" name="ComboBoxSelecionar">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Todas "/>
-            <StringItem index="1" value="Conclu&#xed;das "/>
-            <StringItem index="2" value="A fazer "/>
+          <StringArray count="5">
+            <StringItem index="0" value="Todas"/>
+            <StringItem index="1" value="Conclu&#xed;das"/>
+            <StringItem index="2" value="Iniciadas"/>
             <StringItem index="3" value="Podem ser iniciadas"/>
+            <StringItem index="4" value="Aguardando Pr&#xe9;-Requisito"/>
           </StringArray>
         </Property>
       </Properties>
