@@ -17,6 +17,7 @@ public class TaskPessoaDAOJDBC implements TaskPessoaDAO{
     private PreparedStatement operacaoInsere;
     private PreparedStatement operacaoBuscar;
     private PreparedStatement operacaoExcluir;
+    private PreparedStatement operacaoPresenca;
     
     public TaskPessoaDAOJDBC() {
         try {
@@ -25,6 +26,7 @@ public class TaskPessoaDAOJDBC implements TaskPessoaDAO{
                     + "(?, ?)");
             operacaoBuscar = conexao.prepareStatement("select fkid_pessoa from tarefa_pessoa where fkid_tarefa = ?");
             operacaoExcluir = conexao.prepareStatement("delete from Tarefa_pessoa where  fkid_tarefa= ?");
+            operacaoPresenca = conexao.prepareStatement("select * from prerequisito where fkid_tarefaprerequisito = ?");
         } catch (Exception ex) {
             Logger.getLogger(ProjetoDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -64,13 +66,6 @@ public class TaskPessoaDAOJDBC implements TaskPessoaDAO{
                 }
             }
         }
-        /*
-            System.out.println(tarefa.getTaskName());
-            System.out.println(tarefa.getNumero_tarefa());
-        for (Pessoa p: pTarefa)
-        {
-            System.out.println(p.getPesNome());
-        }*/
         tarefa.setPessoa(pTarefa);
     }
 
@@ -79,5 +74,18 @@ public class TaskPessoaDAOJDBC implements TaskPessoaDAO{
         operacaoExcluir.clearParameters();
         operacaoExcluir.setInt(1,i);
         operacaoExcluir.executeUpdate();
+    }
+
+    @Override
+    public boolean presenca(Pessoa p) throws Exception {
+        Boolean presenca = false;
+        operacaoPresenca.clearParameters();
+        operacaoPresenca.setInt(1, p.getPesId());
+        ResultSet resultado = operacaoPresenca.executeQuery();
+        while (resultado.next())
+        {
+            presenca = true;
+        }
+        return presenca;
     }
 }

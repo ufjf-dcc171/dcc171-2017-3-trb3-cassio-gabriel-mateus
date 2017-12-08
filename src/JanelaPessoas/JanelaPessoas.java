@@ -193,12 +193,19 @@ public class JanelaPessoas extends JFrame {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 try {
-                    for (Project p : daoProjeto.listarTodos()) {
-                        for (Task t : daoTask.listarTodos(p.getId())) {
-                            daoTaskPessoa.buscar(t, pessoas);
-                        }
-                        System.out.println(p.getTarefas().size());
-                    }
+                Pessoa pe = listaPessoas.getSelectedValue();
+                Boolean presenca;
+                presenca = sp.getDaoTaskPessoa().presenca(pe);
+                if (presenca)
+                {
+                    //JOptionPane de remoção não pode ser feita
+                }
+                else
+                {
+                    sp.getDaoPessoa().excluir(pe);
+                    sp.getPessoa().remove(pe);
+                    listaPessoas.updateUI();
+                }
                 } catch (Exception ex) {
                     Logger.getLogger(JanelaPessoas.class.getName()).log(Level.SEVERE, null, ex);
                 }

@@ -16,6 +16,7 @@ public class TaskPreRequisitoDAOJDBC implements TaskPreRequisitoDAO{
     private PreparedStatement operacaoInsere;
     private PreparedStatement operacaoBuscar;
     private PreparedStatement operacaoExcluir;
+    private PreparedStatement operacaoPresenca;
 
     public TaskPreRequisitoDAOJDBC() {
          try {
@@ -23,6 +24,7 @@ public class TaskPreRequisitoDAOJDBC implements TaskPreRequisitoDAO{
             operacaoInsere = conexao.prepareStatement("insert into prerequisito (fkid_tarefa, fkid_tarefaPreRequisito) values (?, ?)");       
             operacaoBuscar = conexao.prepareStatement("select fkid_tarefaPreRequisito from prerequisito where fkid_tarefa = ?");
             operacaoExcluir = conexao.prepareStatement("delete from prerequisito where fkid_tarefa=?");
+            operacaoPresenca = conexao.prepareStatement("select * from Tarefa_pessoa where fkid_pessoa = ?");
          } catch (Exception ex) {
             Logger.getLogger(ProjetoDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -71,6 +73,19 @@ public class TaskPreRequisitoDAOJDBC implements TaskPreRequisitoDAO{
         operacaoExcluir.clearParameters();
         operacaoExcluir.setInt(1, id);
         operacaoExcluir.executeUpdate();
+    }
+
+    @Override
+    public Boolean preesnca(Task t) throws Exception {
+        Boolean presenca = false;
+        operacaoPresenca.clearParameters();
+        operacaoPresenca.setInt(1, t.getNumero_tarefa());
+        ResultSet resultado = operacaoPresenca.executeQuery();
+        while (resultado.next())
+        {
+            presenca = true;
+        }
+        return presenca;
     }
     
 }

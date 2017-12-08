@@ -17,6 +17,7 @@ public class PessoaDAOJDBC implements PessoaDAO {
     private PreparedStatement operacaoListar;
     private PreparedStatement operacaoAlterar;
     private PreparedStatement operacaoAlterar2;
+    private PreparedStatement operacaoExcluir;
 
     public PessoaDAOJDBC() {
      
@@ -28,6 +29,7 @@ public class PessoaDAOJDBC implements PessoaDAO {
                 operacaoListar = conexao.prepareStatement("select pesid, pesnome, pesmail from pessoa");
                 operacaoAlterar = conexao.prepareStatement("update pessoa set PESNOME=? where PESID = ?");
                 operacaoAlterar2 = conexao.prepareStatement("update pessoa set PESMAIL=? where PESID = ?");
+                operacaoExcluir = conexao.prepareStatement("delete from pessoa where PESID = ?");
             } catch (Exception ex) {
                 Logger.getLogger(PessoaDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -74,7 +76,9 @@ public class PessoaDAOJDBC implements PessoaDAO {
 
     @Override
     public void excluir(Pessoa pessoa) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        operacaoExcluir.clearParameters();
+        operacaoExcluir.setInt(1, pessoa.getPesId());
+        operacaoExcluir.execute();
     }
 
 }
