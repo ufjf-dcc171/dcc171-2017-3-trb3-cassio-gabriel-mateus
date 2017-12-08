@@ -39,9 +39,9 @@ create table tarefa_pessoa (
     fkid_pessoa integer,
     foreign key (fkid_tarefa) references tarefa (id_tarefa),
     foreign key (fkid_pessoa) references pessoa (pesid) 
-);
+);/*
 
-/*drop table tarefa_pessoa;
+drop table tarefa_pessoa;
 drop table prerequisito;
 drop table pessoa;
 drop table tarefa;

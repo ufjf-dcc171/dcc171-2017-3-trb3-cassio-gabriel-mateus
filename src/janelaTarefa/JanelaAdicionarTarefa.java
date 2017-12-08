@@ -259,11 +259,7 @@ public class JanelaAdicionarTarefa extends javax.swing.JFrame {
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         if ("".equals(duracaoTarefa.getText())) {
-            JOptionPane.showMessageDialog(null, "Informe um valor inteiro para a duração da tarefa.", "Valor inválido.", JOptionPane.INFORMATION_MESSAGE);
-        }
-        else if(Integer.parseInt(duracaoTarefa.getText()) < 0)
-        {
-            JOptionPane.showMessageDialog(null, "Informe um valor positivo para a duração da tarefa.", "Valor inválido.", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Informe um valor inteiro positivo para a duração da tarefa.", "Valor inválido.", JOptionPane.INFORMATION_MESSAGE);
         }
         else if ("".equals(nomeTarefa.getText()))
         {

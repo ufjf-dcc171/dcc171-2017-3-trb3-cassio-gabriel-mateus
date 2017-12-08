@@ -57,11 +57,11 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
             listaPessoa.setModel(new PessoasListModel(this.tarefa.getPessoa()));
         }
         if (this.tarefa.getTaskDateIni() != null) {
-            btnIniciar.setEnabled(false);
+            this.btnIniciar.setEnabled(false);
         }
         if (this.tarefa.getTaskDateEnd() != null) {
             this.tarefa.setProgresso(100);
-            btnFinalizar.setEnabled(false);
+            this.btnFinalizar.setEnabled(false);
             btnAlterarEstimativa.setEnabled(false);
             btnAterarProgresso.setEnabled(false);
             btnAlterarDescricao.setEnabled(false);
@@ -383,9 +383,16 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
         } else {
             try {
                 Integer p = Integer.parseInt(JOptionPane.showInputDialog("Qual a porcentagem de progresso da tarefa?"));
-                if (p < 0) {
+                if (p < 0)
+                {
                     JOptionPane.showMessageDialog(null, "Informe um valor inteiro positivo ou 0.", "Valor inválido", JOptionPane.INFORMATION_MESSAGE);
-                } else {
+                }
+                else if(p > 100)
+                {
+                    JOptionPane.showMessageDialog(null, "Informe um valor entre 0 e 100.", "Valor inválido.", JOptionPane.INFORMATION_MESSAGE);
+                }
+                else
+                {
                     this.tarefa.setProgresso(p);
                 }
             } catch (NumberFormatException e) {
