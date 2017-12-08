@@ -40,15 +40,15 @@ create table tarefa_pessoa (
     foreign key (fkid_tarefa) references tarefa (id_tarefa),
     foreign key (fkid_pessoa) references pessoa (pesid) 
 );
-/*
-drop table tarefa_pessoa;
+
+/*drop table tarefa_pessoa;
 drop table prerequisito;
 drop table pessoa;
 drop table tarefa;
 drop table projeto;
 
 
-select * from prerequisito;
+/*select * from prerequisito;
 
 select * from tarefa;
-*/
+

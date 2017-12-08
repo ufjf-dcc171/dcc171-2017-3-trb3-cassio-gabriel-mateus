@@ -118,6 +118,9 @@ public class JanelaPessoas extends JFrame {
                         sp.getDaoPessoa().criar(pessoa);
                         pessoas.add(pessoa);
                         JOptionPane.showMessageDialog(null, "Foi adicionado uma pessoa.", "Pessoa criada com sucesso.", JOptionPane.INFORMATION_MESSAGE);
+                        nome.setText("");
+                        email.setText("");
+                        nome.requestFocus();
                     }
                 } catch (Exception ex) {
                     Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
@@ -163,6 +166,9 @@ public class JanelaPessoas extends JFrame {
                             sp.getDaoPessoa().alterar(p);
                             listaPessoas.updateUI();
                             JOptionPane.showMessageDialog(null, "Uma pessoa foi alterada.", "Pessoa alterada com sucesso.", JOptionPane.INFORMATION_MESSAGE);
+                            nome.setText("");
+                            email.setText("");
+                            nome.requestFocus();
                         }
                     } catch (Exception ex) {
                         Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
@@ -192,22 +198,33 @@ public class JanelaPessoas extends JFrame {
         btnRemover.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                try {
                 Pessoa pe = listaPessoas.getSelectedValue();
-                Boolean presenca;
-                presenca = sp.getDaoTaskPessoa().presenca(pe);
-                if (presenca)
+                if (pe != null)
                 {
-                    //JOptionPane de remoção não pode ser feita
+                    try
+                    {
+                        Boolean presenca;
+                        presenca = sp.getDaoTaskPessoa().presenca(pe);
+                        if (presenca)
+                        {
+                            JOptionPane.showMessageDialog(null, "Essa pessoa não pode ser removida pois já está associada a uma tarefa.", "Impossível remover.", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        else
+                        {
+                            sp.getDaoPessoa().excluir(pe);
+                            sp.getPessoa().remove(pe);
+                            listaPessoas.updateUI();
+                            JOptionPane.showMessageDialog(null, "Uma pessoa foi removida.", "Pessoa removida com sucesso", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.getLogger(JanelaPessoas.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
                 else
                 {
-                    sp.getDaoPessoa().excluir(pe);
-                    sp.getPessoa().remove(pe);
-                    listaPessoas.updateUI();
-                }
-                } catch (Exception ex) {
-                    Logger.getLogger(JanelaPessoas.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "Você deve selecionar a pessoa que deseja remover.", "Selecione uma pessoa.", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });

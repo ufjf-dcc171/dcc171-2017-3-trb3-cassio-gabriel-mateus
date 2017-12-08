@@ -20,26 +20,25 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class JanelaDetalhesProjeto extends javax.swing.JFrame {
-    
+
     private SampleDataFuncionamento sp;
     private List<Task> tarefas;
     private Project projeto;
     private List<Pessoa> pessoas;
     private JanelaAdicionarTarefa jat;
     private JanelaVerTarefa jvt;
-    
+
     public JanelaDetalhesProjeto(Project projeto, JanelaAdicionarTarefa jat,
-             JanelaVerTarefa jvt, SampleDataFuncionamento sp) throws Exception {
+            JanelaVerTarefa jvt, SampleDataFuncionamento sp) throws Exception {
         super("Detalhes do Projeto");
         initComponents();
         this.jat = jat;
         this.sp = sp;
-        this.projeto = projeto;;        
+        this.projeto = projeto;;
         this.tarefas = projeto.getTarefas();
         textoDescricao.setText(this.projeto.getProjectDescricao());
         nomeProjeto.setText(this.projeto.getProjectNome());
-        for (Task t : tarefas)
-        {
+        for (Task t : tarefas) {
             sp.getDaoTaskPreRequisito().buscar(t, this.tarefas);
         }
         if (projeto.getProjectDateIni() == null) {
@@ -52,22 +51,18 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
             dataInicio.setText(projeto.getProjectDateIni());
             dataFinal.setText(projeto.getProjectDateEnd());
         }
-        if(projeto.getProjectDateIni() != null)
-        {
+        if (projeto.getProjectDateIni() != null) {
             btnIniciar.setEnabled(false);
         }
-        if(projeto.getProjectDateEnd() != null)
-        {
+        if (projeto.getProjectDateEnd() != null) {
             btnFinalizar.setEnabled(false);
         }
         defaultTela();
         ComboBoxSelecionar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                switch (ComboBoxSelecionar.getSelectedIndex())
-                {
-                    case 0:
-                    {
+                switch (ComboBoxSelecionar.getSelectedIndex()) {
+                    case 0: {
                         try {
                             defaultTela();
                         } catch (Exception ex) {
@@ -75,29 +70,25 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
                         }
                         break;
                     }
-                    case 1:
-                    {
+                    case 1: {
                         defaultTelaConcluida();
                         break;
                     }
-                    case 2:
-                    {
+                    case 2: {
                         defaultTelaIniciada();
                         break;
                     }
-                    case 3:
-                    {
+                    case 3: {
                         defaultPodeSerIniciada();
                         break;
                     }
-                    case 4:
-                    {
+                    case 4: {
                         defaultAguardandoPreRequisito();
                         break;
                     }
                 }
             }
-        });       
+        });
     }
 
     /**
@@ -294,15 +285,19 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
 
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
         Integer i = 1;
-        Date data = new Date();
-        projeto.setProjectDateEnd(data);
-        try {
-            sp.getDaoProjeto().alterar(projeto, i);
-            dataFinal.setText(projeto.getProjectDateEnd());
-            btnFinalizar.setEnabled(false);
-            pack();
-        } catch (Exception ex) {
-            Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
+        if (this.projeto.getProjectDateIni() == null) {
+            JOptionPane.showMessageDialog(null, "Você não pode finalizar um projeto que ainda não foi inciado.", "Inicie o projeto.", JOptionPane.ERROR_MESSAGE);
+        } else {
+            Date data = new Date();
+            projeto.setProjectDateEnd(data);
+            try {
+                sp.getDaoProjeto().alterar(projeto, i);
+                dataFinal.setText(projeto.getProjectDateEnd());
+                btnFinalizar.setEnabled(false);
+                pack();
+            } catch (Exception ex) {
+                Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnFinalizarActionPerformed
 
@@ -326,11 +321,11 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
             jat.setLocationRelativeTo(null);
             jat.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             jat.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent evt) {
-                listaTarefas.updateUI();
-            }
-        });
+                @Override
+                public void windowClosing(WindowEvent evt) {
+                    listaTarefas.updateUI();
+                }
+            });
         } catch (Exception ex) {
             Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -361,25 +356,23 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
             Boolean presenca;
             try {
                 presenca = sp.getDaoTaskPreRequisito().preesnca(selected);
-                if (presenca)
-                {
-                
-                }
-                else
-                {
+                if (presenca) {
+                    
+                } else {
                     try {
                         sp.getDaoTask().excluir(selected);
                         this.projeto.getTarefas().remove(selected);
                         listaTarefas.updateUI();
                     } catch (Exception ex) {
                         System.out.println("Pré-requisito");
+                        JOptionPane.showMessageDialog(null, "Essa tarefa não pode ser excluída pois possui\n pré-requisitos ou pessoas trabalhando nela.", "Não é possível excluir.", JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
             } catch (Exception ex) {
                 Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-       }
+
+        }
     }//GEN-LAST:event_btnExcluirTarefaActionPerformed
 
     /**
@@ -420,109 +413,81 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         listaTarefas.updateUI();
         pack();
     }
-    
-    private void defaultTelaConcluida()
-    {
+
+    private void defaultTelaConcluida() {
         Task task = new Task();
         task.setTaskName("Não há tarefas concluídas");
         Integer i = 0;
         List<Task> tar = new ArrayList<>();
-        if (this.projeto.getTarefas().size() > 0)
-        {
-            for (Task t : this.projeto.getTarefas())
-            {
-                if ("Concluída".equals(t.getStatus()))
-                {
+        if (this.projeto.getTarefas().size() > 0) {
+            for (Task t : this.projeto.getTarefas()) {
+                if ("Concluída".equals(t.getStatus())) {
                     tar.add(t);
                 }
             }
         }
-        if (tar.size() > 0)
-        {
+        if (tar.size() > 0) {
             this.listaTarefas.setModel(new TaskListModel(tar));
             listaTarefas.updateUI();
-        }
-        else
-        {
+        } else {
             tar.add(task);
             this.listaTarefas.setModel(new TaskListModel(tar));
         }
     }
-    
+
     private void defaultTelaIniciada() {
         Task task = new Task();
         task.setTaskName("Não há tarefas iniciadas");
         Integer i = 0;
         List<Task> tar = new ArrayList<>();
-        if (this.projeto.getTarefas().size() > 0)
-        {
-            for (Task t : this.projeto.getTarefas())
-            {
-                if ("Iniciada".equals(t.getStatus()))
-                {
+        if (this.projeto.getTarefas().size() > 0) {
+            for (Task t : this.projeto.getTarefas()) {
+                if ("Iniciada".equals(t.getStatus())) {
                     tar.add(t);
                 }
             }
         }
-        if (tar.size() > 0)
-        {
+        if (tar.size() > 0) {
             this.listaTarefas.setModel(new TaskListModel(tar));
             listaTarefas.updateUI();
-        }
-        else
-        {
+        } else {
             tar.add(task);
             this.listaTarefas.setModel(new TaskListModel(tar));
         }
     }
-   
+
     private void defaultPodeSerIniciada() {
         Task task = new Task();
         task.setTaskName("Nenhuma tarefa para ser iniciada");
         Integer i = 0;
         Boolean preRequisito = false;
         List<Task> tar = new ArrayList<>();
-        if (this.projeto.getTarefas().size() > 0)
-        {
-            for (Task t : this.projeto.getTarefas())
-            {
-                if (t.getPreRequisito().size() > 0)
-                {
-                    for (Task tasks : t.getPreRequisito())
-                    {
-                        if (tasks.getStatus().equals("Concluída"))
-                        {
-                            
-                        }
-                        else 
-                        {
+        if (this.projeto.getTarefas().size() > 0) {
+            for (Task t : this.projeto.getTarefas()) {
+                if (t.getPreRequisito().size() > 0) {
+                    for (Task tasks : t.getPreRequisito()) {
+                        if (tasks.getStatus().equals("Concluída")) {
+
+                        } else {
                             preRequisito = true;
                         }
                     }
-                    if (preRequisito)
-                    {
-                        
-                    }
-                    else
-                    {
+                    if (preRequisito) {
+
+                    } else {
                         tar.add(t);
                     }
-                }
-                else 
-                {
-                    if (t.getStatus().equals("Concluída") || t.getStatus().equals("Iniciada") || t.getStatus().equals("Pré-requisito"))
-                    {}
-                    else
+                } else {
+                    if (t.getStatus().equals("Concluída") || t.getStatus().equals("Iniciada") || t.getStatus().equals("Pré-requisito")) {
+                    } else {
                         tar.add(t);
+                    }
                 }
             }
         }
-        if (tar.size() > 0)
-        {
+        if (tar.size() > 0) {
             this.listaTarefas.setModel(new TaskListModel(tar));
-        }
-        else
-        {
+        } else {
             tar.add(task);
             this.listaTarefas.setModel(new TaskListModel(tar));
         }
@@ -534,36 +499,26 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
         Integer i = 0;
         Boolean preRequisito = false;
         List<Task> tar = new ArrayList<>();
-        if (this.projeto.getTarefas().size() > 0)
-        {
-            for (Task t : this.projeto.getTarefas())
-            {
-                                            
-                if (t.getPreRequisito().size() > 0)
-                {
-                    for (Task tasks : t.getPreRequisito())
-                    {
-                        if (tasks.getStatus().equals("Não iniciada") || tasks.getStatus().equals("Iniciada"))
-                        {
+        if (this.projeto.getTarefas().size() > 0) {
+            for (Task t : this.projeto.getTarefas()) {
+
+                if (t.getPreRequisito().size() > 0) {
+                    for (Task tasks : t.getPreRequisito()) {
+                        if (tasks.getStatus().equals("Não iniciada") || tasks.getStatus().equals("Iniciada")) {
                             preRequisito = true;
                         }
                     }
-                    if (preRequisito)
-                    {
+                    if (preRequisito) {
                         tar.add(t);
                     }
                 }
             }
         }
-        if (tar.size() > 0)
-        {
+        if (tar.size() > 0) {
             this.listaTarefas.setModel(new TaskListModel(tar));
-        }
-        else
-        {
+        } else {
             tar.add(task);
             this.listaTarefas.setModel(new TaskListModel(tar));
         }
     }
 }
-
