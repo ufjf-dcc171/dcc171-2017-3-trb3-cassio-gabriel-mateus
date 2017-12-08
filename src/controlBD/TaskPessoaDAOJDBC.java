@@ -26,7 +26,7 @@ public class TaskPessoaDAOJDBC implements TaskPessoaDAO{
                     + "(?, ?)");
             operacaoBuscar = conexao.prepareStatement("select fkid_pessoa from tarefa_pessoa where fkid_tarefa = ?");
             operacaoExcluir = conexao.prepareStatement("delete from Tarefa_pessoa where  fkid_tarefa= ?");
-            operacaoPresenca = conexao.prepareStatement("select * from prerequisito where fkid_tarefaprerequisito = ?");
+            operacaoPresenca = conexao.prepareStatement("select * from Tarefa_pessoa where fkid_pessoa = ?");
         } catch (Exception ex) {
             Logger.getLogger(ProjetoDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }

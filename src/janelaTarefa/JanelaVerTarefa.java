@@ -8,6 +8,7 @@ import controlBD.TaskPreRequisitoDAO;
 import controlBD.TaskPreRequisitoDAOJDBC;
 import controlDashBoard.Pessoa;
 import controlDashBoard.PessoasListModel;
+import controlDashBoard.Project;
 import controlDashBoard.Task;
 import controlDashBoard.TaskListModel;
 import controleFuncionamento.SampleDataFuncionamento;
@@ -26,13 +27,15 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
     private SampleDataFuncionamento sp;
     private List<Task> tarefas;
     private Task tarefa;
+    private Project p;
 
-    public JanelaVerTarefa(Task tarefa, List<Task> tarefas, SampleDataFuncionamento sp, JButton btnIniciar, JButton btnFinalizar) throws Exception {
+    public JanelaVerTarefa(Task tarefa, List<Task> tarefas, SampleDataFuncionamento sp, Project p) throws Exception {
         super("Ver tarefas");
         initComponents();
         this.sp = sp;
         this.tarefas = tarefas;
         this.tarefa = tarefa;
+        this.p = p;
         nomeTarefa.setText(this.tarefa.getTaskName());
         duracao.setText(Integer.toString(tarefa.getDuracao()) + " dias");
         progresso.setValue(this.tarefa.getProgresso());
@@ -318,14 +321,31 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
         Integer j = 5;
         Boolean podeIniciar = false;
         try {
-            if (this.tarefa.getPreRequisito().size() > 0) {
-                ArrayList<Task> tar = this.tarefa.getPreRequisito();
-                for (Task t : tar) {
-                    if ("Concluída".equals(t.getStatus())) {
-                        podeIniciar = true;
+            if (p.getProjectDateIni() != null)
+            {
+                if (this.tarefa.getPreRequisito().size() > 0) {
+                    ArrayList<Task> tar = this.tarefa.getPreRequisito();
+                    for (Task t : tar) {
+                        if ("Concluída".equals(t.getStatus())) {
+                            podeIniciar = true;
+                        }
+                    }
+                    if (podeIniciar) {
+                        Date data = new Date();
+                        this.tarefa.setStatus("Iniciada");
+                        this.tarefa.setTaskDateIni(data);
+                        sp.getDaoTask().alterar(this.tarefa, i);
+                        sp.getDaoTask().alterar(this.tarefa, j);
+                        dataInicio.setText(this.tarefa.getTaskDateIni());
+                        btnIniciar.setEnabled(false);
+                        pack();
+                    } else {
+                        this.tarefa.setStatus("Pré-requisito");
+                        sp.getDaoTask().alterar(this.tarefa, j);
+                        JOptionPane.showMessageDialog(null, "A tarefa não pode ser inciada pois está esperando pré-requisitos.", "Falta pré-requisitos.", JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
-                if (podeIniciar) {
+                else {
                     Date data = new Date();
                     this.tarefa.setStatus("Iniciada");
                     this.tarefa.setTaskDateIni(data);
@@ -334,20 +354,11 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
                     dataInicio.setText(this.tarefa.getTaskDateIni());
                     btnIniciar.setEnabled(false);
                     pack();
-                } else {
-                    this.tarefa.setStatus("Pré-requisito");
-                    sp.getDaoTask().alterar(this.tarefa, j);
-                    JOptionPane.showMessageDialog(null, "A tarefa não pode ser inciada pois está esperando pré-requisitos.", "Falta pré-requisitos.", JOptionPane.INFORMATION_MESSAGE);
                 }
-            } else {
-                Date data = new Date();
-                this.tarefa.setStatus("Iniciada");
-                this.tarefa.setTaskDateIni(data);
-                sp.getDaoTask().alterar(this.tarefa, i);
-                sp.getDaoTask().alterar(this.tarefa, j);
-                dataInicio.setText(this.tarefa.getTaskDateIni());
-                btnIniciar.setEnabled(false);
-                pack();
+            }
+            else
+            {
+               JOptionPane.showMessageDialog(null, "Inicie o projeto para iniciar a tarefa", "Projeto ainda não inciado", JOptionPane.INFORMATION_MESSAGE); 
             }
 
         } catch (Exception ex) {

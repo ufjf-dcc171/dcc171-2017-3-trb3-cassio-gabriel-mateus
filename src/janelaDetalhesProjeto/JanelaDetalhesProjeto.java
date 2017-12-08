@@ -337,7 +337,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Você deveria ter selecionado uma tarefa.", "Selecione uma tarefa.", JOptionPane.INFORMATION_MESSAGE);
         } else {
             try {
-                jvt = new JanelaVerTarefa(selected, tarefas, sp, btnIniciar, btnFinalizar);
+                jvt = new JanelaVerTarefa(selected, tarefas, sp, projeto);
                 jvt.setLocationRelativeTo(null);
                 jvt.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 jvt.setVisible(true);
@@ -357,14 +357,13 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
             try {
                 presenca = sp.getDaoTaskPreRequisito().preesnca(selected);
                 if (presenca) {
-                    
+                    JOptionPane.showMessageDialog(null, "Essa tarefa não pode ser excluída pois possui\n pré-requisitos ou pessoas trabalhando nela.", "Não é possível excluir.", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     try {
                         sp.getDaoTask().excluir(selected);
                         this.projeto.getTarefas().remove(selected);
                         listaTarefas.updateUI();
                     } catch (Exception ex) {
-                        System.out.println("Pré-requisito");
                         JOptionPane.showMessageDialog(null, "Essa tarefa não pode ser excluída pois possui\n pré-requisitos ou pessoas trabalhando nela.", "Não é possível excluir.", JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
@@ -472,7 +471,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
                             preRequisito = true;
                         }
                     }
-                    if (preRequisito) {
+                    if (preRequisito || t.getStatus().equals("Concluída")) {
 
                     } else {
                         tar.add(t);
