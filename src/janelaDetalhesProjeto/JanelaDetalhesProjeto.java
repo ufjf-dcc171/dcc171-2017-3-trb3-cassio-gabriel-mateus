@@ -372,7 +372,7 @@ public class JanelaDetalhesProjeto extends javax.swing.JFrame {
                         this.projeto.getTarefas().remove(selected);
                         listaTarefas.updateUI();
                     } catch (Exception ex) {
-                        Logger.getLogger(JanelaDetalhesProjeto.class.getName()).log(Level.SEVERE, null, ex);
+                        System.out.println("Pré-requisito");
                     }
                 }
             } catch (Exception ex) {
