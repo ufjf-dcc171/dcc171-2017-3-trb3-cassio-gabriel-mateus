@@ -114,7 +114,7 @@ public class JanelaPessoas extends JFrame {
                     if ("".equals(email.getText()) || "".equals(nome.getText())) {
                         JOptionPane.showMessageDialog(null, "Preencher todos os campos.", "Por favor preencha todos os campos.", JOptionPane.INFORMATION_MESSAGE);
                     } else {
-                        pessoa = new Pessoa(pessoas.size() + 1, nome.getText(), email.getText());
+                        pessoa = new Pessoa(sp.getDaoPessoa().varrerPessoa() + 1, nome.getText(), email.getText());
                         sp.getDaoPessoa().criar(pessoa);
                         pessoas.add(pessoa);
                         JOptionPane.showMessageDialog(null, "Foi adicionado uma pessoa.", "Pessoa criada com sucesso.", JOptionPane.INFORMATION_MESSAGE);

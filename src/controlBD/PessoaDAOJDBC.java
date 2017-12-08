@@ -18,6 +18,7 @@ public class PessoaDAOJDBC implements PessoaDAO {
     private PreparedStatement operacaoAlterar;
     private PreparedStatement operacaoAlterar2;
     private PreparedStatement operacaoExcluir;
+    private PreparedStatement operacaoVarrerProjeto;
 
     public PessoaDAOJDBC() {
      
@@ -30,6 +31,7 @@ public class PessoaDAOJDBC implements PessoaDAO {
                 operacaoAlterar = conexao.prepareStatement("update pessoa set PESNOME=? where PESID = ?");
                 operacaoAlterar2 = conexao.prepareStatement("update pessoa set PESMAIL=? where PESID = ?");
                 operacaoExcluir = conexao.prepareStatement("delete from pessoa where PESID = ?");
+                operacaoVarrerProjeto = conexao.prepareStatement("select PESID from pessoa");
             } catch (Exception ex) {
                 Logger.getLogger(PessoaDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -79,6 +81,17 @@ public class PessoaDAOJDBC implements PessoaDAO {
         operacaoExcluir.clearParameters();
         operacaoExcluir.setInt(1, pessoa.getPesId());
         operacaoExcluir.execute();
+    }
+
+    @Override
+    public Integer varrerPessoa() throws Exception {
+        Integer i = 0;
+        ResultSet resultado = operacaoVarrerProjeto.executeQuery();
+        while (resultado.next())
+        {
+            i = resultado.getInt(1);
+        }
+        return i;   
     }
 
 }

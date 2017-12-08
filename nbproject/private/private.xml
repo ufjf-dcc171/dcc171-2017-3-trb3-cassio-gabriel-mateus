@@ -11,19 +11,21 @@
             <file>file:/ice/Área%20de%20Trabalho/Trabalho%20lab3/Trabalho%20Lab3%20-%202/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/janelaDetalhesProjeto/JanelaDetalhesProjeto.java</file>
             <file>file:/ice/Área%20de%20Trabalho/Trabalho%20lab3/Trabalho%20Lab3%20-%202/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/janelaControleProjeto/Dashboard.java</file>
         </group>
+        <group name="Trabalho 2">
+            <file>file:/C:/Users/Gabriel/Documents/NetBeansProjects/mateusinho/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/janelaDetalhesProjeto/JanelaDetalhesProjeto.java</file>
+        </group>
         <group>
             <file>file:/C:/Users/Mateus%20G/Desktop/Trabalho%20Lab3/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/janelaDetalhesProjeto/JanelaDetalhesProjeto.java</file>
             <file>file:/C:/Users/Mateus%20G/Desktop/Trabalho%20Lab3/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/janelaTarefa/JanelaAdicionarTarefa.java</file>
             <file>file:/C:/Users/Mateus%20G/Desktop/Trabalho%20Lab3/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/controlDashBoard/Task.java</file>
+            <file>file:/C:/Users/Mateus%20G/Desktop/Trabalho%20Lab3/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/controlBD/TaskPessoaDAOJDBC.java</file>
+            <file>file:/C:/Users/Mateus%20G/Desktop/Trabalho%20Lab3/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/janelaTarefa/JanelaVerTarefa.java</file>
             <file>file:/C:/Users/Mateus%20G/Desktop/Trabalho%20Lab3/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/controlDashBoard/PessoasListModel.java</file>
             <file>file:/C:/Users/Mateus%20G/Desktop/Trabalho%20Lab3/dcc171-2017-3-trb3-cassio-gabriel-mateus/CargaInicial.sql</file>
-            <file>file:/C:/Users/Mateus%20G/Desktop/Trabalho%20Lab3/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/controlBD/TaskPreRequisitoDAOJDBC.java</file>
             <file>file:/C:/Users/Mateus%20G/Desktop/Trabalho%20Lab3/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/controleFuncionamento/ControleFuncionamento.java</file>
+            <file>file:/C:/Users/Mateus%20G/Desktop/Trabalho%20Lab3/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/controlBD/TaskPreRequisitoDAO.java</file>
             <file>file:/C:/Users/Mateus%20G/Desktop/Trabalho%20Lab3/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/controlDashBoard/ProjectListModel.java</file>
             <file>file:/C:/Users/Mateus%20G/Desktop/Trabalho%20Lab3/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/janelaControleProjeto/Dashboard.java</file>
-        </group>
-        <group name="Trabalho 2">
-            <file>file:/C:/Users/Gabriel/Documents/NetBeansProjects/mateusinho/dcc171-2017-3-trb3-cassio-gabriel-mateus/src/janelaDetalhesProjeto/JanelaDetalhesProjeto.java</file>
         </group>
     </open-files>
 </project-private>
