@@ -337,6 +337,7 @@ public class JanelaVerTarefa extends javax.swing.JFrame {
                 } else {
                     this.tarefa.setStatus("Pré-requisito");
                     sp.getDaoTask().alterar(this.tarefa, j);
+                    JOptionPane.showMessageDialog(null, "A tarefa não pode ser inciada pois está esperando pré-requisitos.", "Falta pré-requisitos.", JOptionPane.INFORMATION_MESSAGE);
                 }
             } else {
                 Date data = new Date();
